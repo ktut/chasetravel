@@ -1,7 +1,21 @@
-<script lang="ts"></script>
+<script lang="ts">
+import { defineComponent } from "vue";
+import Homepage from "./views/Homepage.vue";
+
+export default defineComponent({
+  name: "App",
+  components: {
+    Homepage,
+  },
+  data: () => ({
+    transitionName: "",
+  }),
+});
+</script>
 
 <template>
   <div>
+    <Homepage />
     <a href="https://vitejs.dev" target="_blank">
       <img src="/vite.svg" class="logo" alt="Vite logo" />
     </a>
