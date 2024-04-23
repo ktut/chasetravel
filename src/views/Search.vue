@@ -1,6 +1,6 @@
 <script lang="ts">
 export default {
-  name: "Homepage",
+  name: "Search",
   data: () => ({
     transitionName: "",
   }),
@@ -8,7 +8,7 @@ export default {
 </script>
 
 <template>
-  <div>TestHomepage</div>
+  <div>Search Results</div>
 </template>
 
 <style scoped></style>
