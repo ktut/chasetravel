@@ -1,26 +1,26 @@
 <script lang="ts">
-import { defineComponent } from "vue";
-import Search from "./views/Search.vue";
-
-export default defineComponent({
-  name: "App",
-  components: {
-    Search,
+export default {
+  name: 'App',
+  data() {
+    return {
+      // Add your data properties here
+    }
   },
-  data: () => ({
-    transitionName: "",
-  }),
-  computed: {
-    isSearch() {
-      return this.$route.path === "/search";
-    },
-  },
-});
+  methods: {
+    // Add your methods here
+  }
+}
 </script>
 
 <template>
-  <div>Search Bar</div>
-  <Search v-if="isSearch" />
+  <div id="app">
+    <router-view />
+  </div>
 </template>
 
-<style scoped></style>
+<style lang="scss" scoped>
+#app {
+  width: 100%;
+  min-height: 100vh;
+}
+</style>
