@@ -213,12 +213,22 @@ export default {
       if (!this.checkIn || (this.checkIn && this.checkOut)) {
         this.checkIn = selectedDate
         this.checkOut = null
+
+        // If the selected start date is today, set flexibility to exact
+        if (this.isSameDate(selectedDate, this.today)) {
+          this.checkInFlexibility = 'exact'
+        }
       } else {
         // If check-in is set but not check-out
         if (selectedDate < this.checkIn) {
           // If selected date is before check-in, make it the new check-in
           this.checkOut = this.checkIn
           this.checkIn = selectedDate
+
+          // If the new start date is today, set flexibility to exact
+          if (this.isSameDate(selectedDate, this.today)) {
+            this.checkInFlexibility = 'exact'
+          }
         } else {
           this.checkOut = selectedDate
         }
