@@ -48,6 +48,15 @@ export default {
     document.removeEventListener('keydown', this.handleKeyDown)
   },
   computed: {
+    today(): Date {
+      const now = new Date()
+      return new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    },
+    canNavigateToPreviousMonth(): boolean {
+      const currentViewDate = new Date(this.currentYear, this.currentMonth, 1)
+      const todayFirstOfMonth = new Date(this.today.getFullYear(), this.today.getMonth(), 1)
+      return currentViewDate > todayFirstOfMonth
+    },
     leftMonthName(): string {
       return `${this.monthNames[this.currentMonth]} ${this.currentYear}`
     },
@@ -133,6 +142,9 @@ export default {
 
       const selectedDate = new Date(dateInfo.year, dateInfo.month, dateInfo.date)
 
+      // Don't allow selecting past dates
+      if (this.isPastDate(dateInfo)) return
+
       // If no check-in or both dates are set, start new selection
       if (!this.checkIn || (this.checkIn && this.checkOut)) {
         this.checkIn = selectedDate
@@ -159,7 +171,9 @@ export default {
       this.isOpen = true
       // Set initial focused date
       if (!this.focusedDate) {
-        this.focusedDate = this.checkIn || new Date()
+        const initialDate = this.checkIn || new Date()
+        // Ensure focused date is not in the past
+        this.focusedDate = initialDate < this.today ? this.today : initialDate
       }
     },
     closeCalendar() {
@@ -218,6 +232,12 @@ export default {
       }
       const newDate = new Date(this.focusedDate)
       newDate.setDate(newDate.getDate() + days)
+
+      // Don't allow focusing on past dates
+      if (newDate < this.today) {
+        return
+      }
+
       this.focusedDate = newDate
 
       // Update current month view if focused date is in a different month
@@ -340,6 +360,10 @@ export default {
       return date1.getFullYear() === date2.getFullYear() &&
              date1.getMonth() === date2.getMonth() &&
              date1.getDate() === date2.getDate()
+    },
+    isPastDate(dateInfo: DateInfo): boolean {
+      const date = new Date(dateInfo.year, dateInfo.month, dateInfo.date)
+      return date < this.today
     },
     formatDateShort(date: Date): string {
       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -469,7 +493,13 @@ export default {
     <div v-if="isOpen" class="calendar-grid">
       <div class="month-view">
         <div class="month-header">
-          <button class="nav-btn" @click="previousMonth" tabindex="0" aria-label="Previous month">&lt;</button>
+          <button
+            class="nav-btn"
+            :disabled="!canNavigateToPreviousMonth"
+            @click="previousMonth"
+            tabindex="0"
+            aria-label="Previous month"
+          >&lt;</button>
           <div class="month-name">{{ leftMonthName }}</div>
           <div class="spacer"></div>
         </div>
@@ -483,6 +513,7 @@ export default {
             class="day"
             :class="{
               'other-month': !dateInfo.isCurrentMonth,
+              'past-date': isPastDate(dateInfo),
               'selected': isSelected(dateInfo),
               'focused': isFocused(dateInfo),
               'in-range': isInRange(dateInfo),
@@ -517,6 +548,7 @@ export default {
             class="day"
             :class="{
               'other-month': !dateInfo.isCurrentMonth,
+              'past-date': isPastDate(dateInfo),
               'selected': isSelected(dateInfo),
               'focused': isFocused(dateInfo),
               'in-range': isInRange(dateInfo),
@@ -544,6 +576,8 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+@import '@/styles/variables.scss';
+
 .calendar {
   background: white;
   border: 1px solid #e0e0e0;
@@ -698,13 +732,19 @@ export default {
     border-radius: 4px;
     transition: all 0.2s;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: #f5f5f5;
     }
 
-    &:focus {
+    &:focus:not(:disabled) {
       outline: 2px solid #2563eb;
       outline-offset: 2px;
+    }
+
+    &:disabled {
+      color: #d0d0d0;
+      cursor: not-allowed;
+      opacity: 0.5;
     }
   }
 
@@ -756,8 +796,19 @@ export default {
       }
     }
 
+    &.past-date {
+      color: #d0d0d0 !important;
+      cursor: not-allowed;
+      background: #f9f9f9 !important;
+      pointer-events: none;
+
+      &:hover {
+        background: #f9f9f9 !important;
+      }
+    }
+
     // Price indicator styles
-    &.price-cheap:not(.other-month):not(.selected) {
+    &.price-cheap:not(.other-month):not(.selected):not(.past-date) {
       background: #dcfce7;
       color: #000;
 
@@ -767,7 +818,7 @@ export default {
       }
     }
 
-    &.price-normal:not(.other-month):not(.selected) {
+    &.price-normal:not(.other-month):not(.selected):not(.past-date) {
       background: #fef3c7;
       color: #000;
 
@@ -777,7 +828,7 @@ export default {
       }
     }
 
-    &.price-expensive:not(.other-month):not(.selected) {
+    &.price-expensive:not(.other-month):not(.selected):not(.past-date) {
       background: #fee2e2;
       color: #000;
 
@@ -788,56 +839,61 @@ export default {
     }
 
     &.selected {
-      background: #2563eb !important;
+      background: $color-grey !important;
       color: white !important;
       font-weight: 600;
       border-radius: 0;
 
       &:hover {
-        background: #2563eb !important;
+        background: $color-grey !important;
         color: white !important;
       }
     }
 
     &.focused {
-      outline: 2px solid #2563eb;
+      outline: 2px solid $color-grey;
       outline-offset: -2px;
       z-index: 1;
     }
 
     &.in-range {
-      background: #e6f0ff;
+      background: $color-light-grey;
 
       &:hover {
-        background: #d6e6ff;
+        background: darken($color-light-grey, 5%);
       }
     }
 
     &.flexible-range {
       position: relative;
       border-radius: 0;
+      background: $color-light-grey !important;
+
+      &:hover {
+        background: darken($color-light-grey, 5%) !important;
+      }
 
       // Default: all borders
       &.flex-start {
-        border-left: 2px solid #2563eb;
-        border-top: 2px solid #2563eb;
-        border-bottom: 2px solid #2563eb;
+        border-left: 2px solid $color-grey;
+        border-top: 2px solid $color-grey;
+        border-bottom: 2px solid $color-grey;
         border-right: none;
         border-top-left-radius: 4px;
         border-bottom-left-radius: 4px;
       }
 
       &.flex-middle {
-        border-top: 2px solid #2563eb;
-        border-bottom: 2px solid #2563eb;
+        border-top: 2px solid $color-grey;
+        border-bottom: 2px solid $color-grey;
         border-left: none;
         border-right: none;
       }
 
       &.flex-end {
-        border-right: 2px solid #2563eb;
-        border-top: 2px solid #2563eb;
-        border-bottom: 2px solid #2563eb;
+        border-right: 2px solid $color-grey;
+        border-top: 2px solid $color-grey;
+        border-bottom: 2px solid $color-grey;
         border-left: none;
         border-top-right-radius: 4px;
         border-bottom-right-radius: 4px;
