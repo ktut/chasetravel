@@ -43,9 +43,11 @@ export default {
   },
   mounted() {
     document.addEventListener('keydown', this.handleKeyDown)
+    document.addEventListener('click', this.handleOutsideClick)
   },
   beforeUnmount() {
     document.removeEventListener('keydown', this.handleKeyDown)
+    document.removeEventListener('click', this.handleOutsideClick)
   },
   computed: {
     today(): Date {
@@ -92,6 +94,68 @@ export default {
     checkOutFlexibilityLabel(): string {
       const option = this.flexibilityOptions.find(opt => opt.value === this.checkOutFlexibility)
       return option ? option.label : 'Exact date'
+    },
+    availableCheckInFlexibilityOptions() {
+      if (!this.checkIn || !this.checkOut) {
+        return this.flexibilityOptions
+      }
+
+      const daysBetween = Math.floor((this.checkOut.getTime() - this.checkIn.getTime()) / (1000 * 60 * 60 * 24))
+
+      return this.flexibilityOptions.filter(option => {
+        switch (option.value) {
+          case 'exact':
+            return true
+          case 'day-after':
+            // Need at least 2 days between (checkIn + 1 day must not reach checkOut)
+            return daysBetween >= 2
+          case 'day-before':
+            // day-before only goes backward, always safe for checkIn
+            return true
+          case '1-day':
+            // Need at least 2 days (checkIn + 1 must not reach checkOut)
+            return daysBetween >= 2
+          case '2-days':
+            // Need at least 3 days (checkIn + 2 must not reach checkOut)
+            return daysBetween >= 3
+          case '3-days':
+            // Need at least 4 days (checkIn + 3 must not reach checkOut)
+            return daysBetween >= 4
+          default:
+            return true
+        }
+      })
+    },
+    availableCheckOutFlexibilityOptions() {
+      if (!this.checkIn || !this.checkOut) {
+        return this.flexibilityOptions
+      }
+
+      const daysBetween = Math.floor((this.checkOut.getTime() - this.checkIn.getTime()) / (1000 * 60 * 60 * 24))
+
+      return this.flexibilityOptions.filter(option => {
+        switch (option.value) {
+          case 'exact':
+            return true
+          case 'day-after':
+            // day-after only goes forward, always safe for checkOut
+            return true
+          case 'day-before':
+            // Need at least 2 days between (checkOut - 1 day must not reach checkIn)
+            return daysBetween >= 2
+          case '1-day':
+            // Need at least 2 days (checkOut - 1 must not reach checkIn)
+            return daysBetween >= 2
+          case '2-days':
+            // Need at least 3 days (checkOut - 2 must not reach checkIn)
+            return daysBetween >= 3
+          case '3-days':
+            // Need at least 4 days (checkOut - 3 must not reach checkIn)
+            return daysBetween >= 4
+          default:
+            return true
+        }
+      })
     }
   },
   methods: {
@@ -159,12 +223,38 @@ export default {
           this.checkOut = selectedDate
         }
 
+        // Validate and reset flexibility options if they're no longer valid
+        this.validateFlexibilityOptions()
+
         // Emit the date range and close the dropdown
         this.$emit('date-range-selected', {
           checkIn: this.checkIn,
           checkOut: this.checkOut
         })
         this.isOpen = false
+      }
+    },
+    validateFlexibilityOptions() {
+      // Check if current checkIn flexibility is still valid
+      const validCheckInOptions = this.availableCheckInFlexibilityOptions
+      const checkInStillValid = validCheckInOptions.some(opt => opt.value === this.checkInFlexibility)
+      if (!checkInStillValid) {
+        this.checkInFlexibility = 'exact'
+      }
+
+      // Check if current checkOut flexibility is still valid
+      const validCheckOutOptions = this.availableCheckOutFlexibilityOptions
+      const checkOutStillValid = validCheckOutOptions.some(opt => opt.value === this.checkOutFlexibility)
+      if (!checkOutStillValid) {
+        this.checkOutFlexibility = 'exact'
+      }
+    },
+    handleOutsideClick(event: MouseEvent) {
+      const target = event.target as HTMLElement
+      // Check if click is outside flexibility selector
+      if (!target.closest('.flexibility-selector')) {
+        this.showCheckInFlexMenu = false
+        this.showCheckOutFlexMenu = false
       }
     },
     openCalendar() {
@@ -453,7 +543,7 @@ export default {
           </button>
           <div v-if="showCheckInFlexMenu" class="flex-menu">
             <div
-              v-for="option in flexibilityOptions"
+              v-for="option in availableCheckInFlexibilityOptions"
               :key="option.value"
               class="flex-option"
               :class="{ active: checkInFlexibility === option.value }"
@@ -477,7 +567,7 @@ export default {
           </button>
           <div v-if="showCheckOutFlexMenu" class="flex-menu">
             <div
-              v-for="option in flexibilityOptions"
+              v-for="option in availableCheckOutFlexibilityOptions"
               :key="option.value"
               class="flex-option"
               :class="{ active: checkOutFlexibility === option.value }"
@@ -839,13 +929,13 @@ export default {
     }
 
     &.selected {
-      background: $color-grey !important;
+      background: $color-text !important;
       color: white !important;
       font-weight: 600;
       border-radius: 0;
 
       &:hover {
-        background: $color-grey !important;
+        background: $color-text !important;
         color: white !important;
       }
     }
@@ -867,10 +957,11 @@ export default {
     &.flexible-range {
       position: relative;
       border-radius: 0;
-      background: $color-light-grey !important;
+      background: $color-grey !important;
+      color: white !important;
 
       &:hover {
-        background: darken($color-light-grey, 5%) !important;
+        background: darken($color-grey, 5%) !important;
       }
 
       // Default: all borders
