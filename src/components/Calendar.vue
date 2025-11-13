@@ -15,12 +15,19 @@ export default {
       currentMonth: new Date().getMonth(),
       currentYear: new Date().getFullYear(),
       isOpen: false,
+      focusedDate: null as Date | null,
       monthNames: [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
       ],
       dayNames: ['S', 'M', 'T', 'W', 'T', 'F', 'S']
     }
+  },
+  mounted() {
+    document.addEventListener('keydown', this.handleKeyDown)
+  },
+  beforeUnmount() {
+    document.removeEventListener('keydown', this.handleKeyDown)
   },
   computed: {
     leftMonthName(): string {
@@ -124,11 +131,93 @@ export default {
     },
     openCalendar() {
       this.isOpen = true
+      // Set initial focused date
+      if (!this.focusedDate) {
+        this.focusedDate = this.checkIn || new Date()
+      }
+    },
+    closeCalendar() {
+      this.isOpen = false
+    },
+    handleKeyDown(event: KeyboardEvent) {
+      if (!this.isOpen) {
+        // Open calendar on Enter or Space when focused on inputs
+        if (event.key === 'Enter' || event.key === ' ') {
+          const target = event.target as HTMLElement
+          if (target.closest('.date-input')) {
+            event.preventDefault()
+            this.openCalendar()
+          }
+        }
+        return
+      }
+
+      // Handle keyboard navigation when calendar is open
+      switch (event.key) {
+        case 'Escape':
+          event.preventDefault()
+          this.closeCalendar()
+          break
+        case 'ArrowLeft':
+          event.preventDefault()
+          this.moveFocusedDate(-1)
+          break
+        case 'ArrowRight':
+          event.preventDefault()
+          this.moveFocusedDate(1)
+          break
+        case 'ArrowUp':
+          event.preventDefault()
+          this.moveFocusedDate(-7)
+          break
+        case 'ArrowDown':
+          event.preventDefault()
+          this.moveFocusedDate(7)
+          break
+        case 'Enter':
+        case ' ':
+          event.preventDefault()
+          if (this.focusedDate) {
+            this.selectDateByDate(this.focusedDate)
+          }
+          break
+        case 'Tab':
+          // Allow default tab behavior but keep calendar open
+          break
+      }
+    },
+    moveFocusedDate(days: number) {
+      if (!this.focusedDate) {
+        this.focusedDate = new Date()
+      }
+      const newDate = new Date(this.focusedDate)
+      newDate.setDate(newDate.getDate() + days)
+      this.focusedDate = newDate
+
+      // Update current month view if focused date is in a different month
+      if (newDate.getMonth() !== this.currentMonth || newDate.getFullYear() !== this.currentYear) {
+        this.currentMonth = newDate.getMonth()
+        this.currentYear = newDate.getFullYear()
+      }
+    },
+    selectDateByDate(date: Date) {
+      const dateInfo: DateInfo = {
+        date: date.getDate(),
+        month: date.getMonth(),
+        year: date.getFullYear(),
+        isCurrentMonth: true
+      }
+      this.selectDate(dateInfo)
     },
     isSelected(dateInfo: DateInfo): boolean {
       if (!dateInfo.isCurrentMonth) return false
       const date = new Date(dateInfo.year, dateInfo.month, dateInfo.date)
       return this.isSameDate(date, this.checkIn) || this.isSameDate(date, this.checkOut)
+    },
+    isFocused(dateInfo: DateInfo): boolean {
+      if (!this.focusedDate || !dateInfo.isCurrentMonth) return false
+      const date = new Date(dateInfo.year, dateInfo.month, dateInfo.date)
+      return this.isSameDate(date, this.focusedDate)
     },
     isInRange(dateInfo: DateInfo): boolean {
       if (!this.checkIn || !this.checkOut || !dateInfo.isCurrentMonth) return false
@@ -186,11 +275,11 @@ export default {
 <template>
   <div class="calendar">
     <div class="date-inputs">
-      <div class="date-input" @click="openCalendar">
+      <div class="date-input" @click="openCalendar" tabindex="0">
         <div class="label">Check-in</div>
         <div class="value">{{ checkInFormatted || 'Select date' }}</div>
       </div>
-      <div class="date-input" @click="openCalendar">
+      <div class="date-input" @click="openCalendar" tabindex="0">
         <div class="label">Check-out</div>
         <div class="value">{{ checkOutFormatted || 'Select date' }}</div>
       </div>
@@ -199,7 +288,7 @@ export default {
     <div v-if="isOpen" class="calendar-grid">
       <div class="month-view">
         <div class="month-header">
-          <button class="nav-btn" @click="previousMonth">&lt;</button>
+          <button class="nav-btn" @click="previousMonth" tabindex="0" aria-label="Previous month">&lt;</button>
           <div class="month-name">{{ leftMonthName }}</div>
           <div class="spacer"></div>
         </div>
@@ -214,6 +303,7 @@ export default {
             :class="{
               'other-month': !dateInfo.isCurrentMonth,
               'selected': isSelected(dateInfo),
+              'focused': isFocused(dateInfo),
               'in-range': isInRange(dateInfo)
             }"
             @click="selectDate(dateInfo)"
@@ -227,7 +317,7 @@ export default {
         <div class="month-header">
           <div class="spacer"></div>
           <div class="month-name">{{ rightMonthName }}</div>
-          <button class="nav-btn" @click="nextMonth">&gt;</button>
+          <button class="nav-btn" @click="nextMonth" tabindex="0" aria-label="Next month">&gt;</button>
         </div>
         <div class="day-names">
           <div v-for="day in dayNames" :key="day" class="day-name">{{ day }}</div>
@@ -240,6 +330,7 @@ export default {
             :class="{
               'other-month': !dateInfo.isCurrentMonth,
               'selected': isSelected(dateInfo),
+              'focused': isFocused(dateInfo),
               'in-range': isInRange(dateInfo)
             }"
             @click="selectDate(dateInfo)"
@@ -251,8 +342,8 @@ export default {
     </div>
 
     <div v-if="isOpen" class="actions">
-      <button class="reset-btn" @click="reset">Reset</button>
-      <button class="done-btn" @click="done">Done</button>
+      <button class="reset-btn" @click="reset" tabindex="0">Reset</button>
+      <button class="done-btn" @click="done" tabindex="0">Done</button>
     </div>
   </div>
 </template>
@@ -281,9 +372,15 @@ export default {
     gap: 8px;
     cursor: pointer;
     transition: border-color 0.2s;
+    outline: none;
 
     &:hover {
       border-color: #2563eb;
+    }
+
+    &:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
 
     .label {
@@ -334,10 +431,16 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s;
 
     &:hover {
       background: #f5f5f5;
-      border-radius: 4px;
+    }
+
+    &:focus {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
     }
   }
 
@@ -399,6 +502,12 @@ export default {
       }
     }
 
+    &.focused {
+      outline: 2px solid #2563eb;
+      outline-offset: -2px;
+      z-index: 1;
+    }
+
     &.in-range {
       background: #e6f0ff;
 
@@ -431,6 +540,11 @@ export default {
     &:hover {
       background: #f5f5f5;
     }
+
+    &:focus {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+    }
   }
 
   .done-btn {
@@ -440,6 +554,11 @@ export default {
 
     &:hover {
       background: #1d4ed8;
+    }
+
+    &:focus {
+      outline: 2px solid #1d4ed8;
+      outline-offset: 2px;
     }
   }
 }
