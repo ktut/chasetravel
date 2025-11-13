@@ -48,6 +48,8 @@ export default {
   beforeUnmount() {
     document.removeEventListener('keydown', this.handleKeyDown)
     document.removeEventListener('click', this.handleOutsideClick)
+    // Restore body scroll if component unmounts while modal is open
+    document.body.style.overflow = ''
   },
   computed: {
     today(): Date {
@@ -275,9 +277,15 @@ export default {
         // Ensure focused date is not in the past
         this.focusedDate = initialDate < this.today ? this.today : initialDate
       }
+      // Prevent body scroll on mobile when modal is open
+      if (window.innerWidth <= 768) {
+        document.body.style.overflow = 'hidden'
+      }
     },
     closeCalendar() {
       this.isOpen = false
+      // Restore body scroll
+      document.body.style.overflow = ''
     },
     handleKeyDown(event: KeyboardEvent) {
       if (!this.isOpen) {
@@ -590,7 +598,8 @@ export default {
       </div>
     </div>
 
-    <div v-if="isOpen" class="calendar-grid">
+    <!-- Desktop calendar grid -->
+    <div v-if="isOpen" class="calendar-grid desktop-calendar">
       <div class="month-view">
         <div class="month-header">
           <button
@@ -668,9 +677,159 @@ export default {
       </div>
     </div>
 
-    <div v-if="isOpen" class="actions">
+    <div v-if="isOpen" class="actions desktop-actions">
       <button class="reset-btn" @click="reset" tabindex="0">Reset</button>
       <button class="done-btn" @click="done" tabindex="0">Done</button>
+    </div>
+
+    <!-- Modal overlay for mobile -->
+    <div v-if="isOpen" class="calendar-modal-overlay" @click.self="closeCalendar">
+      <div class="calendar-modal">
+        <div class="modal-header">
+          <h3 class="modal-title">Select dates</h3>
+          <button class="close-btn" @click="closeCalendar" aria-label="Close calendar">×</button>
+        </div>
+
+        <div class="modal-date-inputs">
+          <div class="modal-date-input">
+            <label>Start date</label>
+            <div class="date-display">
+              <span v-if="checkIn">{{ checkInFormatted }}</span>
+              <span v-else class="placeholder-text">Select start date</span>
+            </div>
+            <div v-if="checkIn" class="modal-flexibility">
+              <button
+                class="flex-button"
+                @click.stop="toggleCheckInFlexMenu"
+                tabindex="0"
+              >
+                {{ checkInFlexibilityLabel }} ▾
+              </button>
+              <div v-if="showCheckInFlexMenu" class="flex-menu">
+                <div
+                  v-for="option in availableCheckInFlexibilityOptions"
+                  :key="option.value"
+                  class="flex-option"
+                  :class="{ active: checkInFlexibility === option.value }"
+                  @click="selectCheckInFlexibility(option.value as FlexibilityOption)"
+                >
+                  {{ option.label }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-date-input">
+            <label>End date</label>
+            <div class="date-display">
+              <span v-if="checkOut">{{ checkOutFormatted }}</span>
+              <span v-else class="placeholder-text">Select end date</span>
+            </div>
+            <div v-if="checkOut" class="modal-flexibility">
+              <button
+                class="flex-button"
+                @click.stop="toggleCheckOutFlexMenu"
+                tabindex="0"
+              >
+                {{ checkOutFlexibilityLabel }} ▾
+              </button>
+              <div v-if="showCheckOutFlexMenu" class="flex-menu">
+                <div
+                  v-for="option in availableCheckOutFlexibilityOptions"
+                  :key="option.value"
+                  class="flex-option"
+                  :class="{ active: checkOutFlexibility === option.value }"
+                  @click="selectCheckOutFlexibility(option.value as FlexibilityOption)"
+                >
+                  {{ option.label }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="calendar-grid">
+          <div class="month-view">
+            <div class="month-header">
+              <button
+                class="nav-btn"
+                :disabled="!canNavigateToPreviousMonth"
+                @click="previousMonth"
+                tabindex="0"
+                aria-label="Previous month"
+              >&lt;</button>
+              <div class="month-name">{{ leftMonthName }}</div>
+              <div class="spacer"></div>
+            </div>
+            <div class="day-names">
+              <div v-for="day in dayNames" :key="day" class="day-name">{{ day }}</div>
+            </div>
+            <div class="days">
+              <div
+                v-for="(dateInfo, index) in leftMonthDays"
+                :key="index"
+                class="day"
+                :class="{
+                  'other-month': !dateInfo.isCurrentMonth,
+                  'past-date': isPastDate(dateInfo),
+                  'selected': isSelected(dateInfo),
+                  'focused': isFocused(dateInfo),
+                  'in-range': isInRange(dateInfo),
+                  'flexible-range': isInFlexibleRange(dateInfo) && !isSelected(dateInfo),
+                  'flex-start': getFlexibleRangePosition(dateInfo, 'checkIn') === 'start' || getFlexibleRangePosition(dateInfo, 'checkOut') === 'start',
+                  'flex-middle': getFlexibleRangePosition(dateInfo, 'checkIn') === 'middle' || getFlexibleRangePosition(dateInfo, 'checkOut') === 'middle',
+                  'flex-end': getFlexibleRangePosition(dateInfo, 'checkIn') === 'end' || getFlexibleRangePosition(dateInfo, 'checkOut') === 'end',
+                  'price-cheap': getPriceLevel(dateInfo) === 'cheap',
+                  'price-normal': getPriceLevel(dateInfo) === 'normal',
+                  'price-expensive': getPriceLevel(dateInfo) === 'expensive'
+                }"
+                @click="selectDate(dateInfo)"
+              >
+                {{ dateInfo.date }}
+              </div>
+            </div>
+          </div>
+
+          <div class="month-view">
+            <div class="month-header">
+              <div class="spacer"></div>
+              <div class="month-name">{{ rightMonthName }}</div>
+              <button class="nav-btn" @click="nextMonth" tabindex="0" aria-label="Next month">&gt;</button>
+            </div>
+            <div class="day-names">
+              <div v-for="day in dayNames" :key="day" class="day-name">{{ day }}</div>
+            </div>
+            <div class="days">
+              <div
+                v-for="(dateInfo, index) in rightMonthDays"
+                :key="index"
+                class="day"
+                :class="{
+                  'other-month': !dateInfo.isCurrentMonth,
+                  'past-date': isPastDate(dateInfo),
+                  'selected': isSelected(dateInfo),
+                  'focused': isFocused(dateInfo),
+                  'in-range': isInRange(dateInfo),
+                  'flexible-range': isInFlexibleRange(dateInfo) && !isSelected(dateInfo),
+                  'flex-start': getFlexibleRangePosition(dateInfo, 'checkIn') === 'start' || getFlexibleRangePosition(dateInfo, 'checkOut') === 'start',
+                  'flex-middle': getFlexibleRangePosition(dateInfo, 'checkIn') === 'middle' || getFlexibleRangePosition(dateInfo, 'checkOut') === 'middle',
+                  'flex-end': getFlexibleRangePosition(dateInfo, 'checkIn') === 'end' || getFlexibleRangePosition(dateInfo, 'checkOut') === 'end',
+                  'price-cheap': getPriceLevel(dateInfo) === 'cheap',
+                  'price-normal': getPriceLevel(dateInfo) === 'normal',
+                  'price-expensive': getPriceLevel(dateInfo) === 'expensive'
+                }"
+                @click="selectDate(dateInfo)"
+              >
+                {{ dateInfo.date }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="reset-btn" @click="reset" tabindex="0">Reset</button>
+          <button class="done-btn" @click="done" tabindex="0">Done</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -1044,6 +1203,299 @@ export default {
     &:focus {
       outline: 2px solid #1d4ed8;
       outline-offset: 2px;
+    }
+  }
+}
+
+// Mobile modal styles - hidden on desktop
+.calendar-modal-overlay {
+  display: none;
+}
+
+// Desktop styles - show by default
+.desktop-calendar {
+  display: flex;
+}
+
+.desktop-actions {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .calendar {
+    border: none;
+    padding: 0;
+    max-width: 100%;
+  }
+
+  .date-inputs {
+    margin-bottom: 0;
+  }
+
+  // Hide desktop calendar grid on mobile
+  .desktop-calendar {
+    display: none !important;
+  }
+
+  .desktop-actions {
+    display: none !important;
+  }
+
+  // Show mobile modal
+  .calendar-modal-overlay {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: flex-end;
+    animation: fadeIn 0.2s ease-out;
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  }
+
+  .calendar-modal {
+    background: white;
+    width: 100%;
+    max-height: 90vh;
+    border-radius: 16px 16px 0 0;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+  }
+
+  .modal-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    color: #000;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 32px;
+    line-height: 1;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #f5f5f5;
+      color: #000;
+    }
+
+    &:active {
+      background: #e0e0e0;
+    }
+  }
+
+  .modal-date-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .modal-date-input {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .date-display {
+      font-size: 16px;
+      font-weight: 500;
+      color: #000;
+      padding: 8px 0;
+
+      .placeholder-text {
+        color: #999;
+        font-weight: 400;
+      }
+    }
+  }
+
+  .modal-flexibility {
+    position: relative;
+    margin-top: 4px;
+
+    .flex-button {
+      padding: 8px 12px;
+      background: white;
+      border: 1px solid #d0d0d0;
+      border-radius: 4px;
+      font-size: 14px;
+      color: #666;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #f5f5f5;
+        border-color: #2563eb;
+        color: #2563eb;
+      }
+
+      &:active {
+        background: #e6f0ff;
+      }
+    }
+
+    .flex-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 4px;
+      background: white;
+      border: 1px solid #d0d0d0;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 100;
+      overflow: hidden;
+      min-width: 180px;
+    }
+
+    .flex-option {
+      padding: 12px 16px;
+      font-size: 14px;
+      color: #333;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+
+      &:hover {
+        background: #f5f5f5;
+      }
+
+      &.active {
+        background: #e6f0ff;
+        color: #2563eb;
+        font-weight: 500;
+      }
+
+      &:not(:last-child) {
+        border-bottom: 1px solid #f0f0f0;
+      }
+    }
+  }
+
+  // Adjust calendar grid for mobile
+  .calendar-modal .calendar-grid {
+    display: block;
+    padding: 20px;
+    overflow-x: auto;
+
+    .month-view {
+      margin-bottom: 24px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .month-header {
+      margin-bottom: 16px;
+    }
+
+    .day {
+      font-size: 15px;
+      min-height: 44px;
+      touch-action: manipulation;
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+  }
+
+  // Mobile actions
+  .calendar-modal .actions {
+    display: flex;
+    padding: 20px;
+    gap: 12px;
+    border-top: 1px solid #e0e0e0;
+    position: sticky;
+    bottom: 0;
+    background: white;
+    z-index: 10;
+
+    button {
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 8px;
+      flex: 1;
+      touch-action: manipulation;
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+
+    .reset-btn {
+      background: white;
+      border: 2px solid #d0d0d0;
+
+      &:active {
+        background: #f5f5f5;
+      }
+    }
+
+    .done-btn {
+      background: #2563eb;
+      border: 2px solid #2563eb;
+
+      &:active {
+        background: #1d4ed8;
+      }
     }
   }
 }
