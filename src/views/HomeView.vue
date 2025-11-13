@@ -1,10 +1,12 @@
 <script lang="ts">
 import TabNavigation from '@/components/TabNavigation.vue'
+import Calendar from '@/components/Calendar.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    TabNavigation
+    TabNavigation,
+    Calendar
   },
   data() {
     return {
@@ -15,6 +17,9 @@ export default {
   methods: {
     handleTabChange(tabId: string) {
       this.activeSection = tabId
+    },
+    handleDateRangeSelected(dateRange: { checkIn: Date | null, checkOut: Date | null }) {
+      console.log('Date range selected:', dateRange)
     }
   }
 }
@@ -25,6 +30,8 @@ export default {
     <img src="/chase-travel-logo-white.svg" alt="Chase Travel" class="logo" />
     <h1>Discover The Edit by Chase Travel℠</h1>
     <TabNavigation @tab-change="handleTabChange" />
+
+    <Calendar @date-range-selected="handleDateRangeSelected" />
 
     <div class="content-section">
       <div v-if="activeSection === 'overview'" class="section">
