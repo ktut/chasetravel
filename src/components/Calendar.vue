@@ -1,10 +1,15 @@
 <script lang="ts">
+// @ts-ignore
+import getDayValueCategory from '@/data/getDayValueCategory.js'
+
 interface DateInfo {
   date: number
   month: number
   year: number
   isCurrentMonth: boolean
 }
+
+type PriceLevel = 'cheap' | 'normal' | 'expensive'
 
 export default {
   name: 'Calendar',
@@ -267,6 +272,12 @@ export default {
         })
         this.isOpen = false
       }
+    },
+    getPriceLevel(dateInfo: DateInfo): PriceLevel {
+      if (!dateInfo.isCurrentMonth) return 'cheap'
+
+      const date = new Date(dateInfo.year, dateInfo.month, dateInfo.date)
+      return getDayValueCategory(date)
     }
   }
 }
@@ -276,11 +287,11 @@ export default {
   <div class="calendar">
     <div class="date-inputs">
       <div class="date-input" @click="openCalendar" tabindex="0">
-        <div class="label">Check-in</div>
+        <div class="label">Start date</div>
         <div class="value">{{ checkInFormatted || 'Select date' }}</div>
       </div>
       <div class="date-input" @click="openCalendar" tabindex="0">
-        <div class="label">Check-out</div>
+        <div class="label">End date</div>
         <div class="value">{{ checkOutFormatted || 'Select date' }}</div>
       </div>
     </div>
@@ -304,7 +315,10 @@ export default {
               'other-month': !dateInfo.isCurrentMonth,
               'selected': isSelected(dateInfo),
               'focused': isFocused(dateInfo),
-              'in-range': isInRange(dateInfo)
+              'in-range': isInRange(dateInfo),
+              'price-cheap': getPriceLevel(dateInfo) === 'cheap',
+              'price-normal': getPriceLevel(dateInfo) === 'normal',
+              'price-expensive': getPriceLevel(dateInfo) === 'expensive'
             }"
             @click="selectDate(dateInfo)"
           >
@@ -331,7 +345,10 @@ export default {
               'other-month': !dateInfo.isCurrentMonth,
               'selected': isSelected(dateInfo),
               'focused': isFocused(dateInfo),
-              'in-range': isInRange(dateInfo)
+              'in-range': isInRange(dateInfo),
+              'price-cheap': getPriceLevel(dateInfo) === 'cheap',
+              'price-normal': getPriceLevel(dateInfo) === 'normal',
+              'price-expensive': getPriceLevel(dateInfo) === 'expensive'
             }"
             @click="selectDate(dateInfo)"
           >
@@ -489,6 +506,37 @@ export default {
 
       &:hover {
         background: transparent;
+      }
+    }
+
+    // Price indicator styles
+    &.price-cheap:not(.other-month) {
+      background: #dcfce7;
+      color: #000;
+
+      &:hover {
+        background: #bbf7d0;
+        color: #000;
+      }
+    }
+
+    &.price-normal:not(.other-month) {
+      background: #fef3c7;
+      color: #000;
+
+      &:hover {
+        background: #fde68a;
+        color: #000;
+      }
+    }
+
+    &.price-expensive:not(.other-month) {
+      background: #fee2e2;
+      color: #000;
+
+      &:hover {
+        background: #fecaca;
+        color: #000;
       }
     }
 

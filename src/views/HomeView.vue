@@ -29,8 +29,9 @@ export default {
   <div class="home">
     <img src="/chase-travel-logo-white.svg" alt="Chase Travel" class="logo" />
     <h1>Discover The Edit by Chase Travel℠</h1>
-
-    <Calendar @date-range-selected="handleDateRangeSelected" />
+    <div class="search-section">
+      <Calendar @date-range-selected="handleDateRangeSelected" />
+    </div>
     <br></br>
     <TabNavigation @tab-change="handleTabChange" />
 
