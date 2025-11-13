@@ -14,6 +14,7 @@ export default {
       checkOut: null as Date | null,
       currentMonth: new Date().getMonth(),
       currentYear: new Date().getFullYear(),
+      isOpen: false,
       monthNames: [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
@@ -113,12 +114,16 @@ export default {
           this.checkOut = selectedDate
         }
 
-        // Emit the date range
+        // Emit the date range and close the dropdown
         this.$emit('date-range-selected', {
           checkIn: this.checkIn,
           checkOut: this.checkOut
         })
+        this.isOpen = false
       }
+    },
+    openCalendar() {
+      this.isOpen = true
     },
     isSelected(dateInfo: DateInfo): boolean {
       if (!dateInfo.isCurrentMonth) return false
@@ -171,6 +176,7 @@ export default {
           checkIn: this.checkIn,
           checkOut: this.checkOut
         })
+        this.isOpen = false
       }
     }
   }
@@ -180,17 +186,17 @@ export default {
 <template>
   <div class="calendar">
     <div class="date-inputs">
-      <div class="date-input">
+      <div class="date-input" @click="openCalendar">
         <div class="label">Check-in</div>
         <div class="value">{{ checkInFormatted || 'Select date' }}</div>
       </div>
-      <div class="date-input">
+      <div class="date-input" @click="openCalendar">
         <div class="label">Check-out</div>
         <div class="value">{{ checkOutFormatted || 'Select date' }}</div>
       </div>
     </div>
 
-    <div class="calendar-grid">
+    <div v-if="isOpen" class="calendar-grid">
       <div class="month-view">
         <div class="month-header">
           <button class="nav-btn" @click="previousMonth">&lt;</button>
@@ -244,7 +250,7 @@ export default {
       </div>
     </div>
 
-    <div class="actions">
+    <div v-if="isOpen" class="actions">
       <button class="reset-btn" @click="reset">Reset</button>
       <button class="done-btn" @click="done">Done</button>
     </div>
@@ -258,7 +264,6 @@ export default {
   border-radius: 4px;
   padding: 16px;
   max-width: 640px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
 }
 
 .date-inputs {
@@ -274,6 +279,12 @@ export default {
     display: flex;
     align-items: center;
     gap: 8px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+
+    &:hover {
+      border-color: #2563eb;
+    }
 
     .label {
       font-size: 14px;

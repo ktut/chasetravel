@@ -29,9 +29,10 @@ export default {
   <div class="home">
     <img src="/chase-travel-logo-white.svg" alt="Chase Travel" class="logo" />
     <h1>Discover The Edit by Chase Travel℠</h1>
-    <TabNavigation @tab-change="handleTabChange" />
 
     <Calendar @date-range-selected="handleDateRangeSelected" />
+    <br></br>
+    <TabNavigation @tab-change="handleTabChange" />
 
     <div class="content-section">
       <div v-if="activeSection === 'overview'" class="section">
