@@ -10,6 +10,7 @@ interface DateInfo {
 }
 
 type PriceLevel = 'cheap' | 'normal' | 'expensive'
+type FlexibilityOption = 'exact' | 'day-after' | 'day-before' | '1-day' | '2-days' | '3-days'
 
 export default {
   name: 'Calendar',
@@ -17,6 +18,10 @@ export default {
     return {
       checkIn: null as Date | null,
       checkOut: null as Date | null,
+      checkInFlexibility: 'exact' as FlexibilityOption,
+      checkOutFlexibility: 'exact' as FlexibilityOption,
+      showCheckInFlexMenu: false,
+      showCheckOutFlexMenu: false,
       currentMonth: new Date().getMonth(),
       currentYear: new Date().getFullYear(),
       isOpen: false,
@@ -25,7 +30,15 @@ export default {
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
       ],
-      dayNames: ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+      dayNames: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+      flexibilityOptions: [
+        { value: 'exact', label: 'Exact date' },
+        { value: 'day-after', label: '+ day after' },
+        { value: 'day-before', label: '+ day before' },
+        { value: '1-day', label: '± 1 day' },
+        { value: '2-days', label: '± 2 days' },
+        { value: '3-days', label: '± 3 days' }
+      ]
     }
   },
   mounted() {
@@ -62,6 +75,14 @@ export default {
     checkOutFormatted(): string {
       if (!this.checkOut) return ''
       return this.formatDateShort(this.checkOut)
+    },
+    checkInFlexibilityLabel(): string {
+      const option = this.flexibilityOptions.find(opt => opt.value === this.checkInFlexibility)
+      return option ? option.label : 'Exact date'
+    },
+    checkOutFlexibilityLabel(): string {
+      const option = this.flexibilityOptions.find(opt => opt.value === this.checkOutFlexibility)
+      return option ? option.label : 'Exact date'
     }
   },
   methods: {
@@ -229,6 +250,91 @@ export default {
       const date = new Date(dateInfo.year, dateInfo.month, dateInfo.date)
       return date > this.checkIn && date < this.checkOut
     },
+    isInFlexibleRange(dateInfo: DateInfo): boolean {
+      if (!dateInfo.isCurrentMonth) return false
+      const date = new Date(dateInfo.year, dateInfo.month, dateInfo.date)
+
+      // Check if date is in check-in flexible range
+      if (this.checkIn && this.isDateInFlexibleRange(date, this.checkIn, this.checkInFlexibility)) {
+        return true
+      }
+
+      // Check if date is in check-out flexible range
+      if (this.checkOut && this.isDateInFlexibleRange(date, this.checkOut, this.checkOutFlexibility)) {
+        return true
+      }
+
+      return false
+    },
+    isDateInFlexibleRange(date: Date, baseDate: Date, flexibility: FlexibilityOption): boolean {
+      if (flexibility === 'exact') {
+        return this.isSameDate(date, baseDate)
+      }
+
+      const daysDiff = Math.floor((date.getTime() - baseDate.getTime()) / (1000 * 60 * 60 * 24))
+
+      switch (flexibility) {
+        case 'day-after':
+          return daysDiff === 0 || daysDiff === 1
+        case 'day-before':
+          return daysDiff === 0 || daysDiff === -1
+        case '1-day':
+          return Math.abs(daysDiff) <= 1
+        case '2-days':
+          return Math.abs(daysDiff) <= 2
+        case '3-days':
+          return Math.abs(daysDiff) <= 3
+        default:
+          return false
+      }
+    },
+    getFlexibleRangePosition(dateInfo: DateInfo, type: 'checkIn' | 'checkOut'): string | null {
+      if (!dateInfo.isCurrentMonth) return null
+
+      const date = new Date(dateInfo.year, dateInfo.month, dateInfo.date)
+      const baseDate = type === 'checkIn' ? this.checkIn : this.checkOut
+      const flexibility = type === 'checkIn' ? this.checkInFlexibility : this.checkOutFlexibility
+
+      if (!baseDate || !this.isDateInFlexibleRange(date, baseDate, flexibility)) {
+        return null
+      }
+
+      if (flexibility === 'exact') return null
+
+      const daysDiff = Math.floor((date.getTime() - baseDate.getTime()) / (1000 * 60 * 60 * 24))
+
+      // Determine range bounds based on flexibility
+      let minDiff = 0
+      let maxDiff = 0
+
+      switch (flexibility) {
+        case 'day-after':
+          minDiff = 0
+          maxDiff = 1
+          break
+        case 'day-before':
+          minDiff = -1
+          maxDiff = 0
+          break
+        case '1-day':
+          minDiff = -1
+          maxDiff = 1
+          break
+        case '2-days':
+          minDiff = -2
+          maxDiff = 2
+          break
+        case '3-days':
+          minDiff = -3
+          maxDiff = 3
+          break
+      }
+
+      // Determine position
+      if (daysDiff === minDiff) return 'start'
+      if (daysDiff === maxDiff) return 'end'
+      return 'middle'
+    },
     isSameDate(date1: Date | null, date2: Date | null): boolean {
       if (!date1 || !date2) return false
       return date1.getFullYear() === date2.getFullYear() &&
@@ -259,19 +365,43 @@ export default {
     reset() {
       this.checkIn = null
       this.checkOut = null
+      this.checkInFlexibility = 'exact'
+      this.checkOutFlexibility = 'exact'
       this.$emit('date-range-selected', {
         checkIn: null,
-        checkOut: null
+        checkOut: null,
+        checkInFlexibility: 'exact',
+        checkOutFlexibility: 'exact'
       })
     },
     done() {
       if (this.checkIn && this.checkOut) {
         this.$emit('date-range-selected', {
           checkIn: this.checkIn,
-          checkOut: this.checkOut
+          checkOut: this.checkOut,
+          checkInFlexibility: this.checkInFlexibility,
+          checkOutFlexibility: this.checkOutFlexibility
         })
         this.isOpen = false
       }
+    },
+    toggleCheckInFlexMenu() {
+      if (!this.checkIn) return
+      this.showCheckInFlexMenu = !this.showCheckInFlexMenu
+      this.showCheckOutFlexMenu = false
+    },
+    toggleCheckOutFlexMenu() {
+      if (!this.checkOut) return
+      this.showCheckOutFlexMenu = !this.showCheckOutFlexMenu
+      this.showCheckInFlexMenu = false
+    },
+    selectCheckInFlexibility(option: FlexibilityOption) {
+      this.checkInFlexibility = option
+      this.showCheckInFlexMenu = false
+    },
+    selectCheckOutFlexibility(option: FlexibilityOption) {
+      this.checkOutFlexibility = option
+      this.showCheckOutFlexMenu = false
     },
     getPriceLevel(dateInfo: DateInfo): PriceLevel {
       if (!dateInfo.isCurrentMonth) return 'cheap'
@@ -287,12 +417,52 @@ export default {
   <div class="calendar">
     <div class="date-inputs">
       <div class="date-input" @click="openCalendar" tabindex="0">
-        <div class="label">Start date</div>
-        <div class="value">{{ checkInFormatted || 'Select date' }}</div>
+        <div v-if="!checkIn" class="placeholder">Start date</div>
+        <div v-if="checkIn" class="value">{{ checkInFormatted }}</div>
+        <div v-if="checkIn" class="flexibility-selector">
+          <button
+            class="flex-button"
+            @click.stop="toggleCheckInFlexMenu"
+            tabindex="0"
+          >
+            {{ checkInFlexibilityLabel }} ▾
+          </button>
+          <div v-if="showCheckInFlexMenu" class="flex-menu">
+            <div
+              v-for="option in flexibilityOptions"
+              :key="option.value"
+              class="flex-option"
+              :class="{ active: checkInFlexibility === option.value }"
+              @click="selectCheckInFlexibility(option.value as FlexibilityOption)"
+            >
+              {{ option.label }}
+            </div>
+          </div>
+        </div>
       </div>
       <div class="date-input" @click="openCalendar" tabindex="0">
-        <div class="label">End date</div>
-        <div class="value">{{ checkOutFormatted || 'Select date' }}</div>
+        <div v-if="!checkOut" class="placeholder">End date</div>
+        <div v-if="checkOut" class="value">{{ checkOutFormatted }}</div>
+        <div v-if="checkOut" class="flexibility-selector">
+          <button
+            class="flex-button"
+            @click.stop="toggleCheckOutFlexMenu"
+            tabindex="0"
+          >
+            {{ checkOutFlexibilityLabel }} ▾
+          </button>
+          <div v-if="showCheckOutFlexMenu" class="flex-menu">
+            <div
+              v-for="option in flexibilityOptions"
+              :key="option.value"
+              class="flex-option"
+              :class="{ active: checkOutFlexibility === option.value }"
+              @click="selectCheckOutFlexibility(option.value as FlexibilityOption)"
+            >
+              {{ option.label }}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -316,6 +486,10 @@ export default {
               'selected': isSelected(dateInfo),
               'focused': isFocused(dateInfo),
               'in-range': isInRange(dateInfo),
+              'flexible-range': isInFlexibleRange(dateInfo) && !isSelected(dateInfo),
+              'flex-start': getFlexibleRangePosition(dateInfo, 'checkIn') === 'start' || getFlexibleRangePosition(dateInfo, 'checkOut') === 'start',
+              'flex-middle': getFlexibleRangePosition(dateInfo, 'checkIn') === 'middle' || getFlexibleRangePosition(dateInfo, 'checkOut') === 'middle',
+              'flex-end': getFlexibleRangePosition(dateInfo, 'checkIn') === 'end' || getFlexibleRangePosition(dateInfo, 'checkOut') === 'end',
               'price-cheap': getPriceLevel(dateInfo) === 'cheap',
               'price-normal': getPriceLevel(dateInfo) === 'normal',
               'price-expensive': getPriceLevel(dateInfo) === 'expensive'
@@ -346,6 +520,10 @@ export default {
               'selected': isSelected(dateInfo),
               'focused': isFocused(dateInfo),
               'in-range': isInRange(dateInfo),
+              'flexible-range': isInFlexibleRange(dateInfo) && !isSelected(dateInfo),
+              'flex-start': getFlexibleRangePosition(dateInfo, 'checkIn') === 'start' || getFlexibleRangePosition(dateInfo, 'checkOut') === 'start',
+              'flex-middle': getFlexibleRangePosition(dateInfo, 'checkIn') === 'middle' || getFlexibleRangePosition(dateInfo, 'checkOut') === 'middle',
+              'flex-end': getFlexibleRangePosition(dateInfo, 'checkIn') === 'end' || getFlexibleRangePosition(dateInfo, 'checkOut') === 'end',
               'price-cheap': getPriceLevel(dateInfo) === 'cheap',
               'price-normal': getPriceLevel(dateInfo) === 'normal',
               'price-expensive': getPriceLevel(dateInfo) === 'expensive'
@@ -386,10 +564,12 @@ export default {
     padding: 8px 12px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: space-between;
+    gap: 12px;
     cursor: pointer;
     transition: border-color 0.2s;
     outline: none;
+    position: relative;
 
     &:hover {
       border-color: #2563eb;
@@ -400,15 +580,82 @@ export default {
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
 
-    .label {
-      font-size: 14px;
-      color: #666;
+    .placeholder {
+      font-size: 15px;
+      color: #999;
+      flex: 1;
     }
 
     .value {
       font-size: 15px;
       font-weight: 500;
       color: #000;
+      flex: 1;
+    }
+  }
+
+  .flexibility-selector {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .flex-button {
+    padding: 4px 8px;
+    background: transparent;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #666;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #f5f5f5;
+      border-color: #2563eb;
+      color: #2563eb;
+    }
+
+    &:focus {
+      outline: 2px solid #2563eb;
+      outline-offset: 1px;
+    }
+  }
+
+  .flex-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    background: white;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    overflow: hidden;
+    min-width: 140px;
+  }
+
+  .flex-option {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+
+    &:hover {
+      background: #f5f5f5;
+    }
+
+    &.active {
+      background: #e6f0ff;
+      color: #2563eb;
+      font-weight: 500;
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #f0f0f0;
     }
   }
 }
@@ -510,7 +757,7 @@ export default {
     }
 
     // Price indicator styles
-    &.price-cheap:not(.other-month) {
+    &.price-cheap:not(.other-month):not(.selected) {
       background: #dcfce7;
       color: #000;
 
@@ -520,7 +767,7 @@ export default {
       }
     }
 
-    &.price-normal:not(.other-month) {
+    &.price-normal:not(.other-month):not(.selected) {
       background: #fef3c7;
       color: #000;
 
@@ -530,7 +777,7 @@ export default {
       }
     }
 
-    &.price-expensive:not(.other-month) {
+    &.price-expensive:not(.other-month):not(.selected) {
       background: #fee2e2;
       color: #000;
 
@@ -541,12 +788,14 @@ export default {
     }
 
     &.selected {
-      background: #2563eb;
-      color: white;
+      background: #2563eb !important;
+      color: white !important;
       font-weight: 600;
+      border-radius: 0;
 
       &:hover {
-        background: #2563eb;
+        background: #2563eb !important;
+        color: white !important;
       }
     }
 
@@ -561,6 +810,37 @@ export default {
 
       &:hover {
         background: #d6e6ff;
+      }
+    }
+
+    &.flexible-range {
+      position: relative;
+      border-radius: 0;
+
+      // Default: all borders
+      &.flex-start {
+        border-left: 2px solid #2563eb;
+        border-top: 2px solid #2563eb;
+        border-bottom: 2px solid #2563eb;
+        border-right: none;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+      }
+
+      &.flex-middle {
+        border-top: 2px solid #2563eb;
+        border-bottom: 2px solid #2563eb;
+        border-left: none;
+        border-right: none;
+      }
+
+      &.flex-end {
+        border-right: 2px solid #2563eb;
+        border-top: 2px solid #2563eb;
+        border-bottom: 2px solid #2563eb;
+        border-left: none;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
       }
     }
   }
