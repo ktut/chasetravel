@@ -854,6 +854,9 @@ export default {
     border-radius: 4px;
     padding: 8px 12px;
     display: flex;
+    @media (max-width: $breakpoint-mobile) {
+      display: block;
+    }
     align-items: center;
     justify-content: space-between;
     gap: 12px;
@@ -1328,10 +1331,10 @@ export default {
   }
 
   .modal-date-inputs {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px;
     background: #f9f9f9;
     border-bottom: 1px solid #e0e0e0;
   }
@@ -1339,10 +1342,11 @@ export default {
   .modal-date-input {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
+    min-width: 0;
 
     label {
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 500;
       color: #666;
       text-transform: uppercase;
@@ -1350,14 +1354,18 @@ export default {
     }
 
     .date-display {
-      font-size: 16px;
+      font-size: 13px;
       font-weight: 500;
       color: #000;
-      padding: 8px 0;
+      padding: 4px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
       .placeholder-text {
         color: #999;
         font-weight: 400;
+        font-size: 12px;
       }
     }
   }
@@ -1365,17 +1373,22 @@ export default {
   .modal-flexibility {
     position: relative;
     margin-top: 4px;
+    min-width: 0;
 
     .flex-button {
-      padding: 8px 12px;
+      padding: 5px 8px;
       background: white;
       border: 1px solid #d0d0d0;
       border-radius: 4px;
-      font-size: 14px;
+      font-size: 11px;
       color: #666;
       cursor: pointer;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       transition: all 0.2s;
+      width: 100%;
+      text-align: left;
 
       &:hover {
         background: #f5f5f5;
@@ -1389,28 +1402,32 @@ export default {
     }
 
     .flex-menu {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      margin-top: 4px;
+      position: fixed;
+      top: auto;
+      left: 50%;
+      bottom: 50%;
+      transform: translateX(-50%) translateY(50%);
+      margin-top: 0;
       background: white;
       border: 1px solid #d0d0d0;
-      border-radius: 4px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      z-index: 100;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      z-index: 1001;
       overflow: hidden;
-      min-width: 180px;
+      min-width: 200px;
+      max-width: 90vw;
     }
 
     .flex-option {
-      padding: 12px 16px;
-      font-size: 14px;
+      padding: 14px 18px;
+      font-size: 15px;
       color: #333;
       cursor: pointer;
       transition: background 0.2s;
       white-space: nowrap;
+      touch-action: manipulation;
 
-      &:hover {
+      &:active {
         background: #f5f5f5;
       }
 

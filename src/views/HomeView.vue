@@ -1,14 +1,14 @@
 <script lang="ts">
 import NavBar from '@/components/NavBar.vue'
 import TabNavigation from '@/components/TabNavigation.vue'
-import Calendar from '@/components/Calendar.vue'
+import SearchWidget from '@/components/SearchWidget.vue'
 
 export default {
   name: 'HomeView',
   components: {
     NavBar,
     TabNavigation,
-    Calendar
+    SearchWidget
   },
   data() {
     return {
@@ -20,8 +20,8 @@ export default {
     handleTabChange(tabId: string) {
       this.activeSection = tabId
     },
-    handleDateRangeSelected(dateRange: { checkIn: Date | null, checkOut: Date | null }) {
-      console.log('Date range selected:', dateRange)
+    handleSearchSubmitted(searchData: any) {
+      console.log('Search submitted:', searchData)
     }
   }
 }
@@ -44,7 +44,7 @@ export default {
     <div class="parallax__group">
       <div class="search">
         <div class="search-section">
-          <Calendar @date-range-selected="handleDateRangeSelected" />
+          <SearchWidget @search-submitted="handleSearchSubmitted" />
         </div>
         <br></br>
 
