@@ -103,6 +103,14 @@ export default {
   }
 }
 
+.search-section {
+  max-width: 600px;
+  margin: -10rem auto 0;
+  @media (max-width: $breakpoint-mobile) {
+    margin-top: -6rem;
+  }
+}
+
 .search {
   padding: $spacing-xl;
   margin: 0 auto;
