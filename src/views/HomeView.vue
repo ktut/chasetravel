@@ -3,7 +3,7 @@ import TabNavigation from '@/components/TabNavigation.vue'
 import Calendar from '@/components/Calendar.vue'
 
 export default {
-  name: 'HomeView',
+  name: 'SearchView',
   components: {
     TabNavigation,
     Calendar
@@ -26,15 +26,18 @@ export default {
 </script>
 
 <template>
-  <div class="home">
+  <div class="search">
     <img src="/chase-travel-logo-white.svg" alt="Chase Travel" class="logo" />
     <h1>Discover The Edit by Chase Travel℠</h1>
     <div class="search-section">
       <Calendar @date-range-selected="handleDateRangeSelected" />
     </div>
     <br></br>
-    <TabNavigation @tab-change="handleTabChange" />
 
+    <div class="flight-results-section">Results go here</div>
+    <br></br>
+
+    <TabNavigation @tab-change="handleTabChange" />
     <div class="content-section">
       <div v-if="activeSection === 'overview'" class="section">
         <h2>Premium Travel Rewards</h2>
@@ -55,7 +58,7 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-.home {
+.search {
   padding: $spacing-xl;
   max-width: 1200px;
   margin: 0 auto;
