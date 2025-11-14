@@ -685,12 +685,8 @@ export default {
     <!-- Modal overlay for mobile -->
     <div v-if="isOpen" class="calendar-modal-overlay" @click.self="closeCalendar">
       <div class="calendar-modal">
-        <div class="modal-header">
-          <h3 class="modal-title">Select dates</h3>
-          <button class="close-btn" @click="closeCalendar" aria-label="Close calendar">×</button>
-        </div>
-
         <div class="modal-date-inputs">
+          <button class="close-btn" @click="closeCalendar" aria-label="Close calendar">×</button>
           <div class="modal-date-input">
             <label>Start date</label>
             <div class="date-display">
@@ -1261,7 +1257,7 @@ export default {
   .calendar-modal {
     background: white;
     width: 100%;
-    max-height: 90vh;
+    max-height: 70vh;
     border-radius: 16px 16px 0 0;
     overflow-y: auto;
     animation: slideUp 0.3s ease-out;
@@ -1278,18 +1274,6 @@ export default {
     }
   }
 
-  .modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
-    border-bottom: 1px solid #e0e0e0;
-    position: sticky;
-    top: 0;
-    background: white;
-    z-index: 10;
-  }
-
   .modal-title {
     font-size: 18px;
     font-weight: 600;
@@ -1298,6 +1282,9 @@ export default {
   }
 
   .close-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
     background: none;
     border: none;
     font-size: 32px;
@@ -1324,6 +1311,7 @@ export default {
   }
 
   .modal-date-inputs {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
@@ -1439,11 +1427,13 @@ export default {
   // Adjust calendar grid for mobile
   .calendar-modal .calendar-grid {
     display: block;
-    padding: 20px;
+    padding: 1rem 0;
     overflow-x: auto;
 
     .month-view {
       margin-bottom: 24px;
+        scale: 0.9;
+        transform-origin: 0% 0%;
 
       &:last-child {
         margin-bottom: 0;
