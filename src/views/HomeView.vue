@@ -29,7 +29,7 @@ export default {
 
 <template>
   <NavBar />
-    <div class="parallax__group">
+    <div class="parallax__group image-top-group">
       <div class="parallax__layer parallax__layer--back">
         <img src="@/assets/g0.png" alt="Background layer" />
       </div>
@@ -121,21 +121,11 @@ export default {
   }
 }
 
-.parallax, .parallax__group {
+.image-top-group {
   height: 90vh;
   @media (max-width: $breakpoint-mobile) {
-    height: 80vh;
+    height: 75vh;
   }
-}
-
-.parallax {
-  perspective: 1px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  position: relative;
-
-  /* WebKit overflow scrolling fix */
-  -webkit-overflow-scrolling: touch;
 }
 
 .parallax__group {

@@ -48,7 +48,7 @@ export default {
 
         <h3 class="popover__title">Redeem your points for more value</h3>
         <p class="popover__text">
-          You have points that can be redeemed for 1.5x-2x value if redeemed on Chase Travel with Points Boost.
+          You have points that can be redeemed for up to 2x value on Chase Travel with Points Boost.
         </p>
         <a href="#" class="popover__link" @click.prevent>Learn more</a>
       </div>
