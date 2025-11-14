@@ -699,8 +699,8 @@ export default {
     </div>
 
     <div v-if="isOpen" class="actions desktop-actions">
-      <button class="reset-btn" @click="reset" tabindex="0">Reset</button>
-      <button class="done-btn" @click="done" tabindex="0">Done</button>
+      <button class="reset-btn btn-secondary" @click="reset" tabindex="0">Reset</button>
+      <button class="done-btn btn-primary" @click="done" tabindex="0">Done</button>
     </div>
 
     <!-- Modal overlay for mobile -->
@@ -843,8 +843,8 @@ export default {
         </div>
 
         <div class="actions">
-          <button class="reset-btn" @click="reset" tabindex="0">Reset</button>
-          <button class="done-btn" @click="done" tabindex="0">Done</button>
+          <button class="reset-btn btn-secondary" @click="reset" tabindex="0">Reset</button>
+          <button class="done-btn btn-primary" @click="done" tabindex="0">Done</button>
         </div>
       </div>
     </div>
@@ -1197,42 +1197,6 @@ export default {
 
   button {
     flex: 1;
-    padding: 12px;
-    border-radius: 4px;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    border: 1px solid #d0d0d0;
-    transition: all 0.2s;
-  }
-
-  .reset-btn {
-    background: white;
-    color: #000;
-
-    &:hover {
-      background: #f5f5f5;
-    }
-
-    &:focus {
-      outline: 2px solid #2563eb;
-      outline-offset: 2px;
-    }
-  }
-
-  .done-btn {
-    background: #2563eb;
-    color: white;
-    border-color: #2563eb;
-
-    &:hover {
-      background: #1d4ed8;
-    }
-
-    &:focus {
-      outline: 2px solid #1d4ed8;
-      outline-offset: 2px;
-    }
   }
 }
 
@@ -1511,31 +1475,8 @@ export default {
     button {
       padding: 14px;
       font-size: 16px;
-      border-radius: 8px;
       flex: 1;
       touch-action: manipulation;
-
-      &:active {
-        transform: scale(0.98);
-      }
-    }
-
-    .reset-btn {
-      background: white;
-      border: 2px solid #d0d0d0;
-
-      &:active {
-        background: #f5f5f5;
-      }
-    }
-
-    .done-btn {
-      background: #2563eb;
-      border: 2px solid #2563eb;
-
-      &:active {
-        background: #1d4ed8;
-      }
     }
   }
 }

@@ -195,20 +195,63 @@ export default {
 <template>
   <div class="search-widget glass-effect">
     <h1 class="image-top-group-title">Your most rewarding trips start here.</h1>
-    <!-- Search type toggle -->
+    <!-- Search type toggle and passenger selector -->
     <div class="search-type-toggle">
-      <button
-        :class="['toggle-btn', { active: searchType === 'flights' }]"
-        @click="searchType = 'flights'"
-      >
-        ✈ Flights
-      </button>
-      <button
-        :class="['toggle-btn', { active: searchType === 'hotels' }]"
-        @click="searchType = 'hotels'"
-      >
-        🏨 Hotels
-      </button>
+      <div class="toggle-buttons">
+        <button
+          :class="['toggle-btn', 'btn-outline', { active: searchType === 'hotels' }]"
+          @click="searchType = 'hotels'"
+        >
+          <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          Stays
+        </button>
+        <button
+          :class="['toggle-btn', 'btn-outline', { active: searchType === 'flights' }]"
+          @click="searchType = 'flights'"
+        >
+          <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"></path>
+          </svg>
+          Flights
+        </button>
+      </div>
+
+      <!-- Passenger selector moved here -->
+      <div class="passenger-selector">
+        <button
+          class="passenger-button btn-outline"
+          @click="togglePassengerDropdown"
+          :aria-label="passengerFieldLabel"
+        >
+          <svg class="person-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span class="passenger-count-display">{{ passengerLabel }}</span>
+        </button>
+        <div v-if="showPassengerDropdown" class="passenger-dropdown">
+          <div class="passenger-dropdown-header">{{ passengerDropdownLabel }}</div>
+          <div class="passenger-row">
+            <span class="passenger-type">Adults</span>
+            <div class="passenger-controls">
+              <button class="control-btn" @click="decrementAdults" :disabled="passengerCounts.adults <= 1">-</button>
+              <span class="passenger-count">{{ passengerCounts.adults }}</span>
+              <button class="control-btn" @click="incrementAdults" :disabled="passengerCounts.adults >= 9">+</button>
+            </div>
+          </div>
+          <div class="passenger-row">
+            <span class="passenger-type">Children</span>
+            <div class="passenger-controls">
+              <button class="control-btn" @click="decrementChildren" :disabled="passengerCounts.children <= 0">-</button>
+              <span class="passenger-count">{{ passengerCounts.children }}</span>
+              <button class="control-btn" @click="incrementChildren" :disabled="passengerCounts.children >= 9">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Location inputs -->
@@ -276,40 +319,6 @@ export default {
           </div>
         </div>
       </div>
-
-      <!-- Passenger selector -->
-      <div class="passenger-selector">
-        <button
-          class="passenger-button"
-          @click="togglePassengerDropdown"
-          :aria-label="passengerFieldLabel"
-        >
-          <svg class="person-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-          <span class="passenger-count-display">{{ passengerLabel }}</span>
-        </button>
-        <div v-if="showPassengerDropdown" class="passenger-dropdown">
-          <div class="passenger-dropdown-header">{{ passengerDropdownLabel }}</div>
-          <div class="passenger-row">
-            <span class="passenger-type">Adults</span>
-            <div class="passenger-controls">
-              <button class="control-btn" @click="decrementAdults" :disabled="passengerCounts.adults <= 1">-</button>
-              <span class="passenger-count">{{ passengerCounts.adults }}</span>
-              <button class="control-btn" @click="incrementAdults" :disabled="passengerCounts.adults >= 9">+</button>
-            </div>
-          </div>
-          <div class="passenger-row">
-            <span class="passenger-type">Children</span>
-            <div class="passenger-controls">
-              <button class="control-btn" @click="decrementChildren" :disabled="passengerCounts.children <= 0">-</button>
-              <span class="passenger-count">{{ passengerCounts.children }}</span>
-              <button class="control-btn" @click="incrementChildren" :disabled="passengerCounts.children >= 9">+</button>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- Calendar component -->
@@ -319,7 +328,7 @@ export default {
 
     <!-- Submit button -->
     <div class="submit-section">
-      <button class="submit-btn" @click="handleSubmit">
+      <button class="submit-btn btn-primary" @click="handleSubmit">
         Search {{ searchType === 'flights' ? 'Flights' : 'Hotels' }}
       </button>
     </div>
@@ -342,29 +351,40 @@ export default {
 
 .search-type-toggle {
   display: flex;
-  gap: 8px;
+  gap: 12px;
   margin-bottom: 24px;
+  align-items: center;
+  justify-content: space-between;
+
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
+
+  .toggle-buttons {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+  }
 
   .toggle-btn {
     flex: 1;
-    padding: 12px 24px;
-    border: 1px solid #d0d0d0;
-    background: white;
-    border-radius: 4px;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 
-    &:hover {
-      background: #f5f5f5;
-      border-color: $color-accent;
+    .toggle-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      transition: stroke 0.2s;
     }
 
-    &.active {
-      background: $color-accent;
-      color: white;
-      border-color: $color-accent;
+    &.active,
+    &:hover:not(:disabled) {
+      .toggle-icon {
+        stroke: white;
+      }
     }
   }
 }
@@ -491,61 +511,56 @@ export default {
 .passenger-selector {
   position: relative;
   flex: 0 0 auto;
-  width: 90px;
 
   @media (max-width: 768px) {
-    width: 80px;
+    flex: 1 1 100%;
+    order: 3;
   }
 
   .passenger-button {
-    width: 100%;
-    padding: 10px 8px;
-    border: 1px solid #d0d0d0;
-    border-radius: 4px;
-    background: white;
-    font-size: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    cursor: pointer;
-    transition: all 0.2s;
+    gap: 8px;
+    white-space: nowrap;
 
-    &:hover {
-      border-color: $color-accent;
-    }
-
-    &:focus {
-      outline: none;
-      border-color: $color-accent;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    &:hover:not(:disabled) {
+      .person-icon {
+        stroke: white;
+      }
     }
   }
 
   .person-icon {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
+    transition: stroke 0.2s;
   }
 
   .passenger-count-display {
-    font-weight: 500;
+    font-weight: 600;
     font-size: 15px;
   }
 
   .passenger-dropdown {
     position: absolute;
     top: 100%;
-    left: 0;
-    right: auto;
-    margin-top: 4px;
+    right: 0;
+    left: auto;
+    margin-top: 8px;
     background: white;
     border: 1px solid #d0d0d0;
-    border-radius: 4px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 100;
     padding: 12px;
     min-width: 250px;
+
+    @media (max-width: 768px) {
+      left: 0;
+      right: 0;
+    }
   }
 
   .passenger-dropdown-header {
@@ -623,27 +638,7 @@ export default {
 
   .submit-btn {
     padding: 14px 32px;
-    background: $color-accent;
-    color: white;
-    border: none;
-    border-radius: 4px;
     font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-
-    &:hover {
-      background: #1d4ed8;
-    }
-
-    &:focus {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
-    }
-
-    &:active {
-      transform: scale(0.98);
-    }
   }
 }
 </style>

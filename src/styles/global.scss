@@ -109,3 +109,76 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+
+// Global Button Styles
+.btn {
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+  font-family: $font-body;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+}
+
+.btn-primary {
+  @extend .btn;
+  background: $color-accent;
+  color: white;
+  border-color: $color-accent;
+
+  &:hover:not(:disabled) {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btn-outline {
+  @extend .btn;
+  background: white;
+  color: $color-accent;
+  border-color: $color-accent;
+
+  &:hover:not(:disabled) {
+    background: $color-accent;
+    color: white;
+  }
+
+  &.active {
+    background: $color-accent;
+    color: white;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btn-secondary {
+  @extend .btn;
+  background: white;
+  color: #000;
+  border-color: #d0d0d0;
+
+  &:hover:not(:disabled) {
+    background: #f5f5f5;
+    border-color: $color-accent;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

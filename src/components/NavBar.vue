@@ -66,7 +66,7 @@ export default {
           v-if="!isSignedIn"
           @click="handleSignIn"
           :disabled="isLoading"
-          class="navbar__signin-btn"
+          class="navbar__signin-btn btn-primary"
         >
           <svg
             v-if="isLoading"
@@ -201,29 +201,9 @@ export default {
     align-items: center;
     justify-content: center;
     padding: 0.5rem 1.5rem;
-    background: $color-accent;
-    color: white;
-    border: none;
-    border-radius: 4px;
     font-size: 0.875rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
     min-width: 100px;
     height: 36px;
-
-    &:hover:not(:disabled) {
-      background: color.adjust($color-accent, $lightness: -10%);
-    }
-
-    &:active:not(:disabled) {
-      background: $color-grey;
-    }
-
-    &:disabled {
-      cursor: not-allowed;
-      opacity: 0.9;
-    }
   }
 
   &__spinner {
