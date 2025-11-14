@@ -1260,12 +1260,13 @@ export default {
   .calendar-modal {
     background: white;
     width: 100%;
-    max-height: 70vh;
+    max-height: 80vh;
     border-radius: 16px 16px 0 0;
     overflow-y: auto;
     animation: slideUp 0.3s ease-out;
     display: flex;
     flex-direction: column;
+    -webkit-overflow-scrolling: touch;
 
     @keyframes slideUp {
       from {
@@ -1321,6 +1322,7 @@ export default {
     padding: 16px;
     background: #f9f9f9;
     border-bottom: 1px solid #e0e0e0;
+    flex-shrink: 0;
   }
 
   .modal-date-input {
@@ -1433,13 +1435,12 @@ export default {
   // Adjust calendar grid for mobile
   .calendar-modal .calendar-grid {
     display: block;
-    padding: 1rem 0;
-    overflow-x: auto;
+    padding: 0 1rem 1rem 1rem;
+    overflow-x: hidden;
+    flex: 1;
 
     .month-view {
       margin-bottom: 24px;
-        scale: 0.9;
-        transform-origin: 0% 0%;
 
       &:last-child {
         margin-bottom: 0;
@@ -1464,13 +1465,12 @@ export default {
   // Mobile actions
   .calendar-modal .actions {
     display: flex;
-    padding: 20px;
+    padding: 16px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
     gap: 12px;
     border-top: 1px solid #e0e0e0;
-    position: sticky;
-    bottom: 0;
     background: white;
-    z-index: 10;
+    flex-shrink: 0;
 
     button {
       padding: 14px;

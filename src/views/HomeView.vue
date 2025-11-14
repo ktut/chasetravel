@@ -2,23 +2,50 @@
 import NavBar from '@/components/NavBar.vue'
 import TabNavigation from '@/components/TabNavigation.vue'
 import SearchWidget from '@/components/SearchWidget.vue'
+import Results from '@/components/Results.vue'
+import { getMockFlightResults } from '@/services/MockFlightResults'
+import { getMockHotelResults } from '@/services/MockHotelResults'
 
 export default {
   name: 'HomeView',
   components: {
     NavBar,
     TabNavigation,
-    SearchWidget
+    SearchWidget,
+    Results
   },
   data() {
     return {
       title: 'Chase Sapphire Reserve',
-      activeSection: 'search' as 'search' | 'results'
+      activeSection: 'search' as 'search' | 'results',
+      searchResults: [] as any[],
+      searchType: 'flights' as 'flights' | 'hotels',
+      showResults: false
     }
   },
   methods: {
     handleSearchSubmitted(searchData: any) {
       console.log('Search submitted:', searchData)
+
+      // Get mock results based on search type
+      if (searchData.searchType === 'flights') {
+        this.searchResults = getMockFlightResults(searchData)
+        this.searchType = 'flights'
+      } else if (searchData.searchType === 'hotels') {
+        this.searchResults = getMockHotelResults(searchData)
+        this.searchType = 'hotels'
+      }
+
+      // Show results
+      this.showResults = true
+
+      // Smooth scroll to results after a short delay to ensure DOM update
+      this.$nextTick(() => {
+        const resultsElement = this.$refs.resultsSection as HTMLElement
+        if (resultsElement) {
+          resultsElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      })
     }
   }
 }
@@ -45,7 +72,9 @@ export default {
         </div>
         <br></br>
 
-        <div class="flight-results-section">Results go here</div>
+        <div v-if="showResults" ref="resultsSection" class="results-section">
+          <Results :results="searchResults" :searchType="searchType" />
+        </div>
         <br></br>
       </div>
     </div>
