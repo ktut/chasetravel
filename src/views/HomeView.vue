@@ -75,23 +75,22 @@ export default {
 <style lang="scss" scoped>
 
 .image-top-group-title {
-  font-size: 3rem;
-  color: rgba(255, 255, 255, 0.9);
-  letter-spacing: -0.02em;
-  position: absolute;
-  top: 31vh;
-  left: 0;
-  right: 0;
-  width: 100vw;
-  text-align: center;
-  padding: 0 $spacing-sm;
-  z-index: 1;
-  text-wrap: balance;
-  filter: drop-shadow(-5px 0 10px rgba(0, 0, 0, 1));
+  display: none;
   @media (max-width: $breakpoint-mobile) {
-    font-size: 1.8rem;
+    display: block;
+    position: absolute;
+    top: 13.2rem;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    text-align: center;
+    padding: 0 $spacing-sm;
+    z-index: 1;
+    text-wrap: balance;
+    color: rgba(255, 255, 255, 0.9);
+    filter: drop-shadow(-5px 0 10px rgba(0, 0, 0, 1));
+    font-size: 2.4rem;
     letter-spacing: unset;
-    top: 30vh;
     line-height: 1;
   }
 }

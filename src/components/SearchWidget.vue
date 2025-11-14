@@ -194,6 +194,7 @@ export default {
 
 <template>
   <div class="search-widget glass-effect">
+    <h1 class="image-top-group-title">Your most rewarding trips start here.</h1>
     <!-- Search type toggle -->
     <div class="search-type-toggle">
       <button
@@ -327,17 +328,22 @@ export default {
 
 <style lang="scss" scoped>
 .search-widget {
-  border-radius: 8px;
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.image-top-group-title {
+  font-size: 2.3rem;
+  letter-spacing: -0.02em;
+  @media (max-width: $breakpoint-mobile) {
+    display: none;
+  }
 }
 
 .search-type-toggle {
   display: flex;
   gap: 8px;
   margin-bottom: 24px;
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 16px;
 
   .toggle-btn {
     flex: 1;
