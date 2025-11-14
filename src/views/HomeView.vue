@@ -73,6 +73,10 @@ export default {
         </div>
       </div>
     </div>
+    <!-- REMOVE BELOW DIV AFTER TESTING -->
+    <div class="parallax__group">
+      <img src="@/assets/guatemala-test-p3.jpg" alt="test p3 image" style="width: 100vw;"/>
+      </div>
     
   </div>
 </template>
