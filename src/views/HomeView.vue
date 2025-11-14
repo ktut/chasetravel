@@ -1,10 +1,12 @@
 <script lang="ts">
+import NavBar from '@/components/NavBar.vue'
 import TabNavigation from '@/components/TabNavigation.vue'
 import Calendar from '@/components/Calendar.vue'
 
 export default {
   name: 'SearchView',
   components: {
+    NavBar,
     TabNavigation,
     Calendar
   },
@@ -26,6 +28,8 @@ export default {
 </script>
 
 <template>
+  <NavBar />
+
   <div class="parallax__group">
     
     <div class="parallax__group">
@@ -124,7 +128,7 @@ export default {
 }
 
 .parallax, .parallax__group {
-  height: 100vh;
+  height: 90vh;
 }
 
 .parallax {
