@@ -29,6 +29,7 @@ export default {
 
 <template>
   <NavBar />
+  <h1 class="image-top-group-title">Your most rewarding trips start <i>here</i>.</h1>
     <div class="parallax__group image-top-group">
       <div class="parallax__layer parallax__layer--back">
         <img src="@/assets/g0.png" alt="Background layer" />
@@ -72,6 +73,30 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+
+.image-top-group-title {
+  font-size: 3rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: -0.02em;
+  position: absolute;
+  top: 31vh;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  text-align: center;
+  padding: 0 $spacing-sm;
+  z-index: 1;
+  text-wrap: balance;
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.9));
+  @media (max-width: $breakpoint-mobile) {
+    font-size: 1.8rem;
+    letter-spacing: unset;
+    top: 30vh;
+    line-height: 1;
+  }
+}
+
 .search {
   padding: $spacing-xl;
   margin: 0 auto;

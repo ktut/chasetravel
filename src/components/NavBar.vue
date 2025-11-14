@@ -155,7 +155,10 @@ export default {
   position: sticky;
   top: 0;
   z-index: 1000;
-  margin-bottom: -5rem;
+  margin-bottom: -15rem;
+  @media (max-width: $breakpoint-mobile) {
+    margin-bottom: -10rem;
+  }
 
   &__container {
     max-width: 1440px;
