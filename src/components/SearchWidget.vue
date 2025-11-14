@@ -18,7 +18,7 @@ export default {
   },
   data() {
     return {
-      searchType: 'flights' as 'flights' | 'hotels',
+      searchType: 'flights' as 'flights' | 'hotels' | 'cars' | 'activities' | 'cruises' | 'tours',
       location: '',
       destination: '',
       showLocationDropdown: false,
@@ -217,6 +217,55 @@ export default {
           </svg>
           Stays
         </button>
+        <button
+          :class="['toggle-btn', 'btn-outline', { active: searchType === 'cars' }]"
+          @click="searchType = 'cars'"
+          disabled
+        >
+          <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 17h-2v-6l2-5h9l4 5v6h-2"></path>
+            <circle cx="7" cy="17" r="2"></circle>
+            <circle cx="17" cy="17" r="2"></circle>
+          </svg>
+          Cars
+        </button>
+        <button
+          :class="['toggle-btn', 'btn-outline', { active: searchType === 'activities' }]"
+          @click="searchType = 'activities'"
+          disabled
+        >
+          <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 6v6l4 2"></path>
+          </svg>
+          Activities
+        </button>
+        <button
+          :class="['toggle-btn', 'btn-outline', { active: searchType === 'cruises' }]"
+          @click="searchType = 'cruises'"
+          disabled
+        >
+          <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path>
+            <path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-3.5 5.5L3 13.5"></path>
+            <path d="M2 21l1-10 9-4"></path>
+            <path d="M12 6V3"></path>
+            <path d="M12 3l-2 2"></path>
+            <path d="M12 3l2 2"></path>
+          </svg>
+          Cruises
+        </button>
+        <button
+          :class="['toggle-btn', 'btn-outline', { active: searchType === 'tours' }]"
+          @click="searchType = 'tours'"
+          disabled
+        >
+          <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="10" r="3"></circle>
+            <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z"></path>
+          </svg>
+          Tours
+        </button>
       </div>
     </div>
 
@@ -345,6 +394,7 @@ export default {
 .image-top-group-title {
   font-size: 2.3rem;
   letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
   @media (max-width: $breakpoint-mobile) {
     display: none;
   }
@@ -355,11 +405,41 @@ export default {
   gap: 12px;
   margin-bottom: 24px;
   align-items: center;
+  position: relative;
 
   .toggle-buttons {
     display: flex;
     gap: 8px;
     flex: 1;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    padding-bottom: 12px;
+    @media (max-width: $breakpoint-mobile) {
+      padding-bottom: 0;
+    }
+
+    &::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Edge */
+    }
+
+    @media (max-width: 768px) {
+      margin-top: -48px;
+
+      /* Fade effect on the right side for mobile */
+      &::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 40px;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+        pointer-events: none;
+        z-index: 1;
+      }
+    }
   }
 
   .toggle-btn {
@@ -368,6 +448,8 @@ export default {
     justify-content: center;
     gap: 8px;
     border-radius: 2rem;
+    white-space: nowrap;
+    flex-shrink: 0;
 
     .toggle-icon {
       width: 20px;
@@ -381,6 +463,13 @@ export default {
       .toggle-icon {
         stroke: white;
       }
+    }
+
+    &:disabled {
+      filter: grayscale(100%);
+      cursor: not-allowed;
+      color: #a8a8a8;
+      border-color: #a8a8a8
     }
   }
 }
