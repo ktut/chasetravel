@@ -38,19 +38,7 @@ export default {
     <div class="navbar__container">
       <!-- Logo Section -->
       <div class="navbar__logo">
-        <svg class="navbar__logo-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-          <!-- Hexagonal Chase logo -->
-          <path
-            d="M20 2L35.3 11V29L20 38L4.7 29V11L20 2Z"
-            fill="#0047BB"
-          />
-          <!-- White accent/detail -->
-          <path
-            d="M20 10L28 15V25L20 30L12 25V15L20 10Z"
-            fill="white"
-            opacity="0.2"
-          />
-        </svg>
+        <img src="@/assets/chase-logo.png" alt="Chase" class="navbar__logo-icon" />
         <span class="navbar__logo-text">Travel</span>
       </div>
 
@@ -91,10 +79,7 @@ export default {
 
         <!-- Points Display (shown after sign in) -->
         <div v-else class="navbar__points">
-          <svg class="navbar__points-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <rect x="4" y="6" width="16" height="12" rx="2" fill="#0047BB"/>
-            <circle cx="15" cy="12" r="2.5" fill="white"/>
-          </svg>
+          <img src="@/assets/chase-logo.png" alt="Chase" class="navbar__points-icon" />
           <span class="navbar__points-text">{{ formattedPoints }} pts</span>
         </div>
 
@@ -227,10 +212,8 @@ export default {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: #f5f5f5;
+    padding: 0.25rem 0.5rem;
     border-radius: 8px;
-    border: 1px solid #e0e0e0;
     animation: fadeIn 0.3s ease-in;
   }
 
