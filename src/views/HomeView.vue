@@ -30,13 +30,13 @@ export default {
     
     <div class="parallax__group">
       <div class="parallax__layer parallax__layer--back">
-        <img src="@/assets/g0.svg" alt="Background layer" />
+        <img src="@/assets/g0.png" alt="Background layer" />
       </div>
       <div class="parallax__layer parallax__layer--base">
-        <img src="@/assets/g1.svg" alt="Middle layer" />
+        <img src="@/assets/g1.png" alt="Middle layer" />
       </div>
       <div class="parallax__layer parallax__layer--fore">
-        <img src="@/assets/g2.svg" alt="Foreground layer" />
+        <img src="@/assets/g2.png" alt="Foreground layer" />
 
         <div class="search">
           <img src="/chase-travel-logo-white.svg" alt="Chase Travel" class="logo" />
@@ -122,9 +122,13 @@ export default {
     transform: translateY(0);
   }
 }
+
+.parallax, .parallax__group {
+  height: 100vh;
+}
+
 .parallax {
   perspective: 1px;
-  height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
@@ -135,7 +139,6 @@ export default {
 
 .parallax__group {
   position: relative;
-  height: 100vh;
   transform-style: preserve-3d;
 }
 
