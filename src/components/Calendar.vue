@@ -1360,9 +1360,6 @@ export default {
   }
 
   .modal-date-input {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
     gap: 4px;
     min-width: 0;
 
@@ -1383,6 +1380,10 @@ export default {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+
+      > span {
+        font-size: 18px;
+      }
 
       .placeholder-text {
         color: #999;
