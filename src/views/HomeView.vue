@@ -77,7 +77,7 @@ export default {
 .search {
   padding: $spacing-xl;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 1);
 
   .logo {
     max-width: 300px;
