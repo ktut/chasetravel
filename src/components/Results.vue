@@ -248,7 +248,7 @@ export default {
     ></div>
 
     <!-- Mobile Filter Toggle Button -->
-    <button ref="filterToggle" class="mobile-filter-toggle" @click="openMobileFilters">
+    <button class="mobile-filter-toggle" @click="openMobileFilters">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="4" y1="6" x2="20" y2="6"></line>
         <line x1="4" y1="12" x2="20" y2="12"></line>
@@ -259,7 +259,7 @@ export default {
     </button>
 
     <!-- Filters Sidebar -->
-    <aside class="filters-sidebar" :class="{ 'mobile-visible': showMobileFilters }">
+    <aside class="filters-sidebar" :class="{ 'mobile-visible': showMobileFilters }" ref="filterToggle">
       <div class="filters-header">
         <h3>Filters</h3>
         <button class="close-filters-btn" @click="closeMobileFilters">
@@ -564,7 +564,7 @@ export default {
   top: 2rem;
 
   @media (max-width: 968px) {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
@@ -574,10 +574,11 @@ export default {
     border: none;
     border-radius: 0;
     overflow-y: auto;
-    transform: translateX(-100%);
+    transform: translateX(-150%);
     transition: transform 0.3s ease;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     padding: 1rem;
+    scroll-margin-top: 70px;
 
     &.mobile-visible {
       transform: translateX(0);
