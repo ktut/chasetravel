@@ -193,11 +193,20 @@ export default {
 </script>
 
 <template>
-  <div class="search-widget glass-effect">
+  <div class="search-widget">
     <h1 class="image-top-group-title">Your most rewarding trips start here.</h1>
-    <!-- Search type toggle and passenger selector -->
+    <!-- Search type toggle -->
     <div class="search-type-toggle">
       <div class="toggle-buttons">
+        <button
+          :class="['toggle-btn', 'btn-outline', { active: searchType === 'flights' }]"
+          @click="searchType = 'flights'"
+        >
+          <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"></path>
+          </svg>
+          Flights
+        </button>
         <button
           :class="['toggle-btn', 'btn-outline', { active: searchType === 'hotels' }]"
           @click="searchType = 'hotels'"
@@ -208,49 +217,6 @@ export default {
           </svg>
           Stays
         </button>
-        <button
-          :class="['toggle-btn', 'btn-outline', { active: searchType === 'flights' }]"
-          @click="searchType = 'flights'"
-        >
-          <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"></path>
-          </svg>
-          Flights
-        </button>
-      </div>
-
-      <!-- Passenger selector moved here -->
-      <div class="passenger-selector">
-        <button
-          class="passenger-button btn-outline"
-          @click="togglePassengerDropdown"
-          :aria-label="passengerFieldLabel"
-        >
-          <svg class="person-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-          <span class="passenger-count-display">{{ passengerLabel }}</span>
-        </button>
-        <div v-if="showPassengerDropdown" class="passenger-dropdown">
-          <div class="passenger-dropdown-header">{{ passengerDropdownLabel }}</div>
-          <div class="passenger-row">
-            <span class="passenger-type">Adults</span>
-            <div class="passenger-controls">
-              <button class="control-btn" @click="decrementAdults" :disabled="passengerCounts.adults <= 1">-</button>
-              <span class="passenger-count">{{ passengerCounts.adults }}</span>
-              <button class="control-btn" @click="incrementAdults" :disabled="passengerCounts.adults >= 9">+</button>
-            </div>
-          </div>
-          <div class="passenger-row">
-            <span class="passenger-type">Children</span>
-            <div class="passenger-controls">
-              <button class="control-btn" @click="decrementChildren" :disabled="passengerCounts.children <= 0">-</button>
-              <span class="passenger-count">{{ passengerCounts.children }}</span>
-              <button class="control-btn" @click="incrementChildren" :disabled="passengerCounts.children >= 9">+</button>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -326,8 +292,42 @@ export default {
       <Calendar @date-range-selected="handleDateRangeSelected" />
     </div>
 
-    <!-- Submit button -->
+    <!-- Submit button and passenger selector -->
     <div class="submit-section">
+      <!-- Passenger selector -->
+      <div class="passenger-selector">
+        <button
+          class="passenger-button btn-outline"
+          @click="togglePassengerDropdown"
+          :aria-label="passengerFieldLabel"
+        >
+          <svg class="person-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span class="passenger-count-display">{{ passengerLabel }}</span>
+        </button>
+        <div v-if="showPassengerDropdown" class="passenger-dropdown">
+          <div class="passenger-dropdown-header">{{ passengerDropdownLabel }}</div>
+          <div class="passenger-row">
+            <span class="passenger-type">Adults</span>
+            <div class="passenger-controls">
+              <button class="control-btn" @click="decrementAdults" :disabled="passengerCounts.adults <= 1">-</button>
+              <span class="passenger-count">{{ passengerCounts.adults }}</span>
+              <button class="control-btn" @click="incrementAdults" :disabled="passengerCounts.adults >= 9">+</button>
+            </div>
+          </div>
+          <div class="passenger-row">
+            <span class="passenger-type">Children</span>
+            <div class="passenger-controls">
+              <button class="control-btn" @click="decrementChildren" :disabled="passengerCounts.children <= 0">-</button>
+              <span class="passenger-count">{{ passengerCounts.children }}</span>
+              <button class="control-btn" @click="incrementChildren" :disabled="passengerCounts.children >= 9">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <button class="submit-btn btn-primary" @click="handleSubmit">
         Search {{ searchType === 'flights' ? 'Flights' : 'Hotels' }}
       </button>
@@ -339,6 +339,7 @@ export default {
 .search-widget {
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: white;
 }
 
 .image-top-group-title {
@@ -354,11 +355,6 @@ export default {
   gap: 12px;
   margin-bottom: 24px;
   align-items: center;
-  justify-content: space-between;
-
-  @media (max-width: 768px) {
-    flex-wrap: wrap;
-  }
 
   .toggle-buttons {
     display: flex;
@@ -367,11 +363,11 @@ export default {
   }
 
   .toggle-btn {
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    border-radius: 2rem;
 
     .toggle-icon {
       width: 20px;
@@ -512,11 +508,6 @@ export default {
   position: relative;
   flex: 0 0 auto;
 
-  @media (max-width: 768px) {
-    flex: 1 1 100%;
-    order: 3;
-  }
-
   .passenger-button {
     display: flex;
     align-items: center;
@@ -635,6 +626,12 @@ export default {
 .submit-section {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
 
   .submit-btn {
     padding: 14px 32px;
