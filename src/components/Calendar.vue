@@ -835,8 +835,6 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-@import '@/styles/variables.scss';
-
 .calendar {
   background: white;
   border: 1px solid #e0e0e0;
@@ -1119,7 +1117,7 @@ export default {
       background: $color-light-grey;
 
       &:hover {
-        background: darken($color-light-grey, 5%);
+        background: color.adjust($color-light-grey, $lightness: -5%);
       }
     }
 
@@ -1130,7 +1128,7 @@ export default {
       color: white !important;
 
       &:hover {
-        background: darken($color-grey, 5%) !important;
+        background: color.adjust($color-grey, $lightness: -5%) !important;
       }
 
       // Default: all borders

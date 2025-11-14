@@ -210,7 +210,7 @@ export default {
     height: 36px;
 
     &:hover:not(:disabled) {
-      background: darken($color-accent, 10%);
+      background: color.adjust($color-accent, $lightness: -10%);
     }
 
     &:active:not(:disabled) {
