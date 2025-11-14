@@ -4,7 +4,7 @@ import TabNavigation from '@/components/TabNavigation.vue'
 import Calendar from '@/components/Calendar.vue'
 
 export default {
-  name: 'SearchView',
+  name: 'HomeView',
   components: {
     NavBar,
     TabNavigation,
