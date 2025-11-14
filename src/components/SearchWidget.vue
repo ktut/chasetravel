@@ -79,6 +79,12 @@ export default {
       return this.passengerCounts.adults + this.passengerCounts.children
     },
     passengerLabel(): string {
+      return `${this.totalPassengers}`
+    },
+    passengerFieldLabel(): string {
+      return this.searchType === 'flights' ? 'Passengers' : 'Guests'
+    },
+    passengerDropdownLabel(): string {
       const parts = []
       if (this.passengerCounts.adults > 0) {
         parts.push(`${this.passengerCounts.adults} Adult${this.passengerCounts.adults > 1 ? 's' : ''}`)
@@ -86,7 +92,7 @@ export default {
       if (this.passengerCounts.children > 0) {
         parts.push(`${this.passengerCounts.children} Child${this.passengerCounts.children > 1 ? 'ren' : ''}`)
       }
-      return parts.join(', ') || '0 Passengers'
+      return parts.join(', ')
     },
     locationLabel(): string {
       return this.searchType === 'flights' ? 'From' : 'Location'
@@ -117,13 +123,17 @@ export default {
     onLocationInput() {
       this.showLocationDropdown = true
       this.showDestinationDropdown = false
+      this.showPassengerDropdown = false
     },
     onDestinationInput() {
       this.showDestinationDropdown = true
       this.showLocationDropdown = false
+      this.showPassengerDropdown = false
     },
     togglePassengerDropdown() {
       this.showPassengerDropdown = !this.showPassengerDropdown
+      this.showLocationDropdown = false
+      this.showDestinationDropdown = false
     },
     incrementAdults() {
       if (this.passengerCounts.adults < 9) {
@@ -203,16 +213,24 @@ export default {
     <!-- Location inputs -->
     <div class="search-inputs">
       <!-- From/Location field -->
-      <div class="location-input-wrapper">
+      <div class="location-input-wrapper location-primary">
         <label class="input-label">{{ locationLabel }}</label>
-        <input
-          v-model="location"
-          type="text"
-          class="location-input"
-          :placeholder="searchType === 'flights' ? 'Departure city' : 'Hotel location'"
-          @input="onLocationInput"
-          @focus="showLocationDropdown = true"
-        />
+        <div class="input-with-clear">
+          <input
+            v-model="location"
+            type="text"
+            class="location-input"
+            :placeholder="searchType === 'flights' ? 'Departure city' : 'Hotel location'"
+            @input="onLocationInput"
+            @focus="onLocationInput"
+          />
+          <button
+            v-if="location"
+            class="clear-btn"
+            @click="location = ''"
+            type="button"
+          >×</button>
+        </div>
         <div v-if="showLocationDropdown && filteredLocations.length > 0" class="location-dropdown">
           <div
             v-for="loc in filteredLocations"
@@ -227,16 +245,24 @@ export default {
       </div>
 
       <!-- To field (only for flights) -->
-      <div v-if="showDestinationField" class="location-input-wrapper">
+      <div v-if="showDestinationField" class="location-input-wrapper location-primary">
         <label class="input-label">To</label>
-        <input
-          v-model="destination"
-          type="text"
-          class="location-input"
-          placeholder="Destination city"
-          @input="onDestinationInput"
-          @focus="showDestinationDropdown = true"
-        />
+        <div class="input-with-clear">
+          <input
+            v-model="destination"
+            type="text"
+            class="location-input"
+            placeholder="Destination city"
+            @input="onDestinationInput"
+            @focus="onDestinationInput"
+          />
+          <button
+            v-if="destination"
+            class="clear-btn"
+            @click="destination = ''"
+            type="button"
+          >×</button>
+        </div>
         <div v-if="showDestinationDropdown && filteredDestinations.length > 0" class="location-dropdown">
           <div
             v-for="loc in filteredDestinations"
@@ -252,11 +278,16 @@ export default {
 
       <!-- Passenger selector -->
       <div class="passenger-selector">
-        <label class="input-label">Passengers</label>
+        <label class="input-label">{{ passengerFieldLabel }}</label>
         <button class="passenger-button" @click="togglePassengerDropdown">
-          {{ passengerLabel }} ▾
+          <svg class="person-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span class="passenger-count-display">{{ passengerLabel }}</span>
         </button>
         <div v-if="showPassengerDropdown" class="passenger-dropdown">
+          <div class="passenger-dropdown-header">{{ passengerDropdownLabel }}</div>
           <div class="passenger-row">
             <span class="passenger-type">Adults</span>
             <div class="passenger-controls">
@@ -330,18 +361,28 @@ export default {
 }
 
 .search-inputs {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
+  display: flex;
+  gap: 12px;
   margin-bottom: 24px;
+  align-items: flex-end;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
+    flex-wrap: wrap;
   }
 }
 
 .location-input-wrapper {
   position: relative;
+  flex: 1;
+  min-width: 0;
+
+  &.location-primary {
+    flex: 2;
+
+    @media (max-width: 768px) {
+      flex: 1 1 100%;
+    }
+  }
 
   .input-label {
     display: block;
@@ -351,9 +392,16 @@ export default {
     margin-bottom: 6px;
   }
 
+  .input-with-clear {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
   .location-input {
     width: 100%;
     padding: 10px 12px;
+    padding-right: 36px;
     border: 1px solid #d0d0d0;
     border-radius: 4px;
     font-size: 15px;
@@ -363,6 +411,35 @@ export default {
       outline: none;
       border-color: #2563eb;
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+  }
+
+  .clear-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: #d0d0d0;
+    color: white;
+    border-radius: 50%;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #999;
+    }
+
+    &:active {
+      transform: translateY(-50%) scale(0.95);
     }
   }
 
@@ -412,6 +489,12 @@ export default {
 
 .passenger-selector {
   position: relative;
+  flex: 0 0 auto;
+  width: 90px;
+
+  @media (max-width: 768px) {
+    width: 80px;
+  }
 
   .input-label {
     display: block;
@@ -423,12 +506,15 @@ export default {
 
   .passenger-button {
     width: 100%;
-    padding: 10px 12px;
+    padding: 10px 8px;
     border: 1px solid #d0d0d0;
     border-radius: 4px;
     background: white;
     font-size: 15px;
-    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     cursor: pointer;
     transition: all 0.2s;
 
@@ -443,11 +529,22 @@ export default {
     }
   }
 
+  .person-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .passenger-count-display {
+    font-weight: 500;
+    font-size: 15px;
+  }
+
   .passenger-dropdown {
     position: absolute;
     top: 100%;
     left: 0;
-    right: 0;
+    right: auto;
     margin-top: 4px;
     background: white;
     border: 1px solid #d0d0d0;
@@ -455,59 +552,69 @@ export default {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     z-index: 100;
     padding: 12px;
+    min-width: 250px;
+  }
 
-    .passenger-row {
+  .passenger-dropdown-header {
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+    padding: 8px 0 12px;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 8px;
+  }
+
+  .passenger-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .passenger-type {
+      font-size: 14px;
+      color: #000;
+      font-weight: 500;
+    }
+
+    .passenger-controls {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 12px 0;
+      gap: 12px;
 
-      &:not(:last-child) {
-        border-bottom: 1px solid #f0f0f0;
-      }
-
-      .passenger-type {
-        font-size: 14px;
-        color: #000;
-        font-weight: 500;
-      }
-
-      .passenger-controls {
+      .control-btn {
+        width: 32px;
+        height: 32px;
+        border: 1px solid #d0d0d0;
+        border-radius: 4px;
+        background: white;
+        font-size: 18px;
+        cursor: pointer;
+        transition: all 0.2s;
         display: flex;
         align-items: center;
-        gap: 12px;
+        justify-content: center;
 
-        .control-btn {
-          width: 32px;
-          height: 32px;
-          border: 1px solid #d0d0d0;
-          border-radius: 4px;
-          background: white;
-          font-size: 18px;
-          cursor: pointer;
-          transition: all 0.2s;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          &:hover:not(:disabled) {
-            background: #f5f5f5;
-            border-color: #2563eb;
-          }
-
-          &:disabled {
-            color: #d0d0d0;
-            cursor: not-allowed;
-            opacity: 0.5;
-          }
+        &:hover:not(:disabled) {
+          background: #f5f5f5;
+          border-color: #2563eb;
         }
 
-        .passenger-count {
-          font-size: 16px;
-          font-weight: 500;
-          min-width: 24px;
-          text-align: center;
+        &:disabled {
+          color: #d0d0d0;
+          cursor: not-allowed;
+          opacity: 0.5;
         }
+      }
+
+      .passenger-count {
+        font-size: 16px;
+        font-weight: 500;
+        min-width: 24px;
+        text-align: center;
       }
     }
   }
