@@ -46,9 +46,9 @@ export default {
           </svg>
         </button>
 
-        <h3 class="popover__title">Redeem your points worth 1.5x value</h3>
+        <h3 class="popover__title">Redeem your points for more value</h3>
         <p class="popover__text">
-          You have points that are eligible to keep their current value of 1.5x if redeemed on Chase Travel.
+          You have points that can be redeemed for 1.5x-2x value if redeemed on Chase Travel with Points Boost.
         </p>
         <a href="#" class="popover__link" @click.prevent>Learn more</a>
       </div>
@@ -61,8 +61,8 @@ export default {
   position: absolute;
   top: calc(100% + 12px);
   right: 0;
-  width: 360px;
-  background: #002d5c;
+  width: 400px;
+  background: $color-primary;
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 2px 6px rgba(0, 0, 0, 0.15);
   z-index: 1000;
@@ -74,13 +74,13 @@ export default {
     right: 48px;
     width: 16px;
     height: 16px;
-    background: #002d5c;
+    background: $color-primary;
     transform: rotate(45deg);
   }
 
   &__content {
     position: relative;
-    background: #002d5c;
+    background: $color-primary;
     padding: 24px 20px;
     color: white;
   }
@@ -106,15 +106,15 @@ export default {
 
   &__title {
     font-family: "Queens", serif;
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.3;
+    font-size: 1.3rem;
+    text-wrap: balance;
+    line-height: 1.12;
     margin: 0 0 12px 0;
     padding-right: 24px;
   }
 
   &__text {
-    font-size: 13px;
+    font-size: 0.9rem;
     line-height: 1.5;
     margin: 0 0 12px 0;
     color: rgba(255, 255, 255, 0.95);
@@ -149,8 +149,8 @@ export default {
 
 @media (max-width: 768px) {
   .popover {
-    width: 320px;
-    right: -20px;
+    width: 270px;
+    right: 0px;
 
     &__arrow {
       right: 36px;
