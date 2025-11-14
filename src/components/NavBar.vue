@@ -34,7 +34,7 @@ export default {
 </script>
 
 <template>
-  <nav class="navbar">
+  <nav class="navbar glass-effect">
     <div class="navbar__container">
       <!-- Logo Section -->
       <div class="navbar__logo">
@@ -133,8 +133,7 @@ export default {
 <style lang="scss" scoped>
 .navbar {
   width: 100%;
-  background: white;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid rgba(229, 229, 229, 0.6);
   position: sticky;
   top: 0;
   z-index: 1000;
