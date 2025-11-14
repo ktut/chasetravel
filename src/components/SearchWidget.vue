@@ -214,13 +214,13 @@ export default {
     <div class="search-inputs">
       <!-- From/Location field -->
       <div class="location-input-wrapper location-primary">
-        <label class="input-label">{{ locationLabel }}</label>
         <div class="input-with-clear">
           <input
             v-model="location"
             type="text"
             class="location-input"
-            :placeholder="searchType === 'flights' ? 'Departure city' : 'Hotel location'"
+            :placeholder="searchType === 'flights' ? 'From' : 'Location'"
+            :aria-label="locationLabel"
             @input="onLocationInput"
             @focus="onLocationInput"
           />
@@ -246,13 +246,13 @@ export default {
 
       <!-- To field (only for flights) -->
       <div v-if="showDestinationField" class="location-input-wrapper location-primary">
-        <label class="input-label">To</label>
         <div class="input-with-clear">
           <input
             v-model="destination"
             type="text"
             class="location-input"
-            placeholder="Destination city"
+            placeholder="To"
+            aria-label="To"
             @input="onDestinationInput"
             @focus="onDestinationInput"
           />
@@ -278,8 +278,11 @@ export default {
 
       <!-- Passenger selector -->
       <div class="passenger-selector">
-        <label class="input-label">{{ passengerFieldLabel }}</label>
-        <button class="passenger-button" @click="togglePassengerDropdown">
+        <button
+          class="passenger-button"
+          @click="togglePassengerDropdown"
+          :aria-label="passengerFieldLabel"
+        >
           <svg class="person-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
@@ -349,13 +352,13 @@ export default {
 
     &:hover {
       background: #f5f5f5;
-      border-color: #2563eb;
+      border-color: $color-accent;
     }
 
     &.active {
-      background: #2563eb;
+      background: $color-accent;
       color: white;
-      border-color: #2563eb;
+      border-color: $color-accent;
     }
   }
 }
@@ -364,7 +367,7 @@ export default {
   display: flex;
   gap: 12px;
   margin-bottom: 24px;
-  align-items: flex-end;
+  align-items: stretch;
 
   @media (max-width: 768px) {
     flex-wrap: wrap;
@@ -384,14 +387,6 @@ export default {
     }
   }
 
-  .input-label {
-    display: block;
-    font-size: 13px;
-    font-weight: 500;
-    color: #666;
-    margin-bottom: 6px;
-  }
-
   .input-with-clear {
     position: relative;
     display: flex;
@@ -409,7 +404,7 @@ export default {
 
     &:focus {
       outline: none;
-      border-color: #2563eb;
+      border-color: $color-accent;
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
   }
@@ -496,14 +491,6 @@ export default {
     width: 80px;
   }
 
-  .input-label {
-    display: block;
-    font-size: 13px;
-    font-weight: 500;
-    color: #666;
-    margin-bottom: 6px;
-  }
-
   .passenger-button {
     width: 100%;
     padding: 10px 8px;
@@ -519,12 +506,12 @@ export default {
     transition: all 0.2s;
 
     &:hover {
-      border-color: #2563eb;
+      border-color: $color-accent;
     }
 
     &:focus {
       outline: none;
-      border-color: #2563eb;
+      border-color: $color-accent;
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
   }
@@ -600,7 +587,7 @@ export default {
 
         &:hover:not(:disabled) {
           background: #f5f5f5;
-          border-color: #2563eb;
+          border-color: $color-accent;
         }
 
         &:disabled {
@@ -630,7 +617,7 @@ export default {
 
   .submit-btn {
     padding: 14px 32px;
-    background: #2563eb;
+    background: $color-accent;
     color: white;
     border: none;
     border-radius: 4px;
