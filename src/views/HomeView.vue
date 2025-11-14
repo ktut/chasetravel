@@ -29,9 +29,6 @@ export default {
 
 <template>
   <NavBar />
-
-  <div class="parallax__group">
-    
     <div class="parallax__group">
       <div class="parallax__layer parallax__layer--back">
         <img src="@/assets/g0.png" alt="Background layer" />
@@ -41,40 +38,37 @@ export default {
       </div>
       <div class="parallax__layer parallax__layer--fore">
         <img src="@/assets/g2.png" alt="Foreground layer" />
+      </div>
+    </div>
+    <div class="parallax__group">
+      <div class="search">
+        <div class="search-section">
+          <Calendar @date-range-selected="handleDateRangeSelected" />
+        </div>
+        <br></br>
 
-        <div class="search">
-          <img src="/chase-travel-logo-white.svg" alt="Chase Travel" class="logo" />
-          <h1>Discover The Edit by Chase Travel℠</h1>
-          <div class="search-section">
-            <Calendar @date-range-selected="handleDateRangeSelected" />
+        <div class="flight-results-section">Results go here</div>
+        <br></br>
+
+        <TabNavigation @tab-change="handleTabChange" />
+        <div class="content-section">
+          <div v-if="activeSection === 'overview'" class="section">
+            <h2>Premium Travel Rewards</h2>
+            <p>Experience luxury travel with exclusive benefits and rewards.</p>
           </div>
-          <br></br>
 
-          <div class="flight-results-section">Results go here</div>
-          <br></br>
+          <div v-if="activeSection === 'curated-collections'" class="section">
+            <h2>Curated Collections</h2>
+            <p>Explore hand-picked destinations tailored to your travel style.</p>
+          </div>
 
-          <TabNavigation @tab-change="handleTabChange" />
-          <div class="content-section">
-            <div v-if="activeSection === 'overview'" class="section">
-              <h2>Premium Travel Rewards</h2>
-              <p>Experience luxury travel with exclusive benefits and rewards.</p>
-            </div>
-
-            <div v-if="activeSection === 'curated-collections'" class="section">
-              <h2>Curated Collections</h2>
-              <p>Explore hand-picked destinations tailored to your travel style.</p>
-            </div>
-
-            <div v-if="activeSection === 'featured-properties'" class="section">
-              <h2>Featured Properties</h2>
-              <p>Discover exceptional hotels and resorts with exclusive benefits.</p>
-            </div>
+          <div v-if="activeSection === 'featured-properties'" class="section">
+            <h2>Featured Properties</h2>
+            <p>Discover exceptional hotels and resorts with exclusive benefits.</p>
           </div>
         </div>
       </div>
     </div>
-    
-  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -129,6 +123,9 @@ export default {
 
 .parallax, .parallax__group {
   height: 90vh;
+  @media (max-width: $breakpoint-mobile) {
+    height: 80vh;
+  }
 }
 
 .parallax {
@@ -144,6 +141,8 @@ export default {
 .parallax__group {
   position: relative;
   transform-style: preserve-3d;
+  max-width: $breakpoint-max;
+  margin: 0 auto;
 }
 
 .parallax__layer {

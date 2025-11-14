@@ -155,7 +155,7 @@ export default {
   position: sticky;
   top: 0;
   z-index: 1000;
-  margin-bottom: -3.5rem;
+  margin-bottom: -5rem;
 
   &__container {
     max-width: 1440px;

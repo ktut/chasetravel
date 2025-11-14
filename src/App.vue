@@ -14,7 +14,6 @@ export default {
 .app-wrapper {
   width: 100%;
   min-height: 100vh;
-  max-width: 2048px;
   margin-left: auto;
   margin-right: auto;
 
