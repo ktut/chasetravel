@@ -1,6 +1,11 @@
 <script lang="ts">
+import PointsPopover from './PointsPopover.vue'
+
 export default {
   name: 'NavBar',
+  components: {
+    PointsPopover
+  },
   props: {
     points: {
       type: Number,
@@ -10,12 +15,16 @@ export default {
   data() {
     return {
       isSignedIn: false,
-      isLoading: false
+      isLoading: false,
+      isPopoverVisible: false
     }
   },
   computed: {
     formattedPoints(): string {
       return this.points.toLocaleString('en-US')
+    },
+    cardLastFour(): string {
+      return String(this.points).slice(-4)
     }
   },
   methods: {
@@ -28,6 +37,15 @@ export default {
         this.isLoading = false
         this.isSignedIn = true
       }, 2000)
+    },
+    showPopover() {
+      this.isPopoverVisible = true
+    },
+    hidePopover() {
+      this.isPopoverVisible = false
+    },
+    closePopover() {
+      this.isPopoverVisible = false
     }
   }
 }
@@ -78,24 +96,25 @@ export default {
         </button>
 
         <!-- Points Display (shown after sign in) -->
-        <div v-else class="navbar__points">
-          <img src="@/assets/chase-logo.png" alt="Chase" class="navbar__points-icon" />
+        <div
+          v-else
+          class="navbar__points"
+          @mouseenter="showPopover"
+          @mouseleave="hidePopover"
+        >
+          <div class="navbar__points-card">
+            <img src="@/assets/SR_card_shadow.png" alt="Card" class="navbar__points-icon" />
+            <span class="navbar__card-number">...{{ cardLastFour }}</span>
+          </div>
           <span class="navbar__points-text">{{ formattedPoints }} pts</span>
-        </div>
 
-        <!-- Bookmark Icon -->
-        <button class="navbar__icon-btn" aria-label="Bookmarks">
-          <svg class="navbar__icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M19 21L12 16L5 21V5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21Z"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
+          <!-- Popover -->
+          <PointsPopover
+            :points="points"
+            :is-visible="isPopoverVisible"
+            @close="closePopover"
+          />
+        </div>
 
         <!-- User Profile Icon -->
         <button class="navbar__icon-btn" aria-label="User profile">
@@ -208,23 +227,46 @@ export default {
   }
 
   &__points {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 8px;
+    gap: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
     animation: fadeIn 0.3s ease-in;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+
+    &:hover {
+      background-color: rgba(0, 45, 92, 0.05);
+      border-color: #002d5c;
+    }
+  }
+
+  &__points-card {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
   }
 
   &__points-icon {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 18px;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+
+  &__card-number {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #000;
   }
 
   &__points-text {
     font-size: 0.875rem;
-    font-weight: 500;
-    color: #000;
+    font-weight: 600;
+    color: #0a8a4e;
   }
 
   &__icon-btn {

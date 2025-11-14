@@ -5,13 +5,13 @@ export default {
 </script>
 
 <template>
-  <div id="app">
+  <div class="app-wrapper">
     <router-view />
   </div>
 </template>
 
 <style lang="scss" scoped>
-#app {
+.app-wrapper {
   width: 100%;
   min-height: 100vh;
   max-width: 2048px;
