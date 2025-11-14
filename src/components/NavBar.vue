@@ -177,7 +177,7 @@ export default {
     align-items: center;
     justify-content: center;
     padding: 0.5rem 1.5rem;
-    background: #4169E1;
+    background: $color-accent;
     color: white;
     border: none;
     border-radius: 4px;
@@ -189,11 +189,11 @@ export default {
     height: 36px;
 
     &:hover:not(:disabled) {
-      background: #3557C1;
+      background: darken($color-accent, 10%);
     }
 
     &:active:not(:disabled) {
-      background: #2A45A1;
+      background: $color-grey;
     }
 
     &:disabled {
