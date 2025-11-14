@@ -223,9 +223,9 @@ export default {
           disabled
         >
           <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 17h-2v-6l2-5h9l4 5v6h-2"></path>
-            <circle cx="7" cy="17" r="2"></circle>
-            <circle cx="17" cy="17" r="2"></circle>
+            <path d="M14 16H9m10 0h3l-3-8h-4l-3 8Zm0 0h-3M7 16H4l3-8h4l-3 8Zm0 0h3m-3 0v4m3-4v4m0 0H7m3 0h4m-4 0v-4m4 4v-4m0 4h3m-3-4H10"></path>
+            <circle cx="7" cy="20" r="2"></circle>
+            <circle cx="17" cy="20" r="2"></circle>
           </svg>
           Cars
         </button>
@@ -246,12 +246,12 @@ export default {
           disabled
         >
           <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path>
-            <path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-3.5 5.5L3 13.5"></path>
-            <path d="M2 21l1-10 9-4"></path>
-            <path d="M12 6V3"></path>
-            <path d="M12 3l-2 2"></path>
-            <path d="M12 3l2 2"></path>
+            <path d="M2 20a2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1 2.4 2.4 0 0 1 2-1 2.4 2.4 0 0 1 2 1 2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1 2.4 2.4 0 0 1 2-1 2.4 2.4 0 0 1 2 1 2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1"></path>
+            <path d="M4 18 2 12h10l-1.106 3.93"></path>
+            <path d="M14 18h6l2-6h-8.5"></path>
+            <path d="M6 12V6"></path>
+            <path d="M9 12V8"></path>
+            <path d="M12 12V9"></path>
           </svg>
           Cruises
         </button>

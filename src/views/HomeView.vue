@@ -13,13 +13,10 @@ export default {
   data() {
     return {
       title: 'Chase Sapphire Reserve',
-      activeSection: 'overview'
+      activeSection: 'search' as 'search' | 'results'
     }
   },
   methods: {
-    handleTabChange(tabId: string) {
-      this.activeSection = tabId
-    },
     handleSearchSubmitted(searchData: any) {
       console.log('Search submitted:', searchData)
     }
@@ -50,24 +47,6 @@ export default {
 
         <div class="flight-results-section">Results go here</div>
         <br></br>
-
-        <TabNavigation @tab-change="handleTabChange" />
-        <div class="content-section">
-          <div v-if="activeSection === 'overview'" class="section">
-            <h2>Premium Travel Rewards</h2>
-            <p>Experience luxury travel with exclusive benefits and rewards.</p>
-          </div>
-
-          <div v-if="activeSection === 'curated-collections'" class="section">
-            <h2>Curated Collections</h2>
-            <p>Explore hand-picked destinations tailored to your travel style.</p>
-          </div>
-
-          <div v-if="activeSection === 'featured-properties'" class="section">
-            <h2>Featured Properties</h2>
-            <p>Discover exceptional hotels and resorts with exclusive benefits.</p>
-          </div>
-        </div>
       </div>
     </div>
 </template>
