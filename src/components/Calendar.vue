@@ -263,10 +263,28 @@ export default {
     },
     handleOutsideClick(event: MouseEvent) {
       const target = event.target as HTMLElement
-      // Check if click is outside flexibility selector
-      if (!target.closest('.flexibility-selector')) {
+
+      // Check if click is on a flex menu or flex option (these might be fixed-position in mobile)
+      const isFlexMenuClick = target.closest('.flex-menu') || target.classList.contains('flex-option')
+
+      // Check if click is outside the entire calendar component
+      if (!target.closest('.calendar') && !isFlexMenuClick) {
+        // Close all dropdowns and the calendar modal
         this.showCheckInFlexMenu = false
         this.showCheckOutFlexMenu = false
+        this.closeCalendar()
+        return
+      }
+
+      // Check if click is outside flexibility selector but inside calendar
+      if (!target.closest('.flexibility-selector') && !target.closest('.modal-flexibility') && !isFlexMenuClick) {
+        this.showCheckInFlexMenu = false
+        this.showCheckOutFlexMenu = false
+      }
+
+      // Check if click is outside calendar modal content (on the overlay)
+      if (target.classList.contains('calendar-modal-overlay')) {
+        this.closeCalendar()
       }
     },
     openCalendar() {
@@ -284,6 +302,9 @@ export default {
     },
     closeCalendar() {
       this.isOpen = false
+      // Close all flexibility menus
+      this.showCheckInFlexMenu = false
+      this.showCheckOutFlexMenu = false
       // Restore body scroll
       document.body.style.overflow = ''
     },
@@ -843,9 +864,6 @@ export default {
     border-radius: 4px;
     padding: 8px 12px;
     display: flex;
-    @media (max-width: $breakpoint-mobile) {
-      display: block;
-    }
     align-items: center;
     justify-content: space-between;
     gap: 12px;
@@ -853,6 +871,12 @@ export default {
     transition: border-color 0.2s;
     outline: none;
     position: relative;
+
+    @media (max-width: $breakpoint-mobile) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
 
     &:hover {
       border-color: #2563eb;
@@ -880,6 +904,10 @@ export default {
   .flexibility-selector {
     position: relative;
     flex-shrink: 0;
+
+    @media (max-width: $breakpoint-mobile) {
+      width: 100%;
+    }
   }
 
   .flex-button {
@@ -892,6 +920,11 @@ export default {
     cursor: pointer;
     white-space: nowrap;
     transition: all 0.2s;
+
+    @media (max-width: $breakpoint-mobile) {
+      width: 100%;
+      background: white;
+    }
 
     &:hover {
       background: #f5f5f5;
@@ -917,6 +950,12 @@ export default {
     z-index: 100;
     overflow: hidden;
     min-width: 140px;
+
+    @media (max-width: $breakpoint-mobile) {
+      left: 0;
+      right: auto;
+      width: 100%;
+    }
   }
 
   .flex-option {
@@ -1322,7 +1361,8 @@ export default {
 
   .modal-date-input {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: baseline;
     gap: 4px;
     min-width: 0;
 
@@ -1332,6 +1372,7 @@ export default {
       color: #666;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      flex-basis: 100%;
     }
 
     .date-display {
