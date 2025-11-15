@@ -90,7 +90,7 @@ export default {
     top: 13.2rem;
     left: 0;
     right: 0;
-    width: 100vw;
+    width: 100%;
     text-align: center;
     padding: 0 $spacing-sm;
     z-index: 1;
