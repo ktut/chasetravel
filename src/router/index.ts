@@ -12,4 +12,10 @@ const router = createRouter({
   ]
 })
 
+router.afterEach(() => {
+    setTimeout(() => {
+      window.scroll({ top: -1, left: 0, behavior: "smooth" });
+  }, 10); 
+})
+
 export default router
