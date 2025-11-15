@@ -190,11 +190,6 @@ export default {
         this.selectedAirlines.push(airline)
       }
     },
-    clearFilters() {
-      this.maxStops = 2
-      this.selectedAirlines = []
-      this.priceRange = [this.minPrice, this.maxPrice]
-    },
     openMobileFilters() {
       this.showMobileFilters = true
       // Scroll the filter toggle button to the top
@@ -267,15 +262,12 @@ export default {
     <aside class="filters-sidebar" :class="{ 'mobile-visible': showMobileFilters }" ref="filterToggle">
       <div class="filters-header">
         <h3>Filters</h3>
-        <div class="filters-actions">
-          <button class="clear-filters-btn" @click="clearFilters">Clear</button>
-          <button class="close-filters-btn" @click="closeMobileFilters">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </div>
+        <button class="close-filters-btn" @click="closeMobileFilters">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </div>
 
       <!-- Flight-specific filters -->
@@ -644,28 +636,6 @@ export default {
       font-weight: 600;
       margin: 0;
       color: $color-text;
-    }
-
-    .filters-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .clear-filters-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0.5rem;
-      color: $color-accent;
-      font-size: 0.95rem;
-      font-weight: 600;
-      font-family: $font-body;
-
-      &:hover {
-        color: $color-primary;
-        text-decoration: underline;
-      }
     }
 
     .close-filters-btn {
