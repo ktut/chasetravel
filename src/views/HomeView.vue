@@ -187,7 +187,7 @@ export default {
 
 .image-top-group {
   height: 85vh;
-  transition: height 1.5s cubic-bezier(0.8, -0.4, 0.5, 1);
+  transition: height 1s cubic-bezier(0.8, -0.4, 0.5, 1);
   &.loaded {
     height: 75vh;
   }
