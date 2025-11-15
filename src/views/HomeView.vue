@@ -204,7 +204,7 @@ export default {
 }
 
 .search {
-  padding: $spacing-xl;
+  padding: $spacing-lg;
   margin: 0 auto;
   background: rgba(255, 255, 255, 1);
 

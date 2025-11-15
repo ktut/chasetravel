@@ -450,6 +450,10 @@ export default {
     border-radius: 2rem;
     white-space: nowrap;
     flex-shrink: 0;
+    background: white;
+    color: $color-text;
+    font-weight: 400;
+    border-color: $color-light-grey;
 
     .toggle-icon {
       width: 20px;
@@ -460,8 +464,11 @@ export default {
 
     &.active,
     &:hover:not(:disabled) {
+      border-color: $color-accent;
+      background: white;
+      color: $color-text;
       .toggle-icon {
-        stroke: white;
+        stroke: $color-accent;
       }
     }
 
@@ -469,7 +476,7 @@ export default {
       filter: grayscale(100%);
       cursor: not-allowed;
       color: #a8a8a8;
-      border-color: #a8a8a8
+      border-color: $color-light-grey;
     }
   }
 }
