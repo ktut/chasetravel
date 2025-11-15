@@ -50,7 +50,7 @@ export default {
         <p class="popover__text">
           You have points that can be redeemed for up to 2x value on Chase Travel with Points Boost.
         </p>
-        <a href="#" class="popover__link" @click.prevent>Learn more</a>
+        <a href="https://www.chase.com/travel/guide/trips/chase-sapphire-points-boost-benefits-guide" target="_blank" nofollow noopener noreferrer class="popover__link">Learn more</a>
       </div>
     </div>
   </Transition>
