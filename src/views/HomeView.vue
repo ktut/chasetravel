@@ -20,7 +20,8 @@ export default {
       activeSection: 'search' as 'search' | 'results',
       searchResults: [] as any[],
       searchType: 'flights' as 'flights' | 'hotels',
-      showResults: false
+      showResults: false,
+      activeTab: 'overview'
     }
   },
   methods: {
@@ -46,6 +47,9 @@ export default {
           resultsElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
         }
       })
+    },
+    handleTabChange(tabId: string) {
+      this.activeTab = tabId
     }
   }
 }
@@ -76,6 +80,63 @@ export default {
           <Results :results="searchResults" :searchType="searchType" />
         </div>
         <br></br>
+
+        <!-- The Edit Section with Tab Navigation -->
+        <div class="the-edit-section">
+          <h2 class="section-title">The Edit by Chase Travel</h2>
+          <TabNavigation @tab-change="handleTabChange" />
+
+          <!-- Overview Tab Content -->
+          <div v-if="activeTab === 'overview'" class="tab-content">
+            <div class="benefit-card">
+              <div class="benefit-image">
+                <img src="@/assets/placeholder-hotel1.png" alt="Four Seasons Resort Napa Valley" />
+              </div>
+              <div class="benefit-content">
+                <h3>Complimentary benefits</h3>
+                <p class="property-name">Four Seasons Resort and Residences Napa Valley</p>
+                <ul class="benefits-list">
+                  <li>Daily breakfast for 2</li>
+                  <li>$100 property credit</li>
+                  <li>Room upgrades</li>
+                  <li>Early check-in/late check-out availability</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="benefit-card">
+              <div class="benefit-image">
+                <img src="@/assets/placeholder-hotel2.png" alt="InterContinental London Park Lane" />
+              </div>
+              <div class="benefit-content">
+                <h3>Points redemption</h3>
+                <p class="property-name">InterContinental London Park Lane</p>
+                <p>Use your Chase Ultimate Rewards points to pay for your stay at exclusive properties.</p>
+              </div>
+            </div>
+
+            <div class="benefit-card">
+              <div class="benefit-image">
+                <img src="@/assets/placeholder-hotel3.png" alt="The Hotel Maria Finland" />
+              </div>
+              <div class="benefit-content">
+                <h3>Exploration</h3>
+                <p class="property-name">The Hotel Maria, Finland</p>
+                <p>Discover diverse property types ranging from mountain retreats in Aspen to high-design boutique hotels in London.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Curated Collections Tab Content -->
+          <div v-if="activeTab === 'curated-collections'" class="tab-content">
+            <p>Explore our carefully selected collections of exceptional properties.</p>
+          </div>
+
+          <!-- Featured Properties Tab Content -->
+          <div v-if="activeTab === 'featured-properties'" class="tab-content">
+            <p>Browse our featured luxury properties worldwide.</p>
+          </div>
+        </div>
       </div>
     </div>
 </template>
@@ -111,7 +172,7 @@ export default {
 }
 
 .search-section {
-  max-width: 600px;
+  max-width: 900px;
   margin: -10rem auto 0;
   @media (max-width: $breakpoint-mobile) {
     margin-top: -6rem;
@@ -206,5 +267,113 @@ export default {
 .parallax__layer--fore {
   transform: translateZ(-0.5px) scale(1.5);
   z-index: 3;
+}
+
+/* The Edit Section */
+.the-edit-section {
+  margin-top: $spacing-xl * 2;
+  padding-top: $spacing-xl * 2;
+  border-top: 1px solid #e0e0e0;
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: 400;
+    margin-bottom: $spacing-xl;
+    color: #000;
+  }
+
+  .tab-content {
+    margin-top: $spacing-xl;
+  }
+
+  .benefit-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-xl;
+    margin-bottom: $spacing-xl * 2;
+    align-items: center;
+
+    @media (max-width: $breakpoint-mobile) {
+      grid-template-columns: 1fr;
+      gap: $spacing-md;
+    }
+
+    &:nth-child(even) {
+      .benefit-image {
+        order: 2;
+      }
+      .benefit-content {
+        order: 1;
+      }
+
+      @media (max-width: $breakpoint-mobile) {
+        .benefit-image {
+          order: 1;
+        }
+        .benefit-content {
+          order: 2;
+        }
+      }
+    }
+
+    .benefit-image {
+      width: 100%;
+      overflow: hidden;
+      border-radius: 8px;
+
+      img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+        aspect-ratio: 16 / 10;
+      }
+    }
+
+    .benefit-content {
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: $spacing-sm;
+        color: #000;
+      }
+
+      .property-name {
+        font-size: 1.125rem;
+        font-weight: 500;
+        margin-bottom: $spacing-md;
+        color: #333;
+      }
+
+      p {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #666;
+        margin-bottom: $spacing-sm;
+      }
+
+      .benefits-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+          font-size: 1rem;
+          color: #666;
+          padding: $spacing-xs 0;
+          position: relative;
+          padding-left: $spacing-md;
+
+          &::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #0066cc;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
 }
 </style>
