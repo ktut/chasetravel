@@ -704,7 +704,8 @@ export default {
     </div>
 
     <!-- Modal overlay for mobile -->
-    <div v-if="isOpen" class="calendar-modal-overlay" @click.self="closeCalendar">
+    <Teleport to="#modal-container">
+      <div v-if="isOpen" class="calendar-modal-overlay" @click.self="closeCalendar">
       <div class="calendar-modal">
         <div class="modal-date-inputs">
           <button class="close-btn" @click="closeCalendar" aria-label="Close calendar">×</button>
@@ -848,6 +849,7 @@ export default {
         </div>
       </div>
     </div>
+    </Teleport>
   </div>
 </template>
 
@@ -1260,7 +1262,7 @@ export default {
   .calendar-modal {
     background: white;
     width: 100%;
-    max-height: 80vh;
+    max-height: 70vh;
     border-radius: 16px 16px 0 0;
     overflow-y: auto;
     animation: slideUp 0.3s ease-out;
