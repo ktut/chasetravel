@@ -510,7 +510,7 @@ export default {
     padding-right: 36px;
     border: 1px solid #d0d0d0;
     border-radius: 4px;
-    font-size: 15px;
+    font-size: 16px;
     transition: border-color 0.2s;
 
     &:focus {
@@ -620,7 +620,7 @@ export default {
 
   .passenger-count-display {
     font-weight: 600;
-    font-size: 15px;
+    font-size: 16px;
   }
 
   .passenger-dropdown {

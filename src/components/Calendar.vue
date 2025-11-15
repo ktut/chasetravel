@@ -890,13 +890,13 @@ export default {
     }
 
     .placeholder {
-      font-size: 15px;
+      font-size: 16px;
       color: #999;
       flex: 1;
     }
 
     .value {
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 500;
       color: #000;
       flex: 1;

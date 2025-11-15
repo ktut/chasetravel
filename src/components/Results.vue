@@ -771,7 +771,7 @@ export default {
       padding: 0.5rem 1rem;
       border: 1px solid $color-light-grey;
       border-radius: 4px;
-      font-size: 0.9rem;
+      font-size: 1rem;
       background: white;
       cursor: pointer;
 
