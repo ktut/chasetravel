@@ -21,7 +21,8 @@ export default {
       searchResults: [] as any[],
       searchType: 'flights' as 'flights' | 'hotels',
       showResults: false,
-      activeTab: 'overview'
+      activeTab: 'overview',
+      isLoaded: false
     }
   },
   methods: {
@@ -51,6 +52,11 @@ export default {
     handleTabChange(tabId: string) {
       this.activeTab = tabId
     }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.isLoaded = true;
+    }, 100);
   }
 }
 </script>
@@ -58,7 +64,7 @@ export default {
 <template>
   <NavBar />
   <!-- <h1 class="image-top-group-title">Your most rewarding trips start here.</h1> -->
-    <div class="parallax__group image-top-group">
+    <div class="parallax__group image-top-group" :class="{ 'loaded': isLoaded }">
       <div class="parallax__layer parallax__layer--back">
         <img
           src="@/assets/g0.png"
@@ -180,17 +186,18 @@ export default {
 }
 
 .image-top-group {
-  height: 90vh;
-  @media (max-width: $breakpoint-mobile) {
-    height: 80vh;
+  height: 85vh;
+  transition: height 1.5s cubic-bezier(0.8, -0.4, 0.5, 1);
+  &.loaded {
+    height: 75vh;
   }
 }
 
 .search-section {
   max-width: 900px;
-  margin: -6rem auto 0;
+  margin: -3rem auto 0;
   @media (max-width: $breakpoint-mobile) {
-    margin-top: -6rem;
+    margin-top: -3rem;
   }
 }
 
