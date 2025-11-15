@@ -1,5 +1,4 @@
 <script lang="ts">
-import NavBar from '@/components/NavBar.vue'
 import TabNavigation from '@/components/TabNavigation.vue'
 import SearchWidget from '@/components/SearchWidget.vue'
 import Results from '@/components/Results.vue'
@@ -9,7 +8,6 @@ import { getMockHotelResults } from '@/services/MockHotelResults'
 export default {
   name: 'HomeView',
   components: {
-    NavBar,
     TabNavigation,
     SearchWidget,
     Results
@@ -62,9 +60,6 @@ export default {
 </script>
 
 <template>
-  <NavBar />
-  <!-- Teleport target for modals - positioned right below navbar -->
-  <div id="modal-container"></div>
   <!-- <h1 class="image-top-group-title">Your most rewarding trips start here.</h1> -->
     <div class="parallax__group image-top-group" :class="{ 'loaded': isLoaded }">
       <div class="parallax__layer parallax__layer--back">
@@ -193,6 +188,10 @@ export default {
   &.loaded {
     height: 70vh;
   }
+  // margin-top: -15rem !important;;
+  // @media (max-width: $breakpoint-mobile) {
+  //   margin-top: -10rem !important;;
+  // }
 }
 
 .search-section {
