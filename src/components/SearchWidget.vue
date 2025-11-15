@@ -603,6 +603,8 @@ export default {
     justify-content: center;
     gap: 8px;
     white-space: nowrap;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 
     &:hover:not(:disabled) {
       .person-icon {
@@ -718,12 +720,8 @@ export default {
   align-items: center;
   gap: 12px;
 
-  @media (max-width: 768px) {
-    flex-wrap: wrap;
-  }
-
   .submit-btn {
-    padding: 14px 32px;
+    padding: 14px 16px;
     font-size: 16px;
   }
 }

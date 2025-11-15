@@ -191,7 +191,7 @@ export default {
   height: 85vh;
   transition: height 1s cubic-bezier(0.8, -0.4, 0.5, 1);
   &.loaded {
-    height: 75vh;
+    height: 70vh;
   }
 }
 
