@@ -140,8 +140,8 @@ button {
   border-color: $color-accent;
 
   &:hover:not(:disabled) {
-    background: #1d4ed8;
-    border-color: #1d4ed8;
+    background: $color-primary;
+    border-color: $color-primary;
   }
 
   &:disabled {
