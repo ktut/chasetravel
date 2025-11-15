@@ -57,7 +57,7 @@ export default {
 
 <template>
   <NavBar />
-  <h1 class="image-top-group-title">Your most rewarding trips start here.</h1>
+  <!-- <h1 class="image-top-group-title">Your most rewarding trips start here.</h1> -->
     <div class="parallax__group image-top-group">
       <div class="parallax__layer parallax__layer--back">
         <img
@@ -188,7 +188,7 @@ export default {
 
 .search-section {
   max-width: 900px;
-  margin: -10rem auto 0;
+  margin: -6rem auto 0;
   @media (max-width: $breakpoint-mobile) {
     margin-top: -6rem;
   }

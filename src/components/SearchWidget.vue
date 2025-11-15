@@ -194,7 +194,7 @@ export default {
 
 <template>
   <div class="search-widget">
-    <h1 class="image-top-group-title">Your most rewarding trips start here.</h1>
+    <!-- <h1 class="image-top-group-title">Your most rewarding trips start here.</h1> -->
     <!-- Search type toggle -->
     <div class="search-type-toggle">
       <div class="toggle-buttons">
