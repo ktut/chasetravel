@@ -391,8 +391,8 @@ export default {
             <path d="M58 45 Q54 32, 52 26" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
             <path d="M58 45 Q62 32, 64 26" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
           </svg>
-          <h3>No flights found</h3>
-          <p>Try adjusting your filters to see more results</p>
+          <h3>No flights found.</h3>
+          <p>Try adjusting your filters to see more results.</p>
         </div>
 
         <TransitionGroup name="flight-list">
@@ -566,7 +566,9 @@ export default {
     font-size: 0.95rem;
     font-weight: 600;
     color: $color-text;
-    position: relative;
+    position: sticky;
+    top: 60px;
+    z-index: 1;
 
     svg {
       width: 20px;
@@ -815,7 +817,7 @@ export default {
   background: white;
   border: 1px solid $color-light-grey;
   border-radius: 8px;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1rem 0.65rem;
   transition: all 0.2s;
   cursor: pointer;
 
