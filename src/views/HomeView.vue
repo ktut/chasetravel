@@ -60,6 +60,7 @@ export default {
 </script>
 
 <template>
+  <div class="parallax-master-container">
   <!-- <h1 class="image-top-group-title">Your most rewarding trips start here.</h1> -->
     <div class="parallax__group image-top-group" :class="{ 'loaded': isLoaded }">
       <div class="parallax__layer parallax__layer--back">
@@ -157,9 +158,28 @@ export default {
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
+
+.parallax-master-container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+
+  perspective: 1px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+
+  /* WebKit overflow scrolling fix */
+  -webkit-overflow-scrolling: touch;
+  height:  calc(100dvh + 15rem);
+  @media (max-width: $breakpoint-mobile) {
+    height:  calc(100dvh + 10rem);
+  }
+}
 
 .image-top-group-title {
   display: none;
