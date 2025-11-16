@@ -623,9 +623,11 @@ export default {
 <template>
   <div class="calendar">
     <div class="date-inputs">
-      <div class="date-input" @click="openCalendar" tabindex="0">
-        <div v-if="!checkIn" class="placeholder">Start date</div>
-        <div v-if="checkIn" class="value">{{ checkInFormatted }}</div>
+      <div class="date-input-wrapper">
+        <div class="date-input" @click="openCalendar" tabindex="0">
+          <div v-if="!checkIn" class="placeholder">Start date</div>
+          <div v-if="checkIn" class="value">{{ checkInFormatted }}</div>
+        </div>
         <div v-if="checkIn" class="flexibility-selector">
           <button
             class="flex-button"
@@ -647,9 +649,11 @@ export default {
           </div>
         </div>
       </div>
-      <div class="date-input" @click="openCalendar" tabindex="0">
-        <div v-if="!checkOut" class="placeholder">End date</div>
-        <div v-if="checkOut" class="value">{{ checkOutFormatted }}</div>
+      <div class="date-input-wrapper">
+        <div class="date-input" @click="openCalendar" tabindex="0">
+          <div v-if="!checkOut" class="placeholder">End date</div>
+          <div v-if="checkOut" class="value">{{ checkOutFormatted }}</div>
+        </div>
         <div v-if="checkOut" class="flexibility-selector">
           <button
             class="flex-button"
@@ -914,25 +918,22 @@ export default {
   gap: 16px;
   margin-bottom: 16px;
 
-  .date-input {
+  .date-input-wrapper {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .date-input {
     border: 1px solid #d0d0d0;
     border-radius: 4px;
     padding: 8px 12px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
     cursor: pointer;
     transition: border-color 0.2s;
     outline: none;
-    position: relative;
-
-    @media (max-width: $breakpoint-mobile) {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
-    }
 
     &:hover {
       border-color: #2563eb;
@@ -946,41 +947,31 @@ export default {
     .placeholder {
       font-size: 16px;
       color: #999;
-      flex: 1;
     }
 
     .value {
       font-size: 16px;
       font-weight: 500;
       color: #000;
-      flex: 1;
     }
   }
 
   .flexibility-selector {
     position: relative;
-    flex-shrink: 0;
-
-    @media (max-width: $breakpoint-mobile) {
-      width: 100%;
-    }
   }
 
   .flex-button {
-    padding: 4px 8px;
-    background: transparent;
+    padding: 6px 12px;
+    background: white;
     border: 1px solid #d0d0d0;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: 13px;
     color: #666;
     cursor: pointer;
     white-space: nowrap;
     transition: all 0.2s;
-
-    @media (max-width: $breakpoint-mobile) {
-      width: 100%;
-      background: white;
-    }
+    width: 100%;
+    text-align: left;
 
     &:hover {
       background: #f5f5f5;
@@ -997,7 +988,7 @@ export default {
   .flex-menu {
     position: absolute;
     top: 100%;
-    right: 0;
+    left: 0;
     margin-top: 4px;
     background: white;
     border: 1px solid #d0d0d0;
@@ -1005,13 +996,7 @@ export default {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     z-index: 100;
     overflow: hidden;
-    min-width: 140px;
-
-    @media (max-width: $breakpoint-mobile) {
-      left: 0;
-      right: auto;
-      width: 100%;
-    }
+    min-width: 100%;
   }
 
   .flex-option {
