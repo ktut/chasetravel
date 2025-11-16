@@ -54,9 +54,20 @@ export default {
   },
   mounted() {
     document.addEventListener('click', this.handleOutsideClick)
+    // Initialize from query params if on search page
+    this.initializeFromQueryParams()
   },
   beforeUnmount() {
     document.removeEventListener('click', this.handleOutsideClick)
+  },
+  watch: {
+    '$route.query': {
+      handler() {
+        // Update form when query params change
+        this.initializeFromQueryParams()
+      },
+      deep: true
+    }
   },
   computed: {
     filteredLocations(): Location[] {
@@ -102,6 +113,49 @@ export default {
     }
   },
   methods: {
+    initializeFromQueryParams() {
+      const query = this.$route.query
+
+      // Only initialize if we have query params
+      if (Object.keys(query).length === 0) return
+
+      // Set search type
+      if (query.type) {
+        this.searchType = query.type as 'flights' | 'hotels'
+      }
+
+      // Set locations
+      if (query.from) {
+        this.location = query.from as string
+      }
+      if (query.to) {
+        this.destination = query.to as string
+      }
+
+      // Set dates
+      if (query.checkIn) {
+        this.checkInDate = new Date(query.checkIn as string)
+      }
+      if (query.checkOut) {
+        this.checkOutDate = new Date(query.checkOut as string)
+      }
+
+      // Set flexibility
+      if (query.checkInFlex) {
+        this.checkInFlexibility = query.checkInFlex as string
+      }
+      if (query.checkOutFlex) {
+        this.checkOutFlexibility = query.checkOutFlex as string
+      }
+
+      // Set passengers
+      if (query.adults) {
+        this.passengerCounts.adults = parseInt(query.adults as string)
+      }
+      if (query.children) {
+        this.passengerCounts.children = parseInt(query.children as string)
+      }
+    },
     handleOutsideClick(event: MouseEvent) {
       const target = event.target as HTMLElement
       if (!target.closest('.location-input-wrapper')) {
@@ -186,7 +240,47 @@ export default {
         }
       }
 
+      // First emit the event for compatibility with pages that listen for it
       this.$emit('search-submitted', searchData)
+
+      // Then navigate to the search route if not already there
+      if (this.$route.path !== '/search') {
+        // Build query parameters from search data
+        const query: any = {
+          type: searchData.searchType,
+          from: searchData.location,
+          adults: searchData.passengers.adults,
+          children: searchData.passengers.children
+        }
+
+        if (searchData.destination) {
+          query.to = searchData.destination
+        }
+
+        if (searchData.checkIn) {
+          query.checkIn = searchData.checkIn.toISOString()
+        }
+
+        if (searchData.checkOut) {
+          query.checkOut = searchData.checkOut.toISOString()
+        }
+
+        if (searchData.checkInFlexibility) {
+          query.checkInFlex = searchData.checkInFlexibility
+        }
+
+        if (searchData.checkOutFlexibility) {
+          query.checkOutFlex = searchData.checkOutFlexibility
+        }
+
+        // Scroll to top first so user can see the transition
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+
+        // Wait for half a second, then navigate to the search route
+        setTimeout(() => {
+          this.$router.push({ path: '/search', query })
+        }, 500)
+      }
     }
   }
 }
@@ -338,7 +432,13 @@ export default {
 
     <!-- Calendar component -->
     <div class="calendar-section">
-      <Calendar @date-range-selected="handleDateRangeSelected" />
+      <Calendar
+        :initial-check-in="checkInDate"
+        :initial-check-out="checkOutDate"
+        :initial-check-in-flexibility="checkInFlexibility"
+        :initial-check-out-flexibility="checkOutFlexibility"
+        @date-range-selected="handleDateRangeSelected"
+      />
     </div>
 
     <!-- Submit button and passenger selector -->

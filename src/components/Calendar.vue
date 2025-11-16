@@ -14,6 +14,26 @@ type FlexibilityOption = 'exact' | 'day-after' | 'day-before' | '1-day' | '2-day
 
 export default {
   name: 'Calendar',
+  props: {
+    initialCheckIn: {
+      type: [Date, null] as any,
+      default: null,
+      required: false
+    },
+    initialCheckOut: {
+      type: [Date, null] as any,
+      default: null,
+      required: false
+    },
+    initialCheckInFlexibility: {
+      type: String,
+      default: 'exact'
+    },
+    initialCheckOutFlexibility: {
+      type: String,
+      default: 'exact'
+    }
+  },
   data() {
     return {
       checkIn: null as Date | null,
@@ -44,6 +64,41 @@ export default {
   mounted() {
     document.addEventListener('keydown', this.handleKeyDown)
     document.addEventListener('click', this.handleOutsideClick)
+    // Initialize from props
+    if (this.initialCheckIn) {
+      this.checkIn = this.initialCheckIn
+    }
+    if (this.initialCheckOut) {
+      this.checkOut = this.initialCheckOut
+    }
+    if (this.initialCheckInFlexibility) {
+      this.checkInFlexibility = this.initialCheckInFlexibility as FlexibilityOption
+    }
+    if (this.initialCheckOutFlexibility) {
+      this.checkOutFlexibility = this.initialCheckOutFlexibility as FlexibilityOption
+    }
+  },
+  watch: {
+    initialCheckIn(newVal) {
+      if (newVal) {
+        this.checkIn = newVal
+      }
+    },
+    initialCheckOut(newVal) {
+      if (newVal) {
+        this.checkOut = newVal
+      }
+    },
+    initialCheckInFlexibility(newVal) {
+      if (newVal) {
+        this.checkInFlexibility = newVal as FlexibilityOption
+      }
+    },
+    initialCheckOutFlexibility(newVal) {
+      if (newVal) {
+        this.checkOutFlexibility = newVal as FlexibilityOption
+      }
+    }
   },
   beforeUnmount() {
     document.removeEventListener('keydown', this.handleKeyDown)

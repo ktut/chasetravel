@@ -32,7 +32,10 @@ interface SearchData {
 
 export function getMockFlightResults(searchData: SearchData): Flight[] {
   // Extract search parameters
-  const { location, destination, checkIn, passengers } = searchData
+  const location = searchData.location
+  const destination = searchData.destination
+  const passengers = searchData.passengers
+  // Future enhancement: use searchData.checkIn for filtering by date
 
   // Generate mock flight results based on the search
   const airlines = ['United Airlines', 'Delta Air Lines', 'American Airlines', 'Southwest Airlines', 'JetBlue Airways']

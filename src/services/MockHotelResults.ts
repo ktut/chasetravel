@@ -27,7 +27,8 @@ interface SearchData {
 
 export function getMockHotelResults(searchData: SearchData): Hotel[] {
   // Extract search parameters
-  const { location, checkIn, checkOut, passengers } = searchData
+  const location = searchData.location
+  // Future enhancement: use searchData.checkIn, checkOut, passengers for filtering
 
   // Hotel names and amenities
   const hotelPrefixes = ['Grand', 'Royal', 'Luxury', 'Riverside', 'Downtown', 'Seaside', 'Mountain View', 'Plaza', 'Imperial', 'Sunset']
