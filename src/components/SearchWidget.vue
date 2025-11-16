@@ -675,10 +675,6 @@ export default {
     &::-webkit-scrollbar {
       display: none; /* Chrome, Safari, Edge */
     }
-
-    // @media (max-width: 768px) {
-    //   margin-top: -48px;
-    // }
   }
 
   .toggle-btn {
