@@ -176,6 +176,7 @@ export default {
     align-items: center;
     img {
       width: 120px;
+      margin-bottom: -0.5rem;
     }
   }
 
