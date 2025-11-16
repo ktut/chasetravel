@@ -1,21 +1,17 @@
 <script lang="ts">
-import SearchWidget from '@/components/SearchWidget.vue'
 import Results from '@/components/Results.vue'
 import { getMockFlightResults } from '@/services/MockFlightResults'
 import { getMockHotelResults } from '@/services/MockHotelResults'
+import { useSearchStore } from '@/stores/searchStore'
 
 export default {
-  name: 'SearchView',
+  name: 'ResultsView',
   components: {
-    SearchWidget,
     Results
   },
-  data() {
-    return {
-      searchResults: [] as any[],
-      searchType: 'flights' as 'flights' | 'hotels',
-      isInitialized: false
-    }
+  setup() {
+    const searchStore = useSearchStore()
+    return { searchStore }
   },
   mounted() {
     // Read query parameters and perform search
@@ -28,6 +24,17 @@ export default {
         this.initializeFromQueryParams()
       },
       deep: true
+    }
+  },
+  computed: {
+    searchResults() {
+      return this.searchStore.searchResults
+    },
+    searchType() {
+      return this.searchStore.searchType
+    },
+    isInitialized() {
+      return this.searchStore.isInitialized
     }
   },
   methods: {
@@ -50,48 +57,17 @@ export default {
         }
       }
 
+      // Store search data in Pinia
+      this.searchStore.setSearchData(searchData)
+
       // Get mock results based on search type
       if (searchData.searchType === 'flights') {
-        this.searchResults = getMockFlightResults(searchData)
-        this.searchType = 'flights'
+        const results = getMockFlightResults(searchData)
+        this.searchStore.setSearchResults(results, 'flights')
       } else if (searchData.searchType === 'hotels') {
-        this.searchResults = getMockHotelResults(searchData)
-        this.searchType = 'hotels'
+        const results = getMockHotelResults(searchData)
+        this.searchStore.setSearchResults(results, 'hotels')
       }
-
-      this.isInitialized = true
-    },
-    handleSearchSubmitted(searchData: any) {
-      // Build query parameters from search data
-      const query: any = {
-        type: searchData.searchType,
-        from: searchData.location,
-        adults: searchData.passengers.adults,
-        children: searchData.passengers.children
-      }
-
-      if (searchData.destination) {
-        query.to = searchData.destination
-      }
-
-      if (searchData.checkIn) {
-        query.checkIn = searchData.checkIn.toISOString()
-      }
-
-      if (searchData.checkOut) {
-        query.checkOut = searchData.checkOut.toISOString()
-      }
-
-      if (searchData.checkInFlexibility) {
-        query.checkInFlex = searchData.checkInFlexibility
-      }
-
-      if (searchData.checkOutFlexibility) {
-        query.checkOutFlex = searchData.checkOutFlexibility
-      }
-
-      // Update the route with new query parameters
-      this.$router.push({ path: '/search', query })
     }
   }
 }
@@ -99,12 +75,6 @@ export default {
 
 <template>
   <div>
-    <div class="search-header">
-      <div class="search-widget-container">
-        <SearchWidget @search-submitted="handleSearchSubmitted" />
-      </div>
-    </div>
-
     <div v-if="isInitialized" class="search-view">
       <div class="results-section">
         <Results :results="searchResults" :searchType="searchType" />
@@ -114,35 +84,14 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-.search-header {
-  background: white;
-  border-bottom: 1px solid #e0e0e0;
-  position: sticky;
-  top: 60px;
-  z-index: 100;
-  padding: 1rem 0;
-  margin-top: 60px;
-
-  @media (max-width: $breakpoint-mobile) {
-    top: 50px;
-    margin-top: 50px;
-    padding: 0.5rem 0;
-  }
-}
-
-.search-widget-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 2rem;
-
-  @media (max-width: 968px) {
-    padding: 0 0.5rem;
-  }
-}
-
 .search-view {
   min-height: 100vh;
   background: white;
+  margin-top: 60px;
+
+  @media (max-width: $breakpoint-mobile) {
+    margin-top: 50px;
+  }
 }
 
 .results-section {
