@@ -79,6 +79,11 @@ export default {
         this.initializeFromQueryParams()
       },
       deep: true
+    },
+    $route(to) {
+      if (to.fullPath === '/') {
+        this.isMinimized = false
+      }
     }
   },
   computed: {
@@ -272,7 +277,13 @@ export default {
       }
     },
     handleScroll() {
-      if (!this.isOnSearchPage) return
+      // Only handle scroll on search page
+      if (!this.isOnSearchPage) {
+        if (this.isMinimized) {
+          this.isMinimized = false
+        }
+        return
+      }
 
       // Minimize when scrolled down from top
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop
