@@ -87,10 +87,9 @@ export default {
 .search-view {
   min-height: 100vh;
   background: white;
-  padding-top: 60px;
 
   @media (max-width: $breakpoint-mobile) {
-    padding-top: 50px;
+    padding-top: 170px;
   }
 }
 

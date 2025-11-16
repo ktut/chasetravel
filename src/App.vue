@@ -41,7 +41,7 @@ const isSearchPage = computed(() => route.path === '/search')
 
 @media (max-width: 768px) {
   #search-header-container {
-    top: 50px;
+    top: 90px;
   }
 }
 
