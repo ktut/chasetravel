@@ -37,6 +37,7 @@ export default {
       checkOutDate: null as Date | null,
       checkInFlexibility: 'exact' as string,
       checkOutFlexibility: 'exact' as string,
+      isMinimized: false,
       // Sample locations for typeahead
       allLocations: [
         { name: 'New York, NY', code: 'NYC' },
@@ -59,11 +60,17 @@ export default {
   },
   mounted() {
     document.addEventListener('click', this.handleOutsideClick)
+    window.addEventListener('scroll', this.handleScroll)
     // Initialize from query params if on search page
     this.initializeFromQueryParams()
+    // Minimize on search page by default
+    if (this.isOnSearchPage) {
+      this.isMinimized = true
+    }
   },
   beforeUnmount() {
     document.removeEventListener('click', this.handleOutsideClick)
+    window.removeEventListener('scroll', this.handleScroll)
   },
   watch: {
     '$route.query': {
@@ -124,6 +131,32 @@ export default {
     },
     showDestinationField(): boolean {
       return this.searchType === 'flights'
+    },
+    minimizedSearchSummary(): string {
+      // Extract location codes from full names
+      const getCode = (fullName: string) => {
+        const location = this.allLocations.find(loc => loc.name === fullName)
+        return location ? location.code : fullName
+      }
+
+      const fromCode = this.location ? getCode(this.location) : '—'
+      const toCode = this.destination ? getCode(this.destination) : '—'
+
+      // Format dates
+      const formatDate = (date: Date | null) => {
+        if (!date) return '—'
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+      }
+
+      const checkInFormatted = formatDate(this.checkInDate)
+      const checkOutFormatted = formatDate(this.checkOutDate)
+
+      // Build summary based on search type
+      if (this.searchType === 'flights') {
+        return `${fromCode} - ${toCode} • ${checkInFormatted} - ${checkOutFormatted}`
+      } else {
+        return `${fromCode} • ${checkInFormatted} - ${checkOutFormatted}`
+      }
     }
   },
   methods: {
@@ -238,6 +271,22 @@ export default {
         this.checkOutFlexibility = dateRange.checkOutFlexibility
       }
     },
+    handleScroll() {
+      if (!this.isOnSearchPage) return
+
+      // Minimize when scrolled down from top
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+      if (scrollTop > 0 && !this.isMinimized) {
+        this.isMinimized = true
+      }
+    },
+    handleEdit() {
+      // Scroll to top with smooth behavior
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+
+      // Unminimize the component
+      this.isMinimized = false
+    },
     handleSubmit() {
       const searchData = {
         searchType: this.searchType,
@@ -292,6 +341,8 @@ export default {
       if (this.$route.path === '/search') {
         // Update the URL query params
         this.$router.push({ path: '/search', query })
+        // Minimize after updating search
+        this.isMinimized = true
       } else {
         // Navigate to the search route
         // Scroll to top first so user can see the transition
@@ -308,7 +359,23 @@ export default {
 </script>
 
 <template>
-  <div class="search-widget">
+  <div class="search-widget" :class="{ 'minimized': isMinimized }">
+    <!-- Minimized view -->
+    <div v-if="isMinimized" class="minimized-view">
+      <div class="minimized-content">
+        <span class="minimized-summary">{{ minimizedSearchSummary }}</span>
+        <button class="edit-btn btn-primary" @click="handleEdit">
+          <svg class="edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+          Edit
+        </button>
+      </div>
+    </div>
+
+    <!-- Full view -->
+    <div v-if="!isMinimized" class="full-view">
     <!-- <h1 class="image-top-group-title">Your most rewarding trips start here.</h1> -->
     <!-- Search type toggle -->
     <div class="search-type-toggle">
@@ -502,6 +569,7 @@ export default {
         {{ submitButtonText }}
       </button>
     </div>
+    </div>
   </div>
 </template>
 
@@ -510,6 +578,66 @@ export default {
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   background: white;
+  transition: all 0.3s ease-in-out;
+
+  &.minimized {
+    padding: 12px 20px;
+    height: 60px;
+    overflow: hidden;
+  }
+}
+
+.minimized-view {
+  height: 100%;
+  display: flex;
+  align-items: center;
+
+  .minimized-content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .minimized-summary {
+    font-size: 16px;
+    font-weight: 500;
+    color: $color-text;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+  }
+
+  .edit-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    .edit-icon {
+      width: 16px;
+      height: 16px;
+      stroke: white;
+    }
+  }
+}
+
+.full-view {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .image-top-group-title {

@@ -117,7 +117,7 @@ export default {
         </div>
 
         <!-- User Profile Icon -->
-        <button class="navbar__icon-btn" aria-label="User profile">
+        <!-- <button class="navbar__icon-btn" aria-label="User profile">
           <svg class="navbar__icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <circle
               cx="12"
@@ -143,7 +143,7 @@ export default {
               stroke-linecap="round"
             />
           </svg>
-        </button>
+        </button> -->
       </div>
     </div>
   </nav>

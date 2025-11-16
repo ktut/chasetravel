@@ -96,8 +96,8 @@ export default {
   margin: 0 auto;
   padding: 2rem 0;
 
-  @media (max-width: 968px) {
-    padding: 1rem 0;
+  @media (max-width: $breakpoint-mobile) {
+    padding: 0;
   }
 }
 </style>

@@ -212,10 +212,7 @@ export default {
       this.showMobileFilters = false
       // Scroll to the top of results
       this.$nextTick(() => {
-        const resultsHeader = this.$refs.resultsHeader as HTMLElement
-        if (resultsHeader) {
-          resultsHeader.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }
+        window.scroll({ top: -1, left: 0, behavior: "smooth" });
       })
     },
     loadResultsProgressively(results: (Flight | Hotel)[]) {
@@ -411,7 +408,7 @@ export default {
 
   @media (max-width: 968px) {
     grid-template-columns: 1fr;
-    padding: 0.5rem;
+    padding: 0.5rem 1rem;
     gap: 0;
   }
 }
@@ -450,8 +447,8 @@ export default {
     font-weight: 600;
     color: $color-text;
     position: sticky;
-    top: 60px;
-    z-index: 1;
+    top: 134px;
+    z-index: 100;
 
     svg {
       width: 20px;
