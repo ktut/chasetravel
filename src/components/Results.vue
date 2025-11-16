@@ -448,7 +448,7 @@ export default {
     color: $color-text;
     position: sticky;
     top: 146px;
-    z-index: 100;
+    z-index: 1;
 
     svg {
       width: 20px;
