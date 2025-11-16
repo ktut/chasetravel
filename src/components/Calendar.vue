@@ -293,12 +293,11 @@ export default {
         // Validate and reset flexibility options if they're no longer valid
         this.validateFlexibilityOptions()
 
-        // Emit the date range and close the dropdown
+        // Emit the date range
         this.$emit('date-range-selected', {
           checkIn: this.checkIn,
           checkOut: this.checkOut
         })
-        this.isOpen = false
       }
     },
     validateFlexibilityOptions() {
