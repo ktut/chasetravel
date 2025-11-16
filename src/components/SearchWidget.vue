@@ -576,7 +576,7 @@ export default {
 <style lang="scss" scoped>
 .search-widget {
   padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   background: white;
   transition: all 0.3s ease-in-out;
 
@@ -598,6 +598,9 @@ export default {
     justify-content: space-between;
     align-items: center;
     gap: 16px;
+    span {
+      font-weight: 700;
+    }
   }
 
   .minimized-summary {
@@ -673,22 +676,9 @@ export default {
       display: none; /* Chrome, Safari, Edge */
     }
 
-    @media (max-width: 768px) {
-      margin-top: -48px;
-
-      /* Fade effect on the right side for mobile */
-      &::after {
-        content: '';
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        width: 40px;
-        background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
-        pointer-events: none;
-        z-index: 1;
-      }
-    }
+    // @media (max-width: 768px) {
+    //   margin-top: -48px;
+    // }
   }
 
   .toggle-btn {
