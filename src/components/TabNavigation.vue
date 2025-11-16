@@ -36,8 +36,15 @@ export default {
 <style lang="scss" scoped>
 .tab-navigation {
   display: flex;
-  gap: $spacing-xl;
-  margin-bottom: $spacing-xl;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  padding-bottom: 12px;
+  @media (max-width: $breakpoint-mobile) {
+    padding-bottom: 0;
+  }
 }
 
 .tab-button {
