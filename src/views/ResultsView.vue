@@ -74,19 +74,17 @@ export default {
 </script>
 
 <template>
-  <div>
-    <div v-if="isInitialized" class="search-view">
-      <div class="results-section">
-        <Results :results="searchResults" :searchType="searchType" />
-      </div>
+  <div v-if="isInitialized" class="search-view">
+    <div class="results-section">
+      <Results :results="searchResults" :searchType="searchType" />
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .search-view {
-  min-height: 100vh;
   background: white;
+  padding-top: 200px;
 
   @media (max-width: $breakpoint-mobile) {
     padding-top: 170px;

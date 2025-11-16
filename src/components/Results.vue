@@ -1,4 +1,9 @@
 <script lang="ts">
+import NoResults from './NoResults.vue'
+import FlightCard from './FlightCard.vue'
+import SortOptions from './SortOptions.vue'
+import HotelCard from './HotelCard.vue'
+
 interface Flight {
   id: number
   airline: string
@@ -30,6 +35,12 @@ interface Hotel {
 
 export default {
   name: 'Results',
+  components: {
+    NoResults,
+    FlightCard,
+    SortOptions,
+    HotelCard
+  },
   props: {
     results: {
       type: Array as () => Flight[] | Hotel[],
@@ -173,9 +184,6 @@ export default {
         currency: 'USD',
         minimumFractionDigits: 0
       }).format(price)
-    },
-    getStarsArray(count: number): number[] {
-      return Array.from({ length: count }, (_, i) => i)
     },
     parseDuration(duration: string): number {
       const match = duration.match(/(\d+)h\s*(\d+)m/)
@@ -353,84 +361,16 @@ export default {
         </div>
 
         <!-- Sort Options (for flights) -->
-        <div v-if="isFlights" class="sort-options">
-          <label>Sort by:</label>
-          <select v-model="sortBy" class="sort-select">
-            <option value="price">Best Price</option>
-            <option value="duration">Shortest Duration</option>
-            <option value="departure">Departure Time</option>
-          </select>
-        </div>
+        <SortOptions v-if="isFlights" v-model="sortBy" />
       </div>
 
       <!-- Flight Results -->
       <div v-if="isFlights" class="flight-results">
         <!-- No results message -->
-        <div v-if="filteredResults.length === 0 && !isLoading" class="no-results">
-          <svg class="no-results-icon" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Island base -->
-            <ellipse cx="60" cy="95" rx="45" ry="8" fill="#d0d0d0" opacity="0.5"/>
-
-            <!-- Palm tree trunk -->
-            <path d="M58 85 L58 75 Q59 65, 58 55 L58 45" stroke="#888" stroke-width="3" stroke-linecap="round"/>
-
-            <!-- Coconuts -->
-            <circle cx="56" cy="47" r="2.5" fill="#999"/>
-            <circle cx="60" cy="47" r="2.5" fill="#999"/>
-
-            <!-- Palm fronds -->
-            <path d="M58 45 Q45 35, 35 30" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M58 45 Q40 40, 30 42" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M58 45 Q48 38, 38 38" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-
-            <path d="M58 45 Q71 35, 81 30" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M58 45 Q76 40, 86 42" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M58 45 Q68 38, 78 38" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-
-            <path d="M58 45 Q58 28, 58 22" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M58 45 Q54 32, 52 26" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M58 45 Q62 32, 64 26" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-          </svg>
-          <h3>No flights found.</h3>
-          <p>Try adjusting your filters to see more results.</p>
-        </div>
+        <NoResults v-if="filteredResults.length === 0 && !isLoading" :searchType="searchType" />
 
         <TransitionGroup name="flight-list">
-          <div v-for="flight in displayedResults as Flight[]" :key="flight.id" class="flight-card">
-            <div class="flight-main">
-              <div class="flight-info">
-                <div class="airline">{{ flight.airline }}</div>
-                <div class="flight-number">{{ flight.flightNumber }}</div>
-              </div>
-
-              <div class="flight-route">
-                <div class="route-point">
-                  <div class="time">{{ flight.departure.time }}</div>
-                  <div class="airport">{{ flight.departure.airport }}</div>
-                </div>
-
-                <div class="route-visual">
-                  <div class="route-line">
-                    <div class="line"></div>
-                  </div>
-                  <div class="duration">{{ flight.duration }}</div>
-                  <div class="stops" v-if="flight.stops > 0">{{ flight.stops }} stop{{ flight.stops > 1 ? 's' : '' }}</div>
-                  <div class="nonstop" v-else>Nonstop</div>
-                </div>
-
-                <div class="route-point">
-                  <div class="time">{{ flight.arrival.time }}</div>
-                  <div class="airport">{{ flight.arrival.airport }}</div>
-                </div>
-              </div>
-
-              <div class="flight-price">
-                <button class="btn-primary select-btn">
-                  {{ formatPrice(flight.price) }}
-                </button>
-              </div>
-            </div>
-          </div>
+          <FlightCard v-for="flight in displayedResults as Flight[]" :key="flight.id" :flight="flight" />
         </TransitionGroup>
 
         <!-- Loading indicator -->
@@ -443,67 +383,10 @@ export default {
       <!-- Hotel Results -->
       <div v-if="isHotels" class="hotel-results">
         <!-- No results message -->
-        <div v-if="filteredResults.length === 0 && !isLoading" class="no-results">
-          <svg class="no-results-icon" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Island base -->
-            <ellipse cx="60" cy="95" rx="45" ry="8" fill="#d0d0d0" opacity="0.5"/>
-
-            <!-- Palm tree trunk -->
-            <path d="M58 85 L58 75 Q59 65, 58 55 L58 45" stroke="#888" stroke-width="3" stroke-linecap="round"/>
-
-            <!-- Coconuts -->
-            <circle cx="56" cy="47" r="2.5" fill="#999"/>
-            <circle cx="60" cy="47" r="2.5" fill="#999"/>
-
-            <!-- Palm fronds -->
-            <path d="M58 45 Q45 35, 35 30" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M58 45 Q40 40, 30 42" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M58 45 Q48 38, 38 38" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-
-            <path d="M58 45 Q71 35, 81 30" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M58 45 Q76 40, 86 42" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M58 45 Q68 38, 78 38" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-
-            <path d="M58 45 Q58 28, 58 22" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M58 45 Q54 32, 52 26" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M58 45 Q62 32, 64 26" stroke="#999" stroke-width="2.5" stroke-linecap="round"/>
-          </svg>
-          <h3>No hotels found</h3>
-          <p>Try adjusting your filters to see more results</p>
-        </div>
+        <NoResults v-if="filteredResults.length === 0 && !isLoading" :searchType="searchType" />
 
         <TransitionGroup name="flight-list">
-          <div v-for="hotel in displayedResults as Hotel[]" :key="hotel.id" class="hotel-card">
-            <div class="hotel-image">
-              <img :src="hotel.image" :alt="hotel.name" />
-            </div>
-
-            <div class="hotel-details">
-              <div class="hotel-header">
-                <div class="hotel-name">{{ hotel.name }}</div>
-                <div class="hotel-stars">
-                  <span v-for="star in getStarsArray(hotel.stars)" :key="star" class="star">★</span>
-                </div>
-              </div>
-
-              <div class="hotel-location">{{ hotel.location }}</div>
-
-              <div class="hotel-rating">
-                <span class="rating-score">{{ hotel.rating }}</span>
-                <span class="rating-reviews">({{ hotel.reviewCount }} reviews)</span>
-              </div>
-
-              <div class="hotel-amenities">
-                <span v-for="amenity in hotel.amenities" :key="amenity" class="amenity">{{ amenity }}</span>
-              </div>
-            </div>
-
-            <div class="hotel-price">
-              <div class="price-label">Per night</div>
-              <div class="price">{{ formatPrice(hotel.pricePerNight) }}</div>
-              <button class="btn-primary select-btn">Select</button>
-            </div>
-          </div>
+          <HotelCard v-for="hotel in displayedResults as Hotel[]" :key="hotel.id" :hotel="hotel" />
         </TransitionGroup>
 
         <!-- Loading indicator -->
@@ -756,31 +639,6 @@ export default {
       margin: 0;
     }
   }
-
-  .sort-options {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    label {
-      font-size: 0.9rem;
-      color: $color-text-light;
-    }
-
-    .sort-select {
-      padding: 0.5rem 1rem;
-      border: 1px solid $color-light-grey;
-      border-radius: 4px;
-      font-size: 1rem;
-      background: white;
-      cursor: pointer;
-
-      &:focus {
-        outline: none;
-        border-color: $color-accent;
-      }
-    }
-  }
 }
 
 /* Transition Animations */
@@ -811,217 +669,6 @@ export default {
   flex-direction: column;
   gap: 1rem;
   position: relative;
-}
-
-.flight-card {
-  background: white;
-  border: 1px solid $color-light-grey;
-  border-radius: 8px;
-  padding: 0.75rem 1rem 0.65rem;
-  transition: all 0.2s;
-  cursor: pointer;
-
-  @media (max-width: 768px) {
-    padding: 0.75rem;
-  }
-
-  &:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border-color: $color-accent;
-  }
-}
-
-.flight-main {
-  display: grid;
-  grid-template-columns: 140px 1fr 180px;
-  gap: 2rem;
-  align-items: center;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr auto;
-    gap: 0.75rem;
-    position: relative;
-  }
-}
-
-.flight-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-
-  @media (max-width: 768px) {
-    order: 1;
-  }
-
-  .airline {
-    font-weight: 600;
-    font-size: 1rem;
-    color: $color-text;
-
-    @media (max-width: 768px) {
-      font-size: 0.9rem;
-    }
-  }
-
-  .flight-number {
-    color: $color-text-light;
-    font-size: 0.85rem;
-
-    @media (max-width: 768px) {
-      font-size: 0.75rem;
-    }
-  }
-}
-
-.flight-route {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 1.5rem;
-  align-items: center;
-
-  @media (max-width: 768px) {
-    grid-column: 1 / -1;
-    order: 3;
-    gap: 0.75rem;
-  }
-}
-
-.route-point {
-  text-align: center;
-
-  .time {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.25rem;
-    color: $color-text;
-
-    @media (max-width: 768px) {
-      font-size: 1.1rem;
-    }
-  }
-
-  .airport {
-    color: $color-text-light;
-    font-size: 0.85rem;
-    font-weight: 500;
-
-    @media (max-width: 768px) {
-      font-size: 0.75rem;
-    }
-  }
-}
-
-.route-visual {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.35rem;
-  min-width: 140px;
-
-  .route-line {
-    width: 100%;
-    position: relative;
-
-    .line {
-      height: 1px;
-      background: $color-light-grey;
-      position: relative;
-
-      &::before, &::after {
-        content: '';
-        position: absolute;
-        width: 5px;
-        height: 5px;
-        background: $color-text-light;
-        border-radius: 50%;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-
-      &::before {
-        left: 0;
-      }
-
-      &::after {
-        right: 0;
-      }
-    }
-  }
-
-  .duration {
-    color: $color-text-light;
-    font-size: 0.75rem;
-    font-weight: 500;
-  }
-
-  .stops {
-    font-size: 0.75rem;
-    color: $color-text-light;
-    white-space: nowrap;
-  }
-
-  .nonstop {
-    font-size: 0.75rem;
-    color: #16a34a;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-}
-
-.flight-price {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.75rem;
-
-  @media (max-width: 768px) {
-    position: absolute;
-    top: 0;
-    right: 0;
-    order: 2;
-  }
-
-  .select-btn {
-    padding: 0.75rem 1.5rem;
-    white-space: nowrap;
-    font-size: 1.5rem;
-    font-weight: 700;
-
-    @media (max-width: 768px) {
-      padding: 0.5rem 0.75rem;
-      font-size: 1.1rem;
-    }
-  }
-}
-
-/* No Results Message */
-.no-results {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 2rem;
-  text-align: center;
-
-  .no-results-icon {
-    width: 64px;
-    height: 64px;
-    color: $color-text-light;
-    margin-bottom: 1.5rem;
-  }
-
-  h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: $color-text;
-    margin: 0 0 0.5rem 0;
-  }
-
-  p {
-    color: $color-text-light;
-    font-size: 1rem;
-    margin: 0;
-  }
 }
 
 /* Loading Indicator */
@@ -1061,153 +708,5 @@ export default {
   flex-direction: column;
   gap: 1rem;
   position: relative;
-}
-
-.hotel-card {
-  background: white;
-  border: 1px solid $color-light-grey;
-  border-radius: 8px;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: 260px 1fr 200px;
-  transition: all 0.2s;
-  cursor: pointer;
-
-  @media (max-width: 968px) {
-    grid-template-columns: 1fr;
-  }
-
-  &:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border-color: $color-accent;
-  }
-}
-
-.hotel-image {
-  position: relative;
-  overflow: hidden;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    min-height: 200px;
-    transition: transform 0.3s;
-  }
-
-  &:hover img {
-    transform: scale(1.05);
-  }
-}
-
-.hotel-details {
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-
-  @media (max-width: 968px) {
-    padding: 1rem;
-  }
-}
-
-.hotel-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-
-  .hotel-name {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: $color-text;
-    line-height: 1.3;
-  }
-
-  .hotel-stars {
-    color: #ffa500;
-    flex-shrink: 0;
-
-    .star {
-      font-size: 0.9rem;
-    }
-  }
-}
-
-.hotel-location {
-  color: $color-text-light;
-  font-size: 0.9rem;
-}
-
-.hotel-rating {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  .rating-score {
-    background: $color-accent;
-    color: white;
-    padding: 0.3rem 0.6rem;
-    border-radius: 4px;
-    font-weight: 600;
-    font-size: 0.9rem;
-  }
-
-  .rating-reviews {
-    color: $color-text-light;
-    font-size: 0.85rem;
-  }
-}
-
-.hotel-amenities {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.25rem;
-
-  .amenity {
-    background: $color-bg-light;
-    padding: 0.25rem 0.65rem;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    color: $color-text-light;
-    border: 1px solid $color-light-grey;
-  }
-}
-
-.hotel-price {
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 0.5rem;
-  background: $color-bg-light;
-  border-left: 1px solid $color-light-grey;
-
-  @media (max-width: 968px) {
-    align-items: stretch;
-    border-left: none;
-    border-top: 1px solid $color-light-grey;
-    padding: 1rem;
-  }
-
-  .price-label {
-    color: $color-text-light;
-    font-size: 0.85rem;
-  }
-
-  .price {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: $color-text;
-  }
-
-  .select-btn {
-    padding: 0.75rem 1.5rem;
-    margin-top: 0.5rem;
-    white-space: nowrap;
-    font-size: 0.95rem;
-  }
 }
 </style>
