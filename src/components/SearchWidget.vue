@@ -372,17 +372,8 @@ export default {
 <template>
   <div class="search-widget" :class="{ 'minimized': isMinimized }">
     <!-- Minimized view -->
-    <div v-if="isMinimized" class="minimized-view">
-      <div class="minimized-content">
-        <span class="minimized-summary">{{ minimizedSearchSummary }}</span>
-        <button class="edit-btn btn-primary" @click="handleEdit">
-          <svg class="edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-          </svg>
-          Edit
-        </button>
-      </div>
+    <div v-if="isMinimized" class="minimized-view" @click="handleEdit">
+      <span class="minimized-summary">{{ minimizedSearchSummary }}</span>
     </div>
 
     <!-- Full view -->
@@ -592,52 +583,39 @@ export default {
   transition: all 0.3s ease-in-out;
 
   &.minimized {
-    padding: 12px 20px;
-    height: 60px;
+    padding: 0;
+    box-shadow: none;
+    border-radius: 8px;
+    border: 1px solid $color-light-grey;
     overflow: hidden;
+    transition: border-color 0.2s;
+
+    &:hover {
+      border-color: $color-accent;
+    }
   }
 }
 
 .minimized-view {
-  height: 100%;
   display: flex;
   align-items: center;
+  padding: 0.75rem 1rem;
+  background: white;
+  cursor: pointer;
+  transition: background 0.2s;
 
-  .minimized-content {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    span {
-      font-weight: 700;
-    }
+  &:hover {
+    background: $color-bg-light;
   }
 
   .minimized-summary {
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 0.95rem;
+    font-weight: 600;
     color: $color-text;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     flex: 1;
-  }
-
-  .edit-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    font-size: 14px;
-    white-space: nowrap;
-    flex-shrink: 0;
-
-    .edit-icon {
-      width: 16px;
-      height: 16px;
-      stroke: white;
-    }
   }
 }
 

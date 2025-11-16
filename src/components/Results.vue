@@ -447,7 +447,7 @@ export default {
     font-weight: 600;
     color: $color-text;
     position: sticky;
-    top: 134px;
+    top: 146px;
     z-index: 100;
 
     svg {
@@ -481,7 +481,7 @@ export default {
   padding: 1.5rem;
   height: fit-content;
   position: sticky;
-  top: 2rem;
+  top: 9rem;
 
   @media (max-width: 968px) {
     position: absolute;
@@ -608,6 +608,7 @@ export default {
 /* Main Results Area */
 .results-main {
   min-height: 500px;
+  padding-top: 1rem;
 }
 
 .results-header {
@@ -624,6 +625,7 @@ export default {
 
   .results-info {
     h2 {
+      font-family: $font-body;
       font-size: 1.5rem;
       font-weight: 600;
       margin: 0 0 0.25rem 0;

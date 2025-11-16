@@ -46,14 +46,7 @@ const isSearchPage = computed(() => route.path === '/search')
 }
 
 .search-header {
-  border-bottom: 1px solid #e0e0e0;
-  padding: 1rem 0;
-}
-
-@media (max-width: 768px) {
-  .search-header {
-    padding: 0.5rem 0;
-  }
+  padding: 1rem 0 0;
 }
 
 .search-widget-container {
@@ -64,7 +57,7 @@ const isSearchPage = computed(() => route.path === '/search')
 
 @media (max-width: 968px) {
   .search-widget-container {
-    padding: 0 0.5rem;
+    padding: 0 1rem;
   }
 }
 </style>
