@@ -1,5 +1,6 @@
 <script lang="ts">
 import Calendar from './Calendar.vue'
+import { useSearchStore } from '@/stores/searchStore'
 
 interface Location {
   name: string
@@ -15,6 +16,10 @@ export default {
   name: 'SearchWidget',
   components: {
     Calendar
+  },
+  setup() {
+    const searchStore = useSearchStore()
+    return { searchStore }
   },
   data() {
     return {
@@ -70,6 +75,15 @@ export default {
     }
   },
   computed: {
+    isOnSearchPage(): boolean {
+      return this.$route.path === '/search'
+    },
+    submitButtonText(): string {
+      if (this.isOnSearchPage) {
+        return 'Update Search'
+      }
+      return `Search ${this.searchType === 'flights' ? 'Flights' : 'Hotels'}`
+    },
     filteredLocations(): Location[] {
       if (!this.location) return this.allLocations
       const search = this.location.toLowerCase()
@@ -240,39 +254,46 @@ export default {
         }
       }
 
+      // Build query parameters from search data
+      const query: any = {
+        type: searchData.searchType,
+        from: searchData.location,
+        adults: searchData.passengers.adults,
+        children: searchData.passengers.children
+      }
+
+      if (searchData.destination) {
+        query.to = searchData.destination
+      }
+
+      if (searchData.checkIn) {
+        query.checkIn = searchData.checkIn.toISOString()
+      }
+
+      if (searchData.checkOut) {
+        query.checkOut = searchData.checkOut.toISOString()
+      }
+
+      if (searchData.checkInFlexibility) {
+        query.checkInFlex = searchData.checkInFlexibility
+      }
+
+      if (searchData.checkOutFlexibility) {
+        query.checkOutFlex = searchData.checkOutFlexibility
+      }
+
       // First emit the event for compatibility with pages that listen for it
       this.$emit('search-submitted', searchData)
 
-      // Then navigate to the search route if not already there
-      if (this.$route.path !== '/search') {
-        // Build query parameters from search data
-        const query: any = {
-          type: searchData.searchType,
-          from: searchData.location,
-          adults: searchData.passengers.adults,
-          children: searchData.passengers.children
-        }
+      // Update search store with new search data
+      this.searchStore.setSearchData(searchData)
 
-        if (searchData.destination) {
-          query.to = searchData.destination
-        }
-
-        if (searchData.checkIn) {
-          query.checkIn = searchData.checkIn.toISOString()
-        }
-
-        if (searchData.checkOut) {
-          query.checkOut = searchData.checkOut.toISOString()
-        }
-
-        if (searchData.checkInFlexibility) {
-          query.checkInFlex = searchData.checkInFlexibility
-        }
-
-        if (searchData.checkOutFlexibility) {
-          query.checkOutFlex = searchData.checkOutFlexibility
-        }
-
+      // If already on search page, just update the query params and store
+      if (this.$route.path === '/search') {
+        // Update the URL query params
+        this.$router.push({ path: '/search', query })
+      } else {
+        // Navigate to the search route
         // Scroll to top first so user can see the transition
         window.scrollTo({ top: 0, behavior: 'smooth' })
 
@@ -478,7 +499,7 @@ export default {
       </div>
 
       <button class="submit-btn btn-primary" @click="handleSubmit">
-        Search {{ searchType === 'flights' ? 'Flights' : 'Hotels' }}
+        {{ submitButtonText }}
       </button>
     </div>
   </div>
