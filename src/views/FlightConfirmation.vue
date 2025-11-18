@@ -27,6 +27,9 @@ export default {
     pointsBalance() {
       return this.searchStore.pointsBalance
     },
+    isSignedIn() {
+      return this.searchStore.isSignedIn
+    },
     formattedPointsBalance(): string {
       return this.pointsBalance.toLocaleString('en-US')
     },
@@ -459,19 +462,23 @@ export default {
                     <span class="option-title">Pay full amount</span>
                     <span class="option-price">{{ formatPrice(currentFarePrice) }}</span>
                   </div>
-                  <p class="option-description">Keep your {{ formattedPointsBalance }} points for later</p>
+                  <p class="option-description">
+                    {{ isSignedIn ? `Keep your ${formattedPointsBalance} points for later` : 'Pay with credit card' }}
+                  </p>
                 </div>
               </label>
 
               <!-- Option 2: Use points -->
-              <label class="rewards-option" :class="{ selected: usePoints }">
-                <input type="radio" :value="true" v-model="usePoints" name="rewards" />
+              <label class="rewards-option" :class="{ selected: usePoints, disabled: !isSignedIn }">
+                <input type="radio" :value="true" v-model="usePoints" name="rewards" :disabled="!isSignedIn" />
                 <div class="option-content">
                   <div class="option-header">
                     <span class="option-title">Redeem points</span>
-                    <span class="option-price">Use your rewards</span>
+                    <span class="option-price">{{ isSignedIn ? 'Use your rewards' : 'Sign in required' }}</span>
                   </div>
-                  <p class="option-description">You have {{ formattedPointsBalance }} points available</p>
+                  <p class="option-description">
+                    {{ isSignedIn ? `You have ${formattedPointsBalance} points available` : 'Please sign in to redeem points' }}
+                  </p>
                 </div>
               </label>
 
@@ -851,6 +858,21 @@ export default {
     border-color: #005eb8;
     background: #f0f7ff;
     box-shadow: 0 0 0 1px #005eb8;
+  }
+
+  &.disabled {
+    background: #f5f5f5;
+    border-color: #e5e5e5;
+    cursor: not-allowed;
+    opacity: 0.6;
+
+    &:hover {
+      border-color: #e5e5e5;
+    }
+
+    .option-content {
+      color: #999;
+    }
   }
 
   input[type="radio"] {

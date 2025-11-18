@@ -14,6 +14,10 @@ export default {
       isPopoverVisible: false
     }
   },
+  mounted() {
+    // Sync local state with store
+    this.isSignedIn = this.searchStore.isSignedIn
+  },
   computed: {
     searchStore() {
       return useSearchStore()
@@ -37,6 +41,7 @@ export default {
       setTimeout(() => {
         this.isLoading = false
         this.isSignedIn = true
+        this.searchStore.signIn()
       }, 2000)
     },
     showPopover() {
