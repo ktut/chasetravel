@@ -80,24 +80,55 @@ test.describe('Hotel Booking E2E Flow', () => {
 
     console.log('Selected hotel:', { hotelName, hotelRating })
 
-    // Step 8: Click the select button to book hotel (use the visible one - desktop or mobile)
+    // Step 8: Click the select button to view hotel details (use the visible one - desktop or mobile)
     await firstHotelCard.locator('.select-btn').first().click()
 
-    // Step 9: Wait for navigation to confirmation page
+    // Step 9: Wait for navigation to hotel view page
+    await page.waitForURL(/\/hotel\/\d+/, { timeout: 10000 })
+    expect(page.url()).toMatch(/\/hotel\/\d+/)
+
+    // Step 10: Verify hotel view page loaded with property info
+    await page.waitForSelector('.property-info', { timeout: 10000 })
+    await expect(page.locator('.property-name')).toContainText(hotelName || '')
+
+    // Verify rating matches
+    const hotelViewRating = await page.locator('.rating-score').first().textContent()
+    expect(hotelViewRating?.trim()).toBe(hotelRating?.trim())
+
+    // Step 11: Wait for rooms to load and select a room
+    await page.waitForSelector('.room-card', { timeout: 10000 })
+    const firstRoom = page.locator('.room-card').first()
+    await expect(firstRoom).toBeVisible()
+
+    // Get room name for verification
+    const roomName = await firstRoom.locator('.room-name').textContent()
+
+    // Step 12: Click Reserve button on the first room
+    const reserveButton = firstRoom.locator('.reserve-btn')
+    await expect(reserveButton).toBeVisible()
+    await reserveButton.click()
+
+    // Step 13: Wait for navigation to confirmation page
     await page.waitForURL(/\/confirmation/, { timeout: 10000 })
     expect(page.url()).toContain('/confirmation')
 
-    // Step 10: Verify confirmation page loaded with hotel details section
+    // Step 14: Verify confirmation page loaded with hotel details section
     await page.waitForSelector('.hotel-details-section', { timeout: 10000 })
 
-    // Step 11: Verify hotel details on confirmation page match selected hotel
+    // Step 15: Verify hotel details on confirmation page match selected hotel
     await expect(page.locator('.hotel-info h3')).toContainText(hotelName || '')
 
     // Verify rating matches
     const confHotelRating = await page.locator('.hotel-info .rating-score').textContent()
     expect(confHotelRating?.trim()).toBe(hotelRating?.trim())
 
-    // Step 12: Verify hotel stay information is present
+    // Verify room information is displayed if a room was selected
+    const roomDetail = page.locator('.stay-detail').filter({ hasText: 'Room:' })
+    if (await roomDetail.count() > 0) {
+      await expect(roomDetail).toContainText(roomName || '')
+    }
+
+    // Step 16: Verify hotel stay information is present
     await expect(page.locator('.hotel-stay-info')).toBeVisible()
 
     // Verify check-in and check-out dates are displayed
@@ -107,18 +138,18 @@ test.describe('Hotel Booking E2E Flow', () => {
     await expect(stayDetails.filter({ hasText: 'night' }).first()).toBeVisible()
     await expect(stayDetails.filter({ hasText: 'Price per night:' })).toBeVisible()
 
-    // Step 13: Verify booking sections are present
+    // Step 17: Verify booking sections are present
     await expect(page.locator('h2').filter({ hasText: 'Use your rewards' })).toBeVisible()
 
     // Verify rewards redemption options
     await expect(page.locator('.rewards-option').filter({ hasText: 'Pay full amount' })).toBeVisible()
     await expect(page.locator('.rewards-option').filter({ hasText: 'Redeem points' })).toBeVisible()
 
-    // Step 14: Verify book button is present
+    // Step 18: Verify book button is present
     await expect(page.locator('.book-button')).toBeVisible()
     await expect(page.locator('.book-button')).toContainText('Book for')
 
-    // Step 15: Test points redemption functionality (if user is signed in)
+    // Step 19: Test points redemption functionality (if user is signed in)
     const redeemPointsOption = page.locator('.rewards-option').filter({ hasText: 'Redeem points' })
     const isDisabled = await redeemPointsOption.evaluate((el) => el.classList.contains('disabled'))
 

@@ -29,25 +29,21 @@ export default {
       console.log('Hotel selected:', this.hotel)
       console.log('Search data:', this.searchData)
 
-      // Store hotel and search data in sessionStorage for navigation
+      // Store search data in sessionStorage for navigation
       try {
-        const hotelJson = JSON.stringify(this.hotel)
         const searchDataJson = JSON.stringify(this.searchData)
 
-        console.log('Storing in sessionStorage...')
-        sessionStorage.setItem('selectedHotel', hotelJson)
+        console.log('Storing search data in sessionStorage...')
         sessionStorage.setItem('confirmationSearchData', searchDataJson)
 
         // Verify it was stored
-        const storedHotel = sessionStorage.getItem('selectedHotel')
         const storedSearch = sessionStorage.getItem('confirmationSearchData')
-        console.log('Verification - Hotel in storage:', storedHotel ? 'YES' : 'NO')
         console.log('Verification - Search in storage:', storedSearch ? 'YES' : 'NO')
 
-        console.log('Navigating to /confirmation...')
+        console.log('Navigating to /hotel/' + this.hotel.id + '...')
         // Use nextTick to ensure sessionStorage is written before navigation
         this.$nextTick(() => {
-          this.$router.push('/confirmation')
+          this.$router.push(`/hotel/${this.hotel.id}`)
         })
       } catch (e) {
         console.error('Error in selectHotel:', e)

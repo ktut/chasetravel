@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ResultsView from '../views/ResultsView.vue'
 import Confirmation from '../views/Confirmation.vue'
+import HotelView from '../views/HotelView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,10 +20,16 @@ const router = createRouter({
       meta: { depth: 1 }
     },
     {
+      path: '/hotel/:id',
+      name: 'hotel',
+      component: HotelView,
+      meta: { depth: 2 }
+    },
+    {
       path: '/confirmation',
       name: 'confirmation',
       component: Confirmation,
-      meta: { depth: 2 }
+      meta: { depth: 3 }
     }
   ]
 })

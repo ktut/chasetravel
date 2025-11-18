@@ -11,6 +11,7 @@ export default {
       localSearchData: null as any,
       localFlight: null as any,
       localHotel: null as any,
+      localRoom: null as any,
       bookingType: null as 'flight' | 'hotel' | null,
       selectedFareType: 'basic', // 'basic', 'economy', or 'business'
       expandedFare: 'basic' // which fare is currently expanded
@@ -25,6 +26,9 @@ export default {
     },
     hotel() {
       return this.localHotel
+    },
+    room() {
+      return this.localRoom
     },
     searchData() {
       return this.localSearchData
@@ -106,6 +110,11 @@ export default {
       if (this.isFlightBooking) {
         return this.currentFarePrice
       } else if (this.isHotelBooking && this.hotel) {
+        // If a room is selected, use room price, otherwise use hotel price
+        if (this.localRoom) {
+          const nights = this.numberOfNights
+          return this.localRoom.pricePerNight * nights
+        }
         // Calculate total hotel price based on number of nights
         const nights = this.numberOfNights
         return this.hotel.pricePerNight * nights
@@ -150,6 +159,7 @@ export default {
     // Get booking data from sessionStorage
     const flightData = sessionStorage.getItem('selectedFlight')
     const hotelData = sessionStorage.getItem('selectedHotel')
+    const roomData = sessionStorage.getItem('selectedRoom')
     const searchData = sessionStorage.getItem('confirmationSearchData')
 
     console.log('FlightData in sessionStorage:', flightData ? 'EXISTS' : 'NULL')
@@ -178,6 +188,16 @@ export default {
       }
     }
 
+    // Load room data if available
+    if (roomData) {
+      try {
+        this.localRoom = JSON.parse(roomData)
+        console.log('Room loaded from sessionStorage:', this.localRoom)
+      } catch (e) {
+        console.error('Error parsing room data:', e)
+      }
+    }
+
     // Load search data
     if (searchData) {
       try {
@@ -200,6 +220,7 @@ export default {
       setTimeout(() => {
         sessionStorage.removeItem('selectedFlight')
         sessionStorage.removeItem('selectedHotel')
+        sessionStorage.removeItem('selectedRoom')
         sessionStorage.removeItem('confirmationSearchData')
         console.log('SessionStorage cleared')
       }, 100)
@@ -453,7 +474,13 @@ export default {
                   <div class="stay-detail">
                     <strong>{{ numberOfNights }} night{{ numberOfNights > 1 ? 's' : '' }}</strong>
                   </div>
-                  <div class="stay-detail">
+                  <div class="stay-detail" v-if="room">
+                    <strong>Room:</strong> {{ room.name }}
+                  </div>
+                  <div class="stay-detail" v-if="room">
+                    <strong>Price per night:</strong> {{ formatPrice(room.pricePerNight) }}
+                  </div>
+                  <div class="stay-detail" v-else>
                     <strong>Price per night:</strong> {{ formatPrice(hotel.pricePerNight) }}
                   </div>
                 </div>

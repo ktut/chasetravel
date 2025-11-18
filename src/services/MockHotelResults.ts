@@ -1,4 +1,4 @@
-import type { SearchData, Hotel } from '@/types/search'
+import type { SearchData, Hotel, Room } from '@/types/search'
 
 // Real hotel data for each city with authentic information
 const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'reviewCount'>[]> = {
@@ -1358,4 +1358,127 @@ export function getMockHotelResults(searchData: SearchData): Hotel[] {
   results.sort((a, b) => b.rating - a.rating)
 
   return results
+}
+
+// Mock room data per hotel
+export function getMockRoomsForHotel(hotelId: number): Room[] {
+  const roomTemplates = [
+    {
+      name: 'Suite (Level)',
+      capacity: 'Sleeps 4',
+      bedConfig: '1 Double Sofa Bed and 1 King Bed',
+      bedCount: 2,
+      features: ['✓ Reserve now, pay later', 'Free WiFi', 'Partially refundable'],
+      basePrice: 190,
+      imageCount: 7
+    },
+    {
+      name: 'Deluxe Suite, 1 Bedroom',
+      capacity: 'Sleeps 4',
+      bedConfig: '1 Double Sofa Bed and 1 King Bed',
+      bedCount: 2,
+      features: ['✓ Reserve now, pay later', 'Free WiFi', 'Partially refundable'],
+      basePrice: 239,
+      imageCount: 8,
+      hasDiscount: true,
+      discountAmount: 69
+    },
+    {
+      name: 'Executive Suite, 1 Bedroom',
+      capacity: 'Sleeps 4',
+      bedConfig: '1 King Bed and 1 Double Sofa Bed',
+      bedCount: 2,
+      features: ['✓ Reserve now, pay later', 'Free WiFi', 'Partially refundable'],
+      basePrice: 260,
+      imageCount: 9,
+      hasDiscount: true,
+      discountAmount: 84
+    },
+    {
+      name: 'Penthouse Suite',
+      capacity: 'Sleeps 6',
+      bedConfig: '1 King Bed and 2 Queen Beds',
+      bedCount: 3,
+      features: ['✓ Reserve now, pay later', 'Free WiFi', 'Fully refundable', 'City View'],
+      basePrice: 450,
+      imageCount: 10
+    },
+    {
+      name: 'Standard Room',
+      capacity: 'Sleeps 2',
+      bedConfig: '1 King Bed',
+      bedCount: 1,
+      features: ['✓ Reserve now, pay later', 'Free WiFi', 'Partially refundable'],
+      basePrice: 150,
+      imageCount: 5
+    },
+    {
+      name: 'Family Suite',
+      capacity: 'Sleeps 6',
+      bedConfig: '2 Queen Beds and 1 Sofa Bed',
+      bedCount: 3,
+      features: ['✓ Reserve now, pay later', 'Free WiFi', 'Partially refundable', 'Kitchenette'],
+      basePrice: 320,
+      imageCount: 8
+    }
+  ]
+
+  // Generate 3-6 rooms based on hotel ID (for consistency per hotel)
+  const roomCount = 3 + (hotelId % 4) // 3-6 rooms
+  const selectedTemplates = roomTemplates.slice(0, roomCount)
+  
+  // Use hotel images as base for room images
+  const genericImages = [
+    '/images/hotels/generic-1.jpg',
+    '/images/hotels/generic-2.jpg',
+    '/images/hotels/generic-3.jpg',
+    '/images/hotels/generic-4.jpg',
+    '/images/hotels/generic-5.jpg',
+    '/images/hotels/generic-6.jpg',
+    '/images/hotels/generic-7.jpg',
+    '/images/hotels/generic-8.jpg',
+    '/images/hotels/generic-9.jpg',
+    '/images/hotels/generic-10.jpg'
+  ]
+
+  return selectedTemplates.map((template, index) => {
+    const roomId = hotelId * 100 + index + 1
+    const imageCount = template.imageCount
+    const roomImages = genericImages.slice(0, imageCount)
+    
+    // Calculate pricing with potential discount
+    let pricePerNight = template.basePrice
+    let originalPrice: number | undefined
+    let discount: number | undefined
+    
+    if (template.hasDiscount) {
+      originalPrice = template.basePrice
+      pricePerNight = template.basePrice - template.discountAmount
+      discount = template.discountAmount
+    }
+
+    // Generate availability (1-10 rooms left)
+    const availability = 1 + Math.floor((hotelId * 7 + index * 3) % 10)
+
+    return {
+      id: roomId,
+      name: template.name,
+      images: roomImages,
+      imageCount: imageCount,
+      capacity: template.capacity,
+      bedConfig: template.bedConfig,
+      features: [...template.features],
+      pricePerNight: pricePerNight,
+      originalPrice: originalPrice,
+      discount: discount,
+      availability: availability,
+      bedCount: template.bedCount
+    } as Room
+  })
+}
+
+// Get a hotel by ID from the search results
+export function getHotelById(hotelId: number, searchData: SearchData): Hotel | null {
+  const hotels = getMockHotelResults(searchData)
+  return hotels.find(h => h.id === hotelId) || null
 }

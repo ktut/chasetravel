@@ -50,6 +50,21 @@ export interface Hotel {
   }
 }
 
+export interface Room {
+  id: number
+  name: string
+  images: string[]
+  imageCount: number
+  capacity: string
+  bedConfig: string
+  features: string[]
+  pricePerNight: number
+  originalPrice?: number
+  discount?: number
+  availability: number
+  bedCount: number // For filtering purposes
+}
+
 // URL param validation
 export function validateSearchParams(query: any): { valid: boolean; errors: string[] } {
   const errors: string[] = []
