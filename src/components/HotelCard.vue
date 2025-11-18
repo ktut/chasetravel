@@ -102,7 +102,7 @@ export default {
   border-radius: 8px;
   overflow: hidden;
   display: grid;
-  grid-template-columns: 260px 1fr 145px;
+  grid-template-columns: minmax(150px, 1fr) 1fr 145px;
   transition: all 0.2s;
   cursor: pointer;
 
@@ -298,7 +298,7 @@ export default {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   gap: 0.5rem;
   background: $color-bg-light;
