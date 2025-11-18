@@ -1,11 +1,7 @@
 <script lang="ts">
 import Calendar from './Calendar.vue'
 import { useSearchStore } from '@/stores/searchStore'
-
-interface Location {
-  name: string
-  code: string
-}
+import { LOCATIONS, type Location } from '@/constants'
 
 interface PassengerCounts {
   adults: number
@@ -39,23 +35,7 @@ export default {
       checkOutFlexibility: 'exact' as string,
       isMinimized: false,
       // Sample locations for typeahead
-      allLocations: [
-        { name: 'New York, NY', code: 'NYC' },
-        { name: 'Los Angeles, CA', code: 'LAX' },
-        { name: 'Chicago, IL', code: 'ORD' },
-        { name: 'San Francisco, CA', code: 'SFO' },
-        { name: 'Miami, FL', code: 'MIA' },
-        { name: 'Boston, MA', code: 'BOS' },
-        { name: 'Seattle, WA', code: 'SEA' },
-        { name: 'Las Vegas, NV', code: 'LAS' },
-        { name: 'Orlando, FL', code: 'MCO' },
-        { name: 'Denver, CO', code: 'DEN' },
-        { name: 'Paris, France', code: 'CDG' },
-        { name: 'London, UK', code: 'LHR' },
-        { name: 'Tokyo, Japan', code: 'NRT' },
-        { name: 'Dubai, UAE', code: 'DXB' },
-        { name: 'Rome, Italy', code: 'FCO' }
-      ] as Location[]
+      allLocations: LOCATIONS
     }
   },
   mounted() {
