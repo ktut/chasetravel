@@ -78,7 +78,7 @@ onUnmounted(() => {
     </div>
   </div>
   <router-view v-slot="{ Component, route: currentRoute }">
-    <Transition :name="transitionName" mode="out-in">
+    <Transition :name="transitionName">
       <div :key="currentRoute.path" class="view-wrapper">
         <KeepAlive>
           <component :is="Component" />
@@ -120,5 +120,10 @@ onUnmounted(() => {
 
 .view-wrapper {
   width: 100%;
+}
+
+/* Ensure router-view container allows absolute positioning during transitions */
+.router-view-container {
+  position: relative;
 }
 </style>
