@@ -1,8 +1,12 @@
 <script lang="ts">
 import type { Hotel } from '@/types/search'
+import AmenityPills from './AmenityPills.vue'
 
 export default {
   name: 'HotelCard',
+  components: {
+    AmenityPills
+  },
   props: {
     hotel: {
       type: Object as () => Hotel,
@@ -73,11 +77,7 @@ export default {
         </div>
       </div>
 
-      <div class="hotel-amenities-container">
-        <div class="hotel-amenities">
-          <span v-for="amenity in hotel.amenities" :key="amenity" class="amenity">{{ amenity }}</span>
-        </div>
-      </div>
+      <AmenityPills :amenities="hotel.amenities" />
     </div>
 
     <div class="hotel-price desktop-only">
@@ -231,65 +231,6 @@ export default {
           font-size: 0.75rem;
         }
       }
-    }
-  }
-}
-
-.hotel-amenities-container {
-  position: relative;
-  overflow: hidden;
-  max-width: 78vw;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-
-  @media (max-width: 968px) {
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: 40px;
-      background: linear-gradient(to left, white, transparent);
-      pointer-events: none;
-    }
-  }
-}
-
-.hotel-amenities {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.25rem;
-
-  @media (max-width: 968px) {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none; // Firefox
-    -ms-overflow-style: none; // IE/Edge
-    gap: 0.4rem;
-    margin-top: 0;
-    padding-bottom: 2px;
-
-    &::-webkit-scrollbar {
-      display: none; // Chrome/Safari
-    }
-  }
-
-  .amenity {
-    background: $color-bg-light;
-    padding: 0.03rem 0.65rem;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    color: $color-text-light;
-    border: 1px solid $color-light-grey;
-
-    @media (max-width: 968px) {
-      padding: 0.2rem 0.5rem;
-      font-size: 0.7rem;
-      white-space: nowrap;
-      flex-shrink: 0;
     }
   }
 }

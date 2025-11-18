@@ -2,9 +2,13 @@
 import { getHotelById, getMockRoomsForHotel } from '@/services/MockHotelResults'
 import { parseSearchDataFromQuery } from '@/types/search'
 import type { Hotel, Room, SearchData } from '@/types/search'
+import AmenityPills from '@/components/AmenityPills.vue'
 
 export default {
   name: 'HotelView',
+  components: {
+    AmenityPills
+  },
   data() {
     return {
       hotel: null as Hotel | null,
@@ -302,26 +306,6 @@ export default {
         this.transitioning = false
       }, 300)
     },
-    getAmenityIcon(amenity: string): string {
-      const icons: Record<string, string> = {
-        'Free Wifi': '📶',
-        'Spa': '💆',
-        'Pool': '🏊',
-        'Fitness Center': '💪',
-        'Hot Tub': '🛁',
-        'Bar': '🍸',
-        'On-site Restaurant': '🍽️',
-        'Parking': 'P',
-        'Self-parking available': 'P',
-        'Valet Parking': 'P',
-        'Dogs and cats allowed': '🐾',
-        'Pet Friendly': '🐾',
-        'On-site fitness center': '💪',
-        'Outdoor furniture': '🪑',
-        'Free cribs/infant beds': '🛏️'
-      }
-      return icons[amenity] || '✓'
-    },
     getCurrentRoomImageIndex(roomId: number): number {
       return this.currentRoomImageIndex[roomId] || 0
     }
@@ -446,12 +430,7 @@ export default {
             <div class="about-section">
               <h2>About this property</h2>
               <p class="description">City-center hotel within walking distance of Merchandise Mart.</p>
-              <div class="amenities-grid">
-                <div v-for="amenity in hotel.amenities.slice(0, 6)" :key="amenity" class="amenity-item">
-                  <span class="amenity-icon">{{ getAmenityIcon(amenity) }}</span>
-                  <span>{{ amenity }}</span>
-                </div>
-              </div>
+              <AmenityPills :amenities="hotel.amenities" />
             </div>
           </div>
 
@@ -949,30 +928,6 @@ export default {
       color: $color-text-light;
       margin-bottom: 1.5rem;
       line-height: 1.6;
-    }
-
-    .amenities-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-
-      @media (max-width: 768px) {
-        grid-template-columns: 1fr;
-      }
-
-      .amenity-item {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        font-size: 0.9rem;
-        color: $color-text;
-
-        .amenity-icon {
-          font-size: 1.25rem;
-          width: 24px;
-          text-align: center;
-        }
-      }
     }
   }
 }
