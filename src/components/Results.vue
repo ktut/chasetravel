@@ -151,6 +151,19 @@ export default {
       }
       return false
     },
+    activeFiltersCount(): number {
+      let count = 0
+      if (this.isFlights) {
+        // Count each active filter
+        if (this.maxStops < 2) count++
+        if (this.selectedAirlines.length > 0) count++
+        if (this.priceRange[1] < this.maxPrice || this.priceRange[0] > this.minPrice) count++
+      } else if (this.isHotels) {
+        // Count price filter if active
+        if (this.priceRange[1] < this.maxPrice || this.priceRange[0] > this.minPrice) count++
+      }
+      return count
+    },
     resultsCountText(): string {
       const count = this.filteredResults.length
       const total = this.results.length
@@ -264,7 +277,7 @@ export default {
         <line x1="4" y1="18" x2="20" y2="18"></line>
       </svg>
       <span>{{ showMobileFilters ? 'Hide Filters' : 'Show Filters' }}</span>
-      <span v-if="isFiltering" class="filter-badge">{{ filteredResults.length }}</span>
+      <span v-if="activeFiltersCount > 0" class="filter-badge">{{ activeFiltersCount }}</span>
     </button>
 
     <!-- Filters Sidebar -->

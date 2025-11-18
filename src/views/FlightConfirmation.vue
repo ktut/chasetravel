@@ -9,7 +9,9 @@ export default {
       pointsToRedeem: 0,
       pointsValue: 0.0125, // Each point is worth $0.0125
       localSearchData: null as any,
-      localFlight: null as any
+      localFlight: null as any,
+      selectedFareType: 'basic', // 'basic', 'economy', or 'business'
+      expandedFare: 'basic' // which fare is currently expanded
     }
   },
   computed: {
@@ -30,7 +32,7 @@ export default {
     },
     maxPointsRedeemable(): number {
       if (!this.flight) return 0
-      const maxFromPrice = Math.floor(this.flight.price / this.pointsValue)
+      const maxFromPrice = Math.floor(this.currentFarePrice / this.pointsValue)
       return Math.min(maxFromPrice, this.pointsBalance)
     },
     dollarsFromPoints(): number {
@@ -38,8 +40,8 @@ export default {
     },
     balanceDue(): number {
       if (!this.flight) return 0
-      if (!this.usePoints) return this.flight.price
-      return Math.max(0, this.flight.price - this.dollarsFromPoints)
+      if (!this.usePoints) return this.currentFarePrice
+      return Math.max(0, this.currentFarePrice - this.dollarsFromPoints)
     },
     remainingPoints(): number {
       if (!this.usePoints) return this.pointsBalance
@@ -74,6 +76,19 @@ export default {
     },
     tripType(): string {
       return 'Round-trip'
+    },
+    currentFarePrice(): number {
+      if (!this.flight) return 0
+      switch (this.selectedFareType) {
+        case 'basic':
+          return this.flight.price
+        case 'economy':
+          return this.flight.price + 75
+        case 'business':
+          return this.flight.price + 450
+        default:
+          return this.flight.price
+      }
     }
   },
   watch: {
@@ -145,6 +160,16 @@ export default {
     proceedToBook() {
       // This would normally proceed to actual booking
       alert('Booking functionality would be implemented here')
+    },
+    selectFare(fareType: string) {
+      if (this.expandedFare === fareType) {
+        // If clicking the already expanded fare, just select it
+        this.selectedFareType = fareType
+      } else {
+        // Expand the clicked fare and collapse others
+        this.expandedFare = fareType
+        this.selectedFareType = fareType
+      }
     }
   }
 }
@@ -168,7 +193,7 @@ export default {
           <p class="trip-details">{{ tripType }}, {{ travelersText }}</p>
         </div>
         <div class="price-display">
-          <span class="price">{{ formatPrice(flight.price) }}</span>
+          <span class="price">{{ formatPrice(currentFarePrice) }}</span>
         </div>
       </div>
 
@@ -181,10 +206,21 @@ export default {
         </p>
 
         <div class="fare-options">
-          <div class="fare-card selected">
-            <h3>Basic Economy</h3>
-            <div class="fare-price">{{ formatPrice(flight.price) }}</div>
-            <ul class="fare-features">
+          <!-- Basic Economy -->
+          <div
+            class="fare-card"
+            :class="{
+              selected: selectedFareType === 'basic',
+              expanded: expandedFare === 'basic',
+              collapsed: expandedFare !== 'basic'
+            }"
+            @click="selectFare('basic')"
+          >
+            <div class="fare-header">
+              <h3>Basic Economy</h3>
+              <div class="fare-price">{{ formatPrice(flight.price) }}</div>
+            </div>
+            <ul class="fare-features" v-if="expandedFare === 'basic'">
               <li class="feature-negative">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10"/>
@@ -208,6 +244,112 @@ export default {
               </li>
             </ul>
           </div>
+
+          <!-- Regular Economy -->
+          <div
+            class="fare-card"
+            :class="{
+              selected: selectedFareType === 'economy',
+              expanded: expandedFare === 'economy',
+              collapsed: expandedFare !== 'economy'
+            }"
+            @click="selectFare('economy')"
+          >
+            <div class="fare-header">
+              <h3>Economy</h3>
+              <div class="fare-price">{{ formatPrice(flight.price + 75) }}</div>
+            </div>
+            <ul class="fare-features" v-if="expandedFare === 'economy'">
+              <li class="feature-positive">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+                1 carry-on bag included
+              </li>
+              <li class="feature-positive">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+                1 checked bag included
+              </li>
+              <li class="feature-positive">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+                Free seat selection
+              </li>
+              <li class="feature-positive">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+                Changes allowed for a fee
+              </li>
+            </ul>
+          </div>
+
+          <!-- Business Class -->
+          <div
+            class="fare-card"
+            :class="{
+              selected: selectedFareType === 'business',
+              expanded: expandedFare === 'business',
+              collapsed: expandedFare !== 'business'
+            }"
+            @click="selectFare('business')"
+          >
+            <div class="fare-header">
+              <h3>Business</h3>
+              <div class="fare-price">{{ formatPrice(flight.price + 450) }}</div>
+            </div>
+            <ul class="fare-features" v-if="expandedFare === 'business'">
+              <li class="feature-positive">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+                2 carry-on bags included
+              </li>
+              <li class="feature-positive">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+                2 checked bags included
+              </li>
+              <li class="feature-positive">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+                Priority seat selection
+              </li>
+              <li class="feature-positive">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+                Free changes & cancellation
+              </li>
+              <li class="feature-positive">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+                Priority boarding
+              </li>
+              <li class="feature-positive">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+                Lounge access
+              </li>
+            </ul>
+          </div>
         </div>
 
         <p class="fare-note">Fare and baggage fees apply to the entire trip</p>
@@ -227,7 +369,7 @@ export default {
             <div class="option-content">
               <div class="option-header">
                 <span class="option-title">Pay full amount</span>
-                <span class="option-price">{{ formatPrice(flight.price) }}</span>
+                <span class="option-price">{{ formatPrice(currentFarePrice) }}</span>
               </div>
               <p class="option-description">Keep your {{ formattedPointsBalance }} points for later</p>
             </div>
@@ -400,15 +542,22 @@ export default {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: none;
+  background: rgba(255, 255, 255, 0.95);
   border: none;
   color: #005eb8;
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
-  padding: 0.5rem;
-  margin-left: -0.5rem;
+  padding: 0.75rem 1rem;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  margin-top: -0.5rem;
   transition: all 0.2s;
+  position: sticky;
+  top: 58px;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid transparent;
 
   svg {
     width: 20px;
@@ -418,6 +567,24 @@ export default {
   &:hover {
     color: #004a94;
     transform: translateX(-2px);
+  }
+
+  // Add border on scroll for better visibility
+  @supports (backdrop-filter: blur(8px)) {
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  // Shadow when scrolled
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #e5e5e5;
+    opacity: 0;
+    transition: opacity 0.2s;
   }
 }
 
@@ -514,24 +681,59 @@ export default {
   border: 2px solid #e5e5e5;
   border-radius: 8px;
   padding: 1.5rem;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #005eb8;
+  }
 
   &.selected {
     border-color: #005eb8;
     box-shadow: 0 0 0 1px #005eb8;
   }
 
-  h3 {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin: 0 0 0.5rem 0;
+  &.collapsed {
+    padding: 0.75rem 1.5rem;
+
+    .fare-header {
+      margin-bottom: 0;
+
+      h3 {
+        font-size: 1rem;
+      }
+
+      .fare-price {
+        font-size: 1.125rem;
+      }
+    }
   }
 
-  .fare-price {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: #1a1a1a;
+  &.expanded {
+    .fare-header {
+      margin-bottom: 1rem;
+    }
+  }
+
+  .fare-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: margin 0.3s ease;
+
+    h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0;
+      transition: font-size 0.3s ease;
+    }
+
+    .fare-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      transition: font-size 0.3s ease;
+    }
   }
 
   .fare-features {
@@ -541,6 +743,7 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    animation: fadeIn 0.3s ease;
 
     li {
       display: flex;
@@ -558,7 +761,22 @@ export default {
       &.feature-negative svg {
         color: #999;
       }
+
+      &.feature-positive svg {
+        color: #0a8a4e;
+      }
     }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

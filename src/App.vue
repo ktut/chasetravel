@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import NavBar from '@/components/NavBar.vue'
 import SearchWidget from '@/components/SearchWidget.vue'
@@ -8,6 +8,28 @@ const route = useRoute()
 
 // Show search widget in sticky header only on search page
 const isSearchPage = computed(() => route.path === '/search')
+
+// Track route depth for transition direction
+const prevDepth = ref<number>(0)
+const transitionName = ref<string>('slide')
+
+watch(
+  () => route.meta.depth,
+  (newDepth) => {
+    const depth = typeof newDepth === 'number' ? newDepth : 0
+
+    if (depth > prevDepth.value) {
+      // Going deeper - slide from right to left
+      transitionName.value = 'slide'
+    } else {
+      // Going back - slide from left to right
+      transitionName.value = 'slide-reverse'
+    }
+
+    prevDepth.value = depth
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -22,11 +44,13 @@ const isSearchPage = computed(() => route.path === '/search')
       </div>
     </div>
   </div>
-  <router-view v-slot="{ Component }">
-    <Transition name="slide" mode="out-in">
-      <KeepAlive>
-        <component :is="Component" />
-      </KeepAlive>
+  <router-view v-slot="{ Component, route: currentRoute }">
+    <Transition :name="transitionName" mode="out-in">
+      <div :key="currentRoute.path" class="view-wrapper">
+        <KeepAlive>
+          <component :is="Component" />
+        </KeepAlive>
+      </div>
     </Transition>
   </router-view>
 </template>
@@ -59,5 +83,9 @@ const isSearchPage = computed(() => route.path === '/search')
   .search-widget-container {
     padding: 0 1rem;
   }
+}
+
+.view-wrapper {
+  width: 100%;
 }
 </style>

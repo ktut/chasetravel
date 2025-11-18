@@ -183,7 +183,7 @@ button {
   }
 }
 
-// Route Transitions - Slide effect
+// Route Transitions - Slide effect (forward navigation)
 .slide-enter-active,
 .slide-leave-active {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -201,6 +201,28 @@ button {
 
 .slide-enter-to,
 .slide-leave-from {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+// Route Transitions - Reverse slide effect (backward navigation)
+.slide-reverse-enter-active,
+.slide-reverse-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-reverse-enter-from {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+.slide-reverse-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.slide-reverse-enter-to,
+.slide-reverse-leave-from {
   opacity: 1;
   transform: translateX(0);
 }

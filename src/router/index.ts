@@ -9,17 +9,20 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+      meta: { depth: 0 }
     },
     {
       path: '/search',
       name: 'search',
-      component: ResultsView
+      component: ResultsView,
+      meta: { depth: 1 }
     },
     {
       path: '/confirmation',
       name: 'confirmation',
-      component: FlightConfirmation
+      component: FlightConfirmation,
+      meta: { depth: 2 }
     }
   ]
 })
