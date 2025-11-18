@@ -1,29 +1,4 @@
-interface Hotel {
-  id: number
-  name: string
-  location: string
-  stars: number
-  rating: number
-  reviewCount: number
-  pricePerNight: number
-  image: string
-  amenities: string[]
-}
-
-interface SearchData {
-  searchType: string
-  location: string
-  destination?: string
-  checkIn: Date
-  checkOut: Date
-  checkInFlexibility: string
-  checkOutFlexibility: string
-  passengers: {
-    adults: number
-    children: number
-    total: number
-  }
-}
+import type { SearchData, Hotel } from '@/types/search'
 
 export function getMockHotelResults(searchData: SearchData): Hotel[] {
   // Extract search parameters

@@ -1,22 +1,6 @@
 <script lang="ts">
 import { useSearchStore } from '@/stores/searchStore'
-
-interface Flight {
-  id: number
-  airline: string
-  flightNumber: string
-  departure: {
-    airport: string
-    time: string
-  }
-  arrival: {
-    airport: string
-    time: string
-  }
-  duration: string
-  price: number
-  stops: number
-}
+import type { Flight } from '@/types/search'
 
 export default {
   name: 'FlightCard',

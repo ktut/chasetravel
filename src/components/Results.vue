@@ -3,35 +3,7 @@ import NoResults from './NoResults.vue'
 import FlightCard from './FlightCard.vue'
 import SortOptions from './SortOptions.vue'
 import HotelCard from './HotelCard.vue'
-
-interface Flight {
-  id: number
-  airline: string
-  flightNumber: string
-  departure: {
-    airport: string
-    time: string
-  }
-  arrival: {
-    airport: string
-    time: string
-  }
-  duration: string
-  price: number
-  stops: number
-}
-
-interface Hotel {
-  id: number
-  name: string
-  location: string
-  stars: number
-  rating: number
-  reviewCount: number
-  pricePerNight: number
-  image: string
-  amenities: string[]
-}
+import type { Flight, Hotel } from '@/types/search'
 
 export default {
   name: 'Results',

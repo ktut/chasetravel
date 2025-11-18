@@ -1,34 +1,4 @@
-interface Flight {
-  id: number
-  airline: string
-  flightNumber: string
-  departure: {
-    airport: string
-    time: string
-  }
-  arrival: {
-    airport: string
-    time: string
-  }
-  duration: string
-  price: number
-  stops: number
-}
-
-interface SearchData {
-  searchType: string
-  location: string
-  destination?: string
-  checkIn: Date
-  checkOut: Date
-  checkInFlexibility: string
-  checkOutFlexibility: string
-  passengers: {
-    adults: number
-    children: number
-    total: number
-  }
-}
+import type { SearchData, Flight } from '@/types/search'
 
 export function getMockFlightResults(searchData: SearchData): Flight[] {
   // Extract search parameters

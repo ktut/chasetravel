@@ -99,6 +99,21 @@ export default {
       if (!newValue) {
         this.pointsToRedeem = 0
       }
+    },
+    pointsToRedeem(newValue) {
+      // Handle empty or invalid input
+      if (newValue === '' || newValue === null || isNaN(newValue)) {
+        this.pointsToRedeem = 0
+        return
+      }
+      // Ensure points don't exceed maximum redeemable
+      if (newValue > this.maxPointsRedeemable) {
+        this.pointsToRedeem = this.maxPointsRedeemable
+      }
+      // Ensure points aren't negative
+      if (newValue < 0) {
+        this.pointsToRedeem = 0
+      }
     }
   },
   mounted() {
@@ -172,6 +187,20 @@ export default {
         // Expand the clicked fare and collapse others
         this.expandedFare = fareType
         this.selectedFareType = fareType
+      }
+    },
+    handlePointsInput(event: Event) {
+      const input = event.target as HTMLInputElement
+      const value = parseInt(input.value)
+
+      if (isNaN(value) || input.value === '') {
+        this.pointsToRedeem = 0
+      } else if (value > this.maxPointsRedeemable) {
+        this.pointsToRedeem = this.maxPointsRedeemable
+      } else if (value < 0) {
+        this.pointsToRedeem = 0
+      } else {
+        this.pointsToRedeem = value
       }
     }
   }
@@ -490,6 +519,7 @@ export default {
                     id="pointsInput"
                     type="number"
                     v-model.number="pointsToRedeem"
+                    @input="handlePointsInput"
                     :max="maxPointsRedeemable"
                     :min="0"
                     step="100"

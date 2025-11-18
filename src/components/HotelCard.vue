@@ -1,15 +1,5 @@
 <script lang="ts">
-interface Hotel {
-  id: number
-  name: string
-  location: string
-  stars: number
-  rating: number
-  reviewCount: number
-  pricePerNight: number
-  image: string
-  amenities: string[]
-}
+import type { Hotel } from '@/types/search'
 
 export default {
   name: 'HotelCard',
