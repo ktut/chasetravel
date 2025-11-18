@@ -1214,6 +1214,17 @@ export default {
 }
 
 .book-section {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  padding: 1rem;
+  @media (max-width: 768px) {
+    border-top: 1px solid #e5e5e5;
+    z-index: 100;
+  }
+
   .book-button {
     width: 100%;
     padding: 1rem 2rem;
