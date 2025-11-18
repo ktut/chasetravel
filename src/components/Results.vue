@@ -372,7 +372,7 @@ export default {
         <NoResults v-if="filteredResults.length === 0 && !isLoading" :searchType="searchType" />
 
         <TransitionGroup name="flight-list">
-          <HotelCard v-for="hotel in displayedResults as Hotel[]" :key="hotel.id" :hotel="hotel" />
+          <HotelCard v-for="hotel in displayedResults as Hotel[]" :key="hotel.id" :hotel="hotel" :search-data="searchData" />
         </TransitionGroup>
 
         <!-- Loading indicator -->

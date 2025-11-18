@@ -50,7 +50,7 @@ export default {
         console.log('Navigating to /confirmation...')
         // Use nextTick to ensure sessionStorage is written before navigation
         this.$nextTick(() => {
-          window.location.href = '/confirmation'
+          this.$router.push('/confirmation')
         })
       } catch (e) {
         console.error('Error in selectFlight:', e)

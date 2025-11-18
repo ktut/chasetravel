@@ -2,7 +2,7 @@
 import { useSearchStore } from '@/stores/searchStore'
 
 export default {
-  name: 'FlightConfirmation',
+  name: 'Confirmation',
   data() {
     return {
       usePoints: false,
@@ -10,6 +10,8 @@ export default {
       pointsValue: 0.0125, // Each point is worth $0.0125
       localSearchData: null as any,
       localFlight: null as any,
+      localHotel: null as any,
+      bookingType: null as 'flight' | 'hotel' | null,
       selectedFareType: 'basic', // 'basic', 'economy', or 'business'
       expandedFare: 'basic' // which fare is currently expanded
     }
@@ -20,6 +22,9 @@ export default {
     },
     flight() {
       return this.localFlight
+    },
+    hotel() {
+      return this.localHotel
     },
     searchData() {
       return this.localSearchData
@@ -34,21 +39,25 @@ export default {
       return this.pointsBalance.toLocaleString('en-US')
     },
     maxPointsRedeemable(): number {
-      if (!this.flight) return 0
-      const maxFromPrice = Math.floor(this.currentFarePrice / this.pointsValue)
+      const maxFromPrice = Math.floor(this.currentPrice / this.pointsValue)
       return Math.min(maxFromPrice, this.pointsBalance)
     },
     dollarsFromPoints(): number {
       return this.pointsToRedeem * this.pointsValue
     },
     balanceDue(): number {
-      if (!this.flight) return 0
-      if (!this.usePoints) return this.currentFarePrice
-      return Math.max(0, this.currentFarePrice - this.dollarsFromPoints)
+      if (!this.usePoints) return this.currentPrice
+      return Math.max(0, this.currentPrice - this.dollarsFromPoints)
     },
     remainingPoints(): number {
       if (!this.usePoints) return this.pointsBalance
       return this.pointsBalance - this.pointsToRedeem
+    },
+    isFlightBooking(): boolean {
+      return this.bookingType === 'flight'
+    },
+    isHotelBooking(): boolean {
+      return this.bookingType === 'hotel'
     },
     outboundDate(): string {
       if (!this.searchData?.checkIn) return ''
@@ -92,6 +101,24 @@ export default {
         default:
           return this.flight.price
       }
+    },
+    currentPrice(): number {
+      if (this.isFlightBooking) {
+        return this.currentFarePrice
+      } else if (this.isHotelBooking && this.hotel) {
+        // Calculate total hotel price based on number of nights
+        const nights = this.numberOfNights
+        return this.hotel.pricePerNight * nights
+      }
+      return 0
+    },
+    numberOfNights(): number {
+      if (!this.searchData?.checkIn || !this.searchData?.checkOut) return 1
+      const checkIn = new Date(this.searchData.checkIn)
+      const checkOut = new Date(this.searchData.checkOut)
+      const diffTime = Math.abs(checkOut.getTime() - checkIn.getTime())
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+      return diffDays || 1
     }
   },
   watch: {
@@ -117,27 +144,41 @@ export default {
     }
   },
   mounted() {
-    console.log('=== FlightConfirmation.mounted CALLED ===')
+    console.log('=== Confirmation.mounted CALLED ===')
     console.log('Current route:', this.$route.path)
 
-    // Get flight and search data from sessionStorage
+    // Get booking data from sessionStorage
     const flightData = sessionStorage.getItem('selectedFlight')
+    const hotelData = sessionStorage.getItem('selectedHotel')
     const searchData = sessionStorage.getItem('confirmationSearchData')
 
     console.log('FlightData in sessionStorage:', flightData ? 'EXISTS' : 'NULL')
+    console.log('HotelData in sessionStorage:', hotelData ? 'EXISTS' : 'NULL')
     console.log('SearchData in sessionStorage:', searchData ? 'EXISTS' : 'NULL')
 
+    // Load flight data if available
     if (flightData) {
       try {
         this.localFlight = JSON.parse(flightData)
+        this.bookingType = 'flight'
         console.log('Flight loaded from sessionStorage:', this.localFlight)
       } catch (e) {
         console.error('Error parsing flight data:', e)
       }
-    } else {
-      console.error('❌ NO FLIGHT DATA IN SESSIONSTORAGE')
     }
 
+    // Load hotel data if available
+    if (hotelData) {
+      try {
+        this.localHotel = JSON.parse(hotelData)
+        this.bookingType = 'hotel'
+        console.log('Hotel loaded from sessionStorage:', this.localHotel)
+      } catch (e) {
+        console.error('Error parsing hotel data:', e)
+      }
+    }
+
+    // Load search data
     if (searchData) {
       try {
         this.localSearchData = JSON.parse(searchData)
@@ -149,16 +190,16 @@ export default {
       console.warn('No search data in sessionStorage')
     }
 
-    // Redirect if no flight data
-    if (!this.localFlight) {
-      console.error('❌ NO FLIGHT DATA - REDIRECTING BACK')
+    // Redirect if no booking data
+    if (!this.localFlight && !this.localHotel) {
+      console.error('❌ NO BOOKING DATA - REDIRECTING BACK')
       this.$router.back()
     } else {
-      console.log('✓ Flight data loaded successfully')
+      console.log('✓ Booking data loaded successfully')
       // Clear sessionStorage after successfully loading the data
-      // This prevents it from being used again if user navigates away and comes back
       setTimeout(() => {
         sessionStorage.removeItem('selectedFlight')
+        sessionStorage.removeItem('selectedHotel')
         sessionStorage.removeItem('confirmationSearchData')
         console.log('SessionStorage cleared')
       }, 100)
@@ -208,7 +249,7 @@ export default {
 </script>
 
 <template>
-  <div class="confirmation-page" v-if="flight">
+  <div class="confirmation-page" v-if="flight || hotel">
     <div class="confirmation-container">
       <!-- Back Button -->
       <button @click="goBack" class="back-button">
@@ -220,10 +261,10 @@ export default {
 
       <!-- Main Content Grid -->
       <div class="content-grid">
-        <!-- Left Column: Fare Options and Flight Details -->
+        <!-- Left Column: Fare Options and Flight/Hotel Details -->
         <div class="left-column">
-          <!-- Choose a fare -->
-          <section class="step-section">
+          <!-- Choose a fare (Flight only) -->
+          <section class="step-section" v-if="isFlightBooking">
             <h2>Choose a fare</h2>
             <p class="step-disclaimer">
               <a href="#" class="disclaimer-link">See baggage size and weight limit.</a>
@@ -380,8 +421,48 @@ export default {
             <p class="fare-note">Fare and baggage fees apply to the entire trip</p>
           </section>
 
-          <!-- Flight Details -->
-          <section class="flight-details-section">
+          <!-- Hotel Details (Hotel only) -->
+          <section class="hotel-details-section" v-if="isHotelBooking && hotel">
+            <h2>Hotel Details</h2>
+            <div class="hotel-detail-card">
+              <div class="hotel-image">
+                <img :src="hotel.image" :alt="hotel.name" />
+              </div>
+              <div class="hotel-info">
+                <div class="hotel-header">
+                  <h3>{{ hotel.name }}</h3>
+                  <div class="hotel-stars">
+                    <span v-for="star in hotel.stars" :key="star" class="star">★</span>
+                  </div>
+                </div>
+                <div class="hotel-location">{{ hotel.location }}</div>
+                <div class="hotel-rating">
+                  <span class="rating-score">{{ hotel.rating }}</span>
+                  <span class="rating-reviews">({{ hotel.reviewCount }} reviews)</span>
+                </div>
+                <div class="hotel-amenities">
+                  <span v-for="amenity in hotel.amenities" :key="amenity" class="amenity">{{ amenity }}</span>
+                </div>
+                <div class="hotel-stay-info">
+                  <div class="stay-detail">
+                    <strong>Check-in:</strong> {{ outboundDate }}
+                  </div>
+                  <div class="stay-detail">
+                    <strong>Check-out:</strong> {{ returnDate }}
+                  </div>
+                  <div class="stay-detail">
+                    <strong>{{ numberOfNights }} night{{ numberOfNights > 1 ? 's' : '' }}</strong>
+                  </div>
+                  <div class="stay-detail">
+                    <strong>Price per night:</strong> {{ formatPrice(hotel.pricePerNight) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Flight Details (Flight only) -->
+          <section class="flight-details-section" v-if="isFlightBooking && flight">
         <h2>Flight Details</h2>
 
         <div class="flight-detail-card">
@@ -468,10 +549,13 @@ export default {
         <aside class="right-sidebar">
           <!-- Trip Summary Card -->
           <div class="trip-summary-card">
-            <h1>{{ routeText }}</h1>
-            <p class="trip-details">{{ tripType }}, {{ travelersText }}</p>
+            <h1 v-if="isFlightBooking">{{ routeText }}</h1>
+            <h1 v-else-if="isHotelBooking && hotel">{{ hotel.name }}</h1>
+            <p class="trip-details" v-if="isFlightBooking">{{ tripType }}, {{ travelersText }}</p>
+            <p class="trip-details" v-else-if="isHotelBooking">{{ numberOfNights }} night{{ numberOfNights > 1 ? 's' : '' }}, {{ travelersText }}</p>
             <div class="price-display">
-              <span class="price">{{ formatPrice(currentFarePrice) }}</span>
+              <span class="price">{{ formatPrice(currentPrice) }}</span>
+              <span class="price-label" v-if="isHotelBooking">Total for {{ numberOfNights }} night{{ numberOfNights > 1 ? 's' : '' }}</span>
             </div>
           </div>
 
@@ -479,7 +563,7 @@ export default {
           <section class="rewards-section">
             <h2>Use your rewards</h2>
             <p class="step-description">
-              Apply your Chase Ultimate Rewards points to reduce the cost of your flight.
+              Apply your Chase Ultimate Rewards points to reduce the cost of your {{ isFlightBooking ? 'flight' : 'hotel' }}.
             </p>
 
             <div class="rewards-options">
@@ -690,6 +774,13 @@ export default {
       font-size: 2rem;
       font-weight: 700;
       color: $color-primary;
+      display: block;
+    }
+
+    .price-label {
+      font-size: 0.875rem;
+      color: #666;
+      margin-top: 0.5rem;
       display: block;
     }
   }
@@ -1278,6 +1369,142 @@ export default {
         padding: 0.25rem 0;
         font-family: monospace;
         font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+.hotel-details-section {
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    color: $color-primary;
+  }
+}
+
+.hotel-detail-card {
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 0;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
+  .hotel-image {
+    position: relative;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      min-height: 250px;
+
+      @media (max-width: 768px) {
+        min-height: 150px;
+        max-height: 200px;
+      }
+    }
+  }
+
+  .hotel-info {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .hotel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e5e5e5;
+
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0;
+        color: $color-primary;
+      }
+
+      .hotel-stars {
+        color: #ffa500;
+        flex-shrink: 0;
+        font-size: 1.1rem;
+
+        .star {
+          margin-left: 2px;
+        }
+      }
+    }
+
+    .hotel-location {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .hotel-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      .rating-score {
+        background: $color-accent;
+        color: white;
+        padding: 0.4rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 700;
+        font-size: 1rem;
+      }
+
+      .rating-reviews {
+        color: #666;
+        font-size: 0.9rem;
+      }
+    }
+
+    .hotel-amenities {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+
+      .amenity {
+        background: #f5f5f5;
+        padding: 0.4rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        color: #666;
+        border: 1px solid #e5e5e5;
+      }
+    }
+
+    .hotel-stay-info {
+      margin-top: 0.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e5e5;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+
+      .stay-detail {
+        font-size: 0.9rem;
+        color: #666;
+
+        strong {
+          color: $color-primary;
+          font-weight: 600;
+        }
       }
     }
   }

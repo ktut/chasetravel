@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 
 /**
- * End-to-End Test: Flight Booking Flow
+ * End-to-End Test: Booking Flow
  *
  * This test validates the complete user journey from homepage to confirmation:
  * 1. Search for flights (New York → Chicago, March 1-8, 2026)
@@ -9,8 +9,8 @@ import { test, expect } from '@playwright/test'
  * 3. Verify confirmation page shows correct flight and search information
  */
 
-test.describe('Flight Booking E2E Flow', () => {
-  test('should complete booking from homepage to confirmation with correct data', async ({ page }) => {
+test.describe('Booking E2E Flow', () => {
+  test('should complete flight booking from homepage to confirmation with correct data', async ({ page }) => {
     // Step 1: Navigate to homepage
     await page.goto('/')
     await expect(page).toHaveTitle(/Chase Travel/)
@@ -90,8 +90,8 @@ test.describe('Flight Booking E2E Flow', () => {
       expect(confArrivalAirport?.trim()).toBe(arrivalAirport?.trim())
 
       // Step 10: Verify booking sections are present
-      await expect(page.locator('h2').filter({ hasText: 'Step 1: Choose a fare' })).toBeVisible()
-      await expect(page.locator('h2').filter({ hasText: 'Step 2: Use your rewards' })).toBeVisible()
+      await expect(page.locator('h2').filter({ hasText: 'Choose a fare' })).toBeVisible()
+      await expect(page.locator('h2').filter({ hasText: 'Use your rewards' })).toBeVisible()
 
       // Verify fare option
       await expect(page.locator('.fare-card h3')).toContainText('Basic Economy')
