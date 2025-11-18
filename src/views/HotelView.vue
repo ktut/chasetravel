@@ -12,7 +12,15 @@ export default {
       searchData: null as SearchData | null,
       selectedBedFilter: 'all' as 'all' | '2' | '3+',
       currentRoomImageIndex: {} as Record<number, number>,
-      numberOfNights: 1
+      numberOfNights: 1,
+      showLightbox: false,
+      currentLightboxIndex: 0,
+      touchStartX: 0,
+      touchEndX: 0,
+      touchCurrentX: 0,
+      isSwiping: false,
+      swipeOffset: 0,
+      transitioning: false
     }
   },
   computed: {
@@ -40,6 +48,30 @@ export default {
     totalImages(): number {
       return this.hotel?.images?.length || 0
     },
+    allImages(): string[] {
+      return this.hotel?.images || []
+    },
+    currentLightboxImage(): string {
+      if (!this.hotel || !this.hotel.images || this.hotel.images.length === 0) {
+        return ''
+      }
+      return this.hotel.images[this.currentLightboxIndex] || this.hotel.images[0]
+    },
+    lightboxImageStyle(): string {
+      if (!this.hotel || !this.hotel.images) {
+        return 'transform: translateX(0);'
+      }
+      
+      const baseOffset = -(this.currentLightboxIndex * 100)
+      const currentOffset = this.isSwiping && !this.transitioning 
+        ? baseOffset + (this.swipeOffset / window.innerWidth * 100)
+        : baseOffset
+      
+      if (this.isSwiping && !this.transitioning) {
+        return `transform: translateX(calc(${currentOffset}vw)); transition: none;`
+      }
+      return `transform: translateX(calc(${currentOffset}vw)); transition: transform 0.3s ease;`
+    },
     starsArray(): number[] {
       if (!this.hotel) return []
       return Array.from({ length: this.hotel.stars }, (_, i) => i)
@@ -63,6 +95,12 @@ export default {
   },
   mounted() {
     this.loadHotelData()
+    // Add keyboard listeners for lightbox
+    document.addEventListener('keydown', this.handleKeyDown)
+  },
+  beforeUnmount() {
+    // Remove keyboard listeners
+    document.removeEventListener('keydown', this.handleKeyDown)
   },
   watch: {
     '$route.params': {
@@ -162,14 +200,14 @@ export default {
       if (!room) return
       const currentIndex = this.currentRoomImageIndex[roomId] || 0
       const nextIndex = (currentIndex + 1) % room.images.length
-      this.$set(this.currentRoomImageIndex, roomId, nextIndex)
+      this.currentRoomImageIndex[roomId] = nextIndex
     },
     prevRoomImage(roomId: number) {
       const room = this.rooms.find(r => r.id === roomId)
       if (!room) return
       const currentIndex = this.currentRoomImageIndex[roomId] || 0
       const prevIndex = (currentIndex - 1 + room.images.length) % room.images.length
-      this.$set(this.currentRoomImageIndex, roomId, prevIndex)
+      this.currentRoomImageIndex[roomId] = prevIndex
     },
     getCurrentRoomImage(roomId: number): string {
       const room = this.rooms.find(r => r.id === roomId)
@@ -192,12 +230,77 @@ export default {
         console.error('Error storing reservation data:', e)
       }
     },
-    selectMainImage(index: number) {
+    openLightbox(index: number) {
       if (!this.hotel || !this.hotel.images) return
-      const selected = this.hotel.images[index]
-      const currentMain = this.hotel.images[0]
-      this.hotel.images[0] = selected
-      this.hotel.images[index] = currentMain
+      this.currentLightboxIndex = index
+      this.showLightbox = true
+      // Prevent body scroll when lightbox is open
+      document.body.style.overflow = 'hidden'
+    },
+    closeLightbox() {
+      this.showLightbox = false
+      // Restore body scroll
+      document.body.style.overflow = ''
+    },
+    nextLightboxImage() {
+      if (!this.hotel || !this.hotel.images) return
+      this.currentLightboxIndex = (this.currentLightboxIndex + 1) % this.hotel.images.length
+    },
+    prevLightboxImage() {
+      if (!this.hotel || !this.hotel.images) return
+      this.currentLightboxIndex = (this.currentLightboxIndex - 1 + this.hotel.images.length) % this.hotel.images.length
+    },
+    handleKeyDown(event: KeyboardEvent) {
+      if (!this.showLightbox) return
+      
+      if (event.key === 'Escape') {
+        this.closeLightbox()
+      } else if (event.key === 'ArrowRight') {
+        this.nextLightboxImage()
+      } else if (event.key === 'ArrowLeft') {
+        this.prevLightboxImage()
+      }
+    },
+    handleTouchStart(event: TouchEvent) {
+      if (!this.showLightbox || this.transitioning) return
+      this.isSwiping = true
+      this.touchStartX = event.touches[0].clientX
+      this.touchCurrentX = event.touches[0].clientX
+      this.swipeOffset = 0
+    },
+    handleTouchMove(event: TouchEvent) {
+      if (!this.showLightbox || !this.isSwiping || this.transitioning) return
+      this.touchCurrentX = event.touches[0].clientX
+      this.swipeOffset = this.touchCurrentX - this.touchStartX
+    },
+    handleTouchEnd(event: TouchEvent) {
+      if (!this.showLightbox || !this.isSwiping) return
+      this.isSwiping = false
+      this.touchEndX = event.changedTouches[0].clientX
+      this.handleSwipe()
+    },
+    handleSwipe() {
+      const swipeThreshold = 50
+      const diff = this.touchStartX - this.touchEndX
+      
+      // Reset swipe offset
+      this.swipeOffset = 0
+      this.transitioning = true
+      
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          // Swipe left - next image
+          this.nextLightboxImage()
+        } else {
+          // Swipe right - previous image
+          this.prevLightboxImage()
+        }
+      }
+      
+      // Re-enable transitions after animation completes
+      setTimeout(() => {
+        this.transitioning = false
+      }, 300)
     },
     getAmenityIcon(amenity: string): string {
       const icons: Record<string, string> = {
@@ -239,7 +342,7 @@ export default {
 
       <!-- Image Gallery -->
       <div class="image-gallery">
-        <div class="main-image" @click="selectMainImage(0)">
+        <div class="main-image" @click="openLightbox(0)">
           <img :src="mainImage" :alt="hotel.name" />
         </div>
         <div class="thumbnail-grid">
@@ -247,15 +350,69 @@ export default {
             v-for="(thumb, index) in thumbnailImages" 
             :key="index"
             class="thumbnail"
-            @click="selectMainImage(index + 1)"
+            @click="openLightbox(index + 1)"
           >
             <img :src="thumb" :alt="hotel.name" />
           </div>
-          <div v-if="totalImages > 5" class="thumbnail more-images">
+          <div v-if="totalImages > 5" class="thumbnail more-images" @click="openLightbox(4)">
             <img :src="hotel.images[4]" :alt="hotel.name" />
             <div class="more-overlay">{{ totalImages - 5 }}+</div>
           </div>
         </div>
+      </div>
+
+      <!-- Lightbox -->
+      <div 
+        v-if="showLightbox" 
+        class="lightbox"
+        @click="closeLightbox"
+        @touchstart="handleTouchStart"
+        @touchmove="handleTouchMove"
+        @touchend="handleTouchEnd"
+      >
+        <button class="lightbox-close" @click.stop="closeLightbox" aria-label="Close lightbox">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+        <button 
+          class="lightbox-nav lightbox-prev" 
+          @click.stop="prevLightboxImage"
+          v-if="totalImages > 1"
+          aria-label="Previous image"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <div class="lightbox-content" @click.stop>
+          <div 
+            class="lightbox-images-container" 
+            :style="lightboxImageStyle"
+          >
+            <img 
+              v-for="(image, index) in allImages" 
+              :key="index"
+              :src="image" 
+              :alt="hotel.name"
+              :class="{ 'lightbox-image-active': index === currentLightboxIndex }"
+              class="lightbox-image"
+            />
+          </div>
+          <div class="lightbox-counter" v-if="totalImages > 1">
+            {{ currentLightboxIndex + 1 }} / {{ totalImages }}
+          </div>
+        </div>
+        <button 
+          class="lightbox-nav lightbox-next" 
+          @click.stop="nextLightboxImage"
+          v-if="totalImages > 1"
+          aria-label="Next image"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </button>
       </div>
 
       <!-- Main Content Grid -->
@@ -388,7 +545,7 @@ export default {
                 width="100%"
                 height="100%"
                 style="border:0;"
-                allowfullscreen=""
+                :allowfullscreen="true"
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
               ></iframe>
@@ -462,6 +619,11 @@ export default {
     cursor: pointer;
     overflow: hidden;
     border-radius: 8px;
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: scale(1.02);
+    }
 
     img {
       width: 100%;
@@ -480,18 +642,23 @@ export default {
       margin-top: 0.5rem;
     }
 
-    .thumbnail {
-      position: relative;
-      cursor: pointer;
-      overflow: hidden;
-      border-radius: 8px;
+      .thumbnail {
+        position: relative;
+        cursor: pointer;
+        overflow: hidden;
+        border-radius: 8px;
+        transition: transform 0.2s;
 
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        min-height: 98px;
-      }
+        &:hover {
+          transform: scale(1.05);
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          min-height: 98px;
+        }
 
       &.more-images {
         .more-overlay {
@@ -510,6 +677,182 @@ export default {
         }
       }
     }
+  }
+}
+
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+  touch-action: pan-y;
+
+  .lightbox-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s;
+    z-index: 10001;
+
+    @media (max-width: 768px) {
+      top: 0.5rem;
+      right: 0.5rem;
+      width: 40px;
+      height: 40px;
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+
+      @media (max-width: 768px) {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  .lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s;
+    z-index: 10001;
+
+    @media (max-width: 768px) {
+      width: 40px;
+      height: 40px;
+      opacity: 0.8;
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+
+      @media (max-width: 768px) {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    &:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+
+    &.lightbox-prev {
+      left: 1rem;
+
+      @media (max-width: 768px) {
+        left: 0.5rem;
+      }
+    }
+
+    &.lightbox-next {
+      right: 1rem;
+
+      @media (max-width: 768px) {
+        right: 0.5rem;
+      }
+    }
+  }
+
+  .lightbox-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .lightbox-images-container {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      height: 100%;
+      will-change: transform;
+
+      .lightbox-image {
+        flex: 0 0 100%;
+        width: 100vw;
+        max-width: 100vw;
+        max-height: 100vh;
+        object-fit: contain;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+        pointer-events: none;
+      }
+    }
+
+    .lightbox-counter {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 24px;
+      font-size: 0.9rem;
+      font-weight: 500;
+
+      @media (max-width: 768px) {
+        bottom: 1rem;
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
