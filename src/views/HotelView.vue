@@ -488,17 +488,6 @@ export default {
               <div v-for="room in filteredRooms" :key="room.id" class="room-card">
                 <div class="room-image-container">
                   <img :src="getCurrentRoomImage(room.id)" :alt="room.name" />
-                  <button class="image-nav prev" @click="prevRoomImage(room.id)">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M15 18l-6-6 6-6"/>
-                    </svg>
-                  </button>
-                  <button class="image-nav next" @click="nextRoomImage(room.id)">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M9 18l6-6-6-6"/>
-                    </svg>
-                  </button>
-                  <div class="image-count">{{ getCurrentRoomImageIndex(room.id) + 1 }}/{{ room.imageCount }}</div>
                 </div>
                 
                 <div class="room-details">
@@ -508,7 +497,6 @@ export default {
                   <div class="room-features">
                     <span v-for="feature in room.features" :key="feature" class="feature">{{ feature }}</span>
                   </div>
-                  <a href="#" class="more-details">More details ></a>
                   
                   <div class="room-pricing">
                     <div v-if="room.discount" class="discount-badge">{{ room.discount }} off</div>
@@ -1032,13 +1020,16 @@ export default {
   }
 
   .rooms-list {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 2rem;
+    @media (max-width: 968px) {
+      grid-template-columns: 1fr;
+    }
   }
 
   .room-card {
-    display: grid;
+    display: block;
     grid-template-columns: 300px 1fr;
     gap: 1.5rem;
     border: 1px solid $color-light-grey;
@@ -1065,56 +1056,13 @@ export default {
         height: 100%;
         object-fit: cover;
       }
-
-      .image-nav {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(255, 255, 255, 0.9);
-        border: none;
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s;
-
-        svg {
-          width: 18px;
-          height: 18px;
-        }
-
-        &:hover {
-          background: white;
-        }
-
-        &.prev {
-          left: 0.5rem;
-        }
-
-        &.next {
-          right: 0.5rem;
-        }
-      }
-
-      .image-count {
-        position: absolute;
-        bottom: 0.5rem;
-        right: 0.5rem;
-        background: rgba(0, 0, 0, 0.7);
-        color: white;
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        font-size: 0.75rem;
-      }
     }
 
     .room-details {
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
+      margin-top: 1rem;
 
       .room-name {
         font-size: 1.25rem;
