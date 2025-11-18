@@ -33,6 +33,7 @@ export default {
       maxStops: 2,
       priceRange: [0, 10000] as [number, number],
       selectedAirlines: [] as string[],
+      selectedAmenities: [] as string[],
       sortBy: 'price' as 'price' | 'duration' | 'departure',
 
       // Progressive loading
@@ -55,6 +56,11 @@ export default {
       if (!this.isFlights) return []
       const flights = this.results as Flight[]
       return [...new Set(flights.map(f => f.airline))].sort()
+    },
+    allAmenities(): string[] {
+      if (!this.isHotels) return []
+      const hotels = this.results as Hotel[]
+      return [...new Set(hotels.flatMap(h => h.amenities))].sort()
     },
     minPrice(): number {
       if (this.results.length === 0) return 0
@@ -106,6 +112,13 @@ export default {
         filtered = hotels.filter((h: any) =>
           h.pricePerNight >= this.priceRange[0] && h.pricePerNight <= this.priceRange[1]
         )
+
+        // Filter by amenities
+        if (this.selectedAmenities.length > 0) {
+          filtered = filtered.filter((h: any) =>
+            this.selectedAmenities.every(amenity => h.amenities.includes(amenity))
+          )
+        }
       }
 
       return filtered
@@ -118,8 +131,10 @@ export default {
         const hasPriceFilter = this.priceRange[1] < this.maxPrice || this.priceRange[0] > this.minPrice
         return hasStopsFilter || hasAirlineFilter || hasPriceFilter
       } else if (this.isHotels) {
-        // Check if price filter is applied
-        return this.priceRange[1] < this.maxPrice || this.priceRange[0] > this.minPrice
+        // Check if price or amenity filters are applied
+        const hasPriceFilter = this.priceRange[1] < this.maxPrice || this.priceRange[0] > this.minPrice
+        const hasAmenityFilter = this.selectedAmenities.length > 0
+        return hasPriceFilter || hasAmenityFilter
       }
       return false
     },
@@ -131,8 +146,9 @@ export default {
         if (this.selectedAirlines.length > 0) count++
         if (this.priceRange[1] < this.maxPrice || this.priceRange[0] > this.minPrice) count++
       } else if (this.isHotels) {
-        // Count price filter if active
+        // Count price and amenity filters if active
         if (this.priceRange[1] < this.maxPrice || this.priceRange[0] > this.minPrice) count++
+        if (this.selectedAmenities.length > 0) count++
       }
       return count
     },
@@ -189,6 +205,14 @@ export default {
         this.selectedAirlines.splice(index, 1)
       } else {
         this.selectedAirlines.push(airline)
+      }
+    },
+    toggleAmenity(amenity: string) {
+      const index = this.selectedAmenities.indexOf(amenity)
+      if (index > -1) {
+        this.selectedAmenities.splice(index, 1)
+      } else {
+        this.selectedAmenities.push(amenity)
       }
     },
     toggleFilters() {
@@ -310,8 +334,9 @@ export default {
         </div>
       </div>
 
-      <!-- Hotel-specific filters can be added here -->
+      <!-- Hotel-specific filters -->
       <div v-if="isHotels" class="filter-sections">
+        <!-- Price Filter -->
         <div class="filter-section">
           <h4>Price per night</h4>
           <div class="price-range-display">
@@ -326,6 +351,21 @@ export default {
             :max="maxPrice"
             class="price-slider"
           />
+        </div>
+
+        <!-- Amenities Filter -->
+        <div class="filter-section">
+          <h4>Amenities</h4>
+          <div class="filter-options">
+            <label v-for="amenity in allAmenities" :key="amenity" class="filter-option">
+              <input
+                type="checkbox"
+                :checked="selectedAmenities.includes(amenity)"
+                @change="toggleAmenity(amenity)"
+              />
+              <span>{{ amenity }}</span>
+            </label>
+          </div>
         </div>
       </div>
     </aside>
