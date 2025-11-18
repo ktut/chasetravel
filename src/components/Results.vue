@@ -49,6 +49,10 @@ export default {
     searchType: {
       type: String as () => 'flights' | 'hotels',
       required: true
+    },
+    searchData: {
+      type: Object as () => any,
+      default: null
     }
   },
   data() {
@@ -367,7 +371,7 @@ export default {
         <NoResults v-if="filteredResults.length === 0 && !isLoading" :searchType="searchType" />
 
         <TransitionGroup name="flight-list">
-          <FlightCard v-for="flight in displayedResults as Flight[]" :key="flight.id" :flight="flight" />
+          <FlightCard v-for="flight in displayedResults as Flight[]" :key="flight.id" :flight="flight" :searchData="searchData" />
         </TransitionGroup>
 
         <!-- Loading indicator -->

@@ -1,48 +1,30 @@
 import { defineStore } from 'pinia'
+import type { Flight } from '@/types/search'
 
 export interface SearchState {
-  searchResults: any[]
-  searchType: 'flights' | 'hotels'
-  isInitialized: boolean
-  searchData: {
-    searchType: string
-    location: string
-    destination?: string | null
-    checkIn: Date | null
-    checkOut: Date | null
-    checkInFlexibility: string
-    checkOutFlexibility: string
-    passengers: {
-      adults: number
-      children: number
-      total: number
-    }
-  } | null
+  selectedFlight: Flight | null
+  pointsBalance: number
 }
 
 export const useSearchStore = defineStore('search', {
   state: (): SearchState => ({
-    searchResults: [],
-    searchType: 'flights',
-    isInitialized: false,
-    searchData: null
+    selectedFlight: null,
+    pointsBalance: 86060
   }),
 
   actions: {
-    setSearchResults(results: any[], type: 'flights' | 'hotels') {
-      this.searchResults = results
-      this.searchType = type
-      this.isInitialized = true
+    setSelectedFlight(flight: Flight) {
+      this.selectedFlight = flight
     },
 
-    setSearchData(data: any) {
-      this.searchData = data
+    clearSelectedFlight() {
+      this.selectedFlight = null
     },
 
-    clearSearch() {
-      this.searchResults = []
-      this.isInitialized = false
-      this.searchData = null
+    redeemPoints(amount: number) {
+      if (amount <= this.pointsBalance) {
+        this.pointsBalance -= amount
+      }
     }
   }
 })

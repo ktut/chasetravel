@@ -1,17 +1,25 @@
 <script lang="ts">
 import Results from '@/components/Results.vue'
+import Search404 from './Search404.vue'
 import { getMockFlightResults } from '@/services/MockFlightResults'
 import { getMockHotelResults } from '@/services/MockHotelResults'
-import { useSearchStore } from '@/stores/searchStore'
+import { validateSearchParams, parseSearchDataFromQuery } from '@/types/search'
+import type { SearchData } from '@/types/search'
 
 export default {
   name: 'ResultsView',
   components: {
-    Results
+    Results,
+    Search404
   },
-  setup() {
-    const searchStore = useSearchStore()
-    return { searchStore }
+  data() {
+    return {
+      searchData: null as SearchData | null,
+      searchResults: [] as any[],
+      validationErrors: [] as string[],
+      isValid: false,
+      isInitialized: false
+    }
   },
   mounted() {
     // Read query parameters and perform search
@@ -27,57 +35,69 @@ export default {
     }
   },
   computed: {
-    searchResults() {
-      return this.searchStore.searchResults
-    },
-    searchType() {
-      return this.searchStore.searchType
-    },
-    isInitialized() {
-      return this.searchStore.isInitialized
+    searchType(): 'flights' | 'hotels' {
+      return this.searchData?.searchType || 'flights'
     }
   },
   methods: {
     initializeFromQueryParams() {
       const query = this.$route.query
 
-      // Build search data from query parameters
-      const searchData = {
-        searchType: (query.type as string) || 'flights',
-        location: query.from as string,
-        destination: query.to as string,
-        checkIn: query.checkIn ? new Date(query.checkIn as string) : null,
-        checkOut: query.checkOut ? new Date(query.checkOut as string) : null,
-        checkInFlexibility: query.checkInFlex as string || 'exact',
-        checkOutFlexibility: query.checkOutFlex as string || 'exact',
-        passengers: {
-          adults: parseInt(query.adults as string) || 1,
-          children: parseInt(query.children as string) || 0,
-          total: (parseInt(query.adults as string) || 1) + (parseInt(query.children as string) || 0)
-        }
+      // Check if there are any query params at all
+      const hasQueryParams = Object.keys(query).length > 0
+
+      // If no query params, redirect to home
+      if (!hasQueryParams) {
+        this.$router.replace('/')
+        return
       }
 
-      // Store search data in Pinia
-      this.searchStore.setSearchData(searchData)
+      // Validate URL parameters
+      const validation = validateSearchParams(query)
+
+      if (!validation.valid) {
+        this.isValid = false
+        this.validationErrors = validation.errors
+        this.isInitialized = true
+        return
+      }
+
+      // Parse search data from valid query params
+      const searchData = parseSearchDataFromQuery(query)
+
+      if (!searchData) {
+        this.isValid = false
+        this.validationErrors = ['Unable to parse search parameters']
+        this.isInitialized = true
+        return
+      }
+
+      // Store search data locally
+      this.searchData = searchData
+      this.isValid = true
+      this.validationErrors = []
 
       // Get mock results based on search type
       if (searchData.searchType === 'flights') {
-        const results = getMockFlightResults(searchData)
-        this.searchStore.setSearchResults(results, 'flights')
+        this.searchResults = getMockFlightResults(searchData)
       } else if (searchData.searchType === 'hotels') {
-        const results = getMockHotelResults(searchData)
-        this.searchStore.setSearchResults(results, 'hotels')
+        this.searchResults = getMockHotelResults(searchData)
       }
+
+      this.isInitialized = true
     }
   }
 }
 </script>
 
 <template>
-  <div v-if="isInitialized" class="search-view">
-    <div class="results-section">
-      <Results :results="searchResults" :searchType="searchType" />
+  <div v-if="isInitialized">
+    <div v-if="isValid" class="search-view">
+      <div class="results-section">
+        <Results :results="searchResults" :searchType="searchType" :searchData="searchData" />
+      </div>
     </div>
+    <Search404 v-else :errors="validationErrors" />
   </div>
 </template>
 

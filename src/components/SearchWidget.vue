@@ -162,6 +162,21 @@ export default {
       } else {
         return `${fromCode} • ${checkInFormatted} - ${checkOutFormatted}`
       }
+    },
+    isSubmitDisabled(): boolean {
+      // Check if departure airport is selected
+      if (!this.location) return true
+
+      // Check if arrival airport is selected (only for flights)
+      if (this.searchType === 'flights' && !this.destination) return true
+
+      // Check if dates are selected
+      if (!this.checkInDate || !this.checkOutDate) return true
+
+      // Check if there are passengers (total should be at least 1)
+      if (this.totalPassengers < 1) return true
+
+      return false
     }
   },
   methods: {
@@ -299,12 +314,17 @@ export default {
       this.isMinimized = false
     },
     handleSubmit() {
+      // Guard clause - should not be able to submit if button is disabled
+      if (this.isSubmitDisabled) {
+        return
+      }
+
       const searchData = {
         searchType: this.searchType,
         location: this.location,
-        destination: this.searchType === 'flights' ? this.destination : null,
-        checkIn: this.checkInDate,
-        checkOut: this.checkOutDate,
+        destination: this.searchType === 'flights' ? this.destination : undefined,
+        checkIn: this.checkInDate!,
+        checkOut: this.checkOutDate!,
         checkInFlexibility: this.checkInFlexibility,
         checkOutFlexibility: this.checkOutFlexibility,
         passengers: {
@@ -318,8 +338,12 @@ export default {
       const query: any = {
         type: searchData.searchType,
         from: searchData.location,
-        adults: searchData.passengers.adults,
-        children: searchData.passengers.children
+        adults: searchData.passengers.adults.toString()
+      }
+
+      // Only add children if > 0
+      if (searchData.passengers.children > 0) {
+        query.children = searchData.passengers.children.toString()
       }
 
       if (searchData.destination) {
@@ -345,10 +369,7 @@ export default {
       // First emit the event for compatibility with pages that listen for it
       this.$emit('search-submitted', searchData)
 
-      // Update search store with new search data
-      this.searchStore.setSearchData(searchData)
-
-      // If already on search page, just update the query params and store
+      // If already on search page, just update the query params
       if (this.$route.path === '/search') {
         // Update the URL query params
         this.$router.push({ path: '/search', query })
@@ -567,7 +588,7 @@ export default {
         </div>
       </div>
 
-      <button class="submit-btn btn-primary" @click="handleSubmit">
+      <button class="submit-btn btn-primary" @click="handleSubmit" :disabled="isSubmitDisabled">
         {{ submitButtonText }}
       </button>
     </div>

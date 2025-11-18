@@ -13,9 +13,9 @@ interface Hotel {
 interface SearchData {
   searchType: string
   location: string
-  destination?: string | null
-  checkIn: Date | null
-  checkOut: Date | null
+  destination?: string
+  checkIn: Date
+  checkOut: Date
   checkInFlexibility: string
   checkOutFlexibility: string
   passengers: {

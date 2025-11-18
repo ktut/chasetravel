@@ -1,4 +1,6 @@
 <script lang="ts">
+import { useSearchStore } from '@/stores/searchStore'
+
 interface Flight {
   id: number
   airline: string
@@ -22,6 +24,15 @@ export default {
     flight: {
       type: Object as () => Flight,
       required: true
+    },
+    searchData: {
+      type: Object,
+      default: null
+    }
+  },
+  computed: {
+    searchStore() {
+      return useSearchStore()
     }
   },
   methods: {
@@ -31,6 +42,35 @@ export default {
         currency: 'USD',
         minimumFractionDigits: 0
       }).format(price)
+    },
+    selectFlight() {
+      console.log('=== FlightCard.selectFlight CALLED ===')
+      console.log('Flight selected:', this.flight)
+      console.log('Search data:', this.searchData)
+
+      // Store flight and search data in sessionStorage for navigation
+      try {
+        const flightJson = JSON.stringify(this.flight)
+        const searchDataJson = JSON.stringify(this.searchData)
+
+        console.log('Storing in sessionStorage...')
+        sessionStorage.setItem('selectedFlight', flightJson)
+        sessionStorage.setItem('confirmationSearchData', searchDataJson)
+
+        // Verify it was stored
+        const storedFlight = sessionStorage.getItem('selectedFlight')
+        const storedSearch = sessionStorage.getItem('confirmationSearchData')
+        console.log('Verification - Flight in storage:', storedFlight ? 'YES' : 'NO')
+        console.log('Verification - Search in storage:', storedSearch ? 'YES' : 'NO')
+
+        console.log('Navigating to /confirmation...')
+        // Use nextTick to ensure sessionStorage is written before navigation
+        this.$nextTick(() => {
+          window.location.href = '/confirmation'
+        })
+      } catch (e) {
+        console.error('Error in selectFlight:', e)
+      }
     }
   }
 }
@@ -66,7 +106,7 @@ export default {
       </div>
 
       <div class="flight-price">
-        <button class="btn-primary select-btn">
+        <button @click="selectFlight" class="btn-primary select-btn">
           {{ formatPrice(flight.price) }}
         </button>
       </div>

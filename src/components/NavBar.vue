@@ -1,16 +1,11 @@
 <script lang="ts">
 import PointsPopover from './PointsPopover.vue'
+import { useSearchStore } from '@/stores/searchStore'
 
 export default {
   name: 'NavBar',
   components: {
     PointsPopover
-  },
-  props: {
-    points: {
-      type: Number,
-      default: 86060
-    }
   },
   data() {
     return {
@@ -20,6 +15,12 @@ export default {
     }
   },
   computed: {
+    searchStore() {
+      return useSearchStore()
+    },
+    points(): number {
+      return this.searchStore.pointsBalance
+    },
     formattedPoints(): string {
       return this.points.toLocaleString('en-US')
     },
