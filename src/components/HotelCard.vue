@@ -242,6 +242,9 @@ export default {
 .hotel-amenities-container {
   position: relative;
   overflow: hidden;
+  max-width: 78vw;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 
   @media (max-width: 968px) {
     &::after {

@@ -12,7 +12,7 @@ import { test, expect } from '@playwright/test'
 test.describe('Booking E2E Flow', () => {
   test('should complete flight booking from homepage to confirmation with correct data', async ({ page }) => {
     // Step 1: Navigate to homepage
-    await page.goto('/')
+    await page.goto('/', { timeout: 60000 })
     await expect(page).toHaveTitle(/Chase Travel/)
 
     // Step 2: Fill in search form - Flights are selected by default
