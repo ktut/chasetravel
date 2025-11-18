@@ -186,26 +186,19 @@ export default {
         Back to results
       </button>
 
-      <!-- Header Section -->
-      <div class="confirmation-header">
-        <div class="route-info">
-          <h1>{{ routeText }}</h1>
-          <p class="trip-details">{{ tripType }}, {{ travelersText }}</p>
-        </div>
-        <div class="price-display">
-          <span class="price">{{ formatPrice(currentFarePrice) }}</span>
-        </div>
-      </div>
+      <!-- Main Content Grid -->
+      <div class="content-grid">
+        <!-- Left Column: Fare Options and Flight Details -->
+        <div class="left-column">
+          <!-- Choose a fare -->
+          <section class="step-section">
+            <h2>Choose a fare</h2>
+            <p class="step-disclaimer">
+              <a href="#" class="disclaimer-link">See baggage size and weight limit.</a>
+              Total prices may include estimated baggage fees and flexibility. Some options may require added baggage or flexibility when checking out. Check terms and conditions on the booking site.
+            </p>
 
-      <!-- Step 1: Choose a fare -->
-      <section class="step-section">
-        <h2>Step 1: Choose a fare</h2>
-        <p class="step-disclaimer">
-          <a href="#" class="disclaimer-link">See baggage size and weight limit.</a>
-          Total prices may include estimated baggage fees and flexibility. Some options may require added baggage or flexibility when checking out. Check terms and conditions on the booking site.
-        </p>
-
-        <div class="fare-options">
+            <div class="fare-options">
           <!-- Basic Economy -->
           <div
             class="fare-card"
@@ -352,84 +345,11 @@ export default {
           </div>
         </div>
 
-        <p class="fare-note">Fare and baggage fees apply to the entire trip</p>
-      </section>
+            <p class="fare-note">Fare and baggage fees apply to the entire trip</p>
+          </section>
 
-      <!-- Step 2: Use your rewards -->
-      <section class="step-section">
-        <h2>Step 2: Use your rewards</h2>
-        <p class="step-description">
-          Apply your Chase Ultimate Rewards points to reduce the cost of your flight.
-        </p>
-
-        <div class="rewards-options">
-          <!-- Option 1: Don't use points -->
-          <label class="rewards-option" :class="{ selected: !usePoints }">
-            <input type="radio" :value="false" v-model="usePoints" name="rewards" />
-            <div class="option-content">
-              <div class="option-header">
-                <span class="option-title">Pay full amount</span>
-                <span class="option-price">{{ formatPrice(currentFarePrice) }}</span>
-              </div>
-              <p class="option-description">Keep your {{ formattedPointsBalance }} points for later</p>
-            </div>
-          </label>
-
-          <!-- Option 2: Use points -->
-          <label class="rewards-option" :class="{ selected: usePoints }">
-            <input type="radio" :value="true" v-model="usePoints" name="rewards" />
-            <div class="option-content">
-              <div class="option-header">
-                <span class="option-title">Redeem points</span>
-                <span class="option-price">Use your rewards</span>
-              </div>
-              <p class="option-description">You have {{ formattedPointsBalance }} points available</p>
-            </div>
-          </label>
-
-          <!-- Points redemption details (shown when usePoints is true) -->
-          <div v-if="usePoints" class="points-redemption">
-            <div class="redemption-input">
-              <label for="pointsInput">Points to redeem</label>
-              <input
-                id="pointsInput"
-                type="number"
-                v-model.number="pointsToRedeem"
-                :max="maxPointsRedeemable"
-                :min="0"
-                step="100"
-                class="points-input"
-              />
-              <p class="input-helper">
-                Maximum: {{ maxPointsRedeemable.toLocaleString() }} points
-                ({{ formatPrice(maxPointsRedeemable * pointsValue) }})
-              </p>
-            </div>
-
-            <div class="redemption-summary">
-              <div class="summary-row">
-                <span>Points redeemed:</span>
-                <strong>{{ pointsToRedeem.toLocaleString() }} pts</strong>
-              </div>
-              <div class="summary-row">
-                <span>Point value:</span>
-                <strong>-{{ formatPrice(dollarsFromPoints) }}</strong>
-              </div>
-              <div class="summary-row highlight">
-                <span>Balance due:</span>
-                <strong>{{ formatPrice(balanceDue) }}</strong>
-              </div>
-              <div class="summary-row">
-                <span>Remaining points:</span>
-                <strong class="points-remaining">{{ remainingPoints.toLocaleString() }} pts</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Flight Details -->
-      <section class="flight-details-section">
+          <!-- Flight Details -->
+          <section class="flight-details-section">
         <h2>Flight Details</h2>
 
         <div class="flight-detail-card">
@@ -509,13 +429,100 @@ export default {
             </div>
           </div>
         </div>
-      </section>
+          </section>
+        </div>
 
-      <!-- Book Button -->
-      <div class="book-section">
-        <button @click="proceedToBook" class="btn-primary book-button">
-          Book for {{ formatPrice(balanceDue) }}
-        </button>
+        <!-- Right Sidebar: Trip Info, Price, and Rewards -->
+        <aside class="right-sidebar">
+          <!-- Trip Summary Card -->
+          <div class="trip-summary-card">
+            <h1>{{ routeText }}</h1>
+            <p class="trip-details">{{ tripType }}, {{ travelersText }}</p>
+            <div class="price-display">
+              <span class="price">{{ formatPrice(currentFarePrice) }}</span>
+            </div>
+          </div>
+
+          <!-- Use your rewards -->
+          <section class="rewards-section">
+            <h2>Use your rewards</h2>
+            <p class="step-description">
+              Apply your Chase Ultimate Rewards points to reduce the cost of your flight.
+            </p>
+
+            <div class="rewards-options">
+              <!-- Option 1: Don't use points -->
+              <label class="rewards-option" :class="{ selected: !usePoints }">
+                <input type="radio" :value="false" v-model="usePoints" name="rewards" />
+                <div class="option-content">
+                  <div class="option-header">
+                    <span class="option-title">Pay full amount</span>
+                    <span class="option-price">{{ formatPrice(currentFarePrice) }}</span>
+                  </div>
+                  <p class="option-description">Keep your {{ formattedPointsBalance }} points for later</p>
+                </div>
+              </label>
+
+              <!-- Option 2: Use points -->
+              <label class="rewards-option" :class="{ selected: usePoints }">
+                <input type="radio" :value="true" v-model="usePoints" name="rewards" />
+                <div class="option-content">
+                  <div class="option-header">
+                    <span class="option-title">Redeem points</span>
+                    <span class="option-price">Use your rewards</span>
+                  </div>
+                  <p class="option-description">You have {{ formattedPointsBalance }} points available</p>
+                </div>
+              </label>
+
+              <!-- Points redemption details (shown when usePoints is true) -->
+              <div v-if="usePoints" class="points-redemption">
+                <div class="redemption-input">
+                  <label for="pointsInput">Points to redeem</label>
+                  <input
+                    id="pointsInput"
+                    type="number"
+                    v-model.number="pointsToRedeem"
+                    :max="maxPointsRedeemable"
+                    :min="0"
+                    step="100"
+                    class="points-input"
+                  />
+                  <p class="input-helper">
+                    Maximum: {{ maxPointsRedeemable.toLocaleString() }} points
+                    ({{ formatPrice(maxPointsRedeemable * pointsValue) }})
+                  </p>
+                </div>
+
+                <div class="redemption-summary">
+                  <div class="summary-row">
+                    <span>Points redeemed:</span>
+                    <strong>{{ pointsToRedeem.toLocaleString() }} pts</strong>
+                  </div>
+                  <div class="summary-row">
+                    <span>Point value:</span>
+                    <strong>-{{ formatPrice(dollarsFromPoints) }}</strong>
+                  </div>
+                  <div class="summary-row highlight">
+                    <span>Balance due:</span>
+                    <strong>{{ formatPrice(balanceDue) }}</strong>
+                  </div>
+                  <div class="summary-row">
+                    <span>Remaining points:</span>
+                    <strong class="points-remaining">{{ remainingPoints.toLocaleString() }} pts</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Book Button -->
+          <div class="book-section">
+            <button @click="proceedToBook" class="btn-primary book-button">
+              Book for {{ formatPrice(balanceDue) }}
+            </button>
+          </div>
+        </aside>
       </div>
     </div>
   </div>
@@ -523,11 +530,12 @@ export default {
 
 <style lang="scss" scoped>
 .confirmation-page {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 16rem 1.5rem;
 
   @media (max-width: 768px) {
+    max-width: 900px;
     padding: 11rem 1rem 1rem;
   }
 }
@@ -538,16 +546,25 @@ export default {
   gap: 2rem;
 }
 
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+
+  @media (min-width: 769px) {
+    grid-template-columns: 1fr 380px;
+  }
+}
+
 .back-button {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   background: rgba(255, 255, 255, 0.95);
   border: none;
-  color: #005eb8;
-  font-size: 0.95rem;
-  font-weight: 500;
+  color: $color-accent;
   cursor: pointer;
+  font-size: 1rem;
   padding: 0.75rem 1rem;
   margin-left: -1rem;
   margin-right: -1rem;
@@ -588,63 +605,65 @@ export default {
   }
 }
 
-.confirmation-header {
+.left-column {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid #e5e5e5;
+  flex-direction: column;
+  gap: 2rem;
+}
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 1rem;
+.right-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  @media (min-width: 769px) {
+    position: sticky;
+    top: 104px;
+    align-self: flex-start;
+  }
+}
+
+.trip-summary-card {
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 1.5rem;
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: $color-primary;
+
+    @media (max-width: 768px) {
+      font-size: 1.25rem;
+    }
   }
 
-  .route-info {
-    h1 {
-      font-size: 1.75rem;
-      font-weight: 600;
-      margin: 0 0 0.5rem 0;
-      color: #1a1a1a;
-
-      @media (max-width: 768px) {
-        font-size: 1.5rem;
-      }
-    }
-
-    .trip-details {
-      color: #666;
-      font-size: 0.95rem;
-      margin: 0;
-    }
+  .trip-details {
+    color: #666;
+    font-size: 0.875rem;
+    margin: 0 0 1rem 0;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e5e5e5;
   }
 
   .price-display {
     .price {
       font-size: 2rem;
       font-weight: 700;
-      color: #1a1a1a;
-
-      @media (max-width: 768px) {
-        font-size: 1.75rem;
-      }
+      color: $color-primary;
+      display: block;
     }
   }
 }
 
 .step-section {
-  padding: 1.5rem 0;
-  border-bottom: 1px solid #e5e5e5;
-
-  &:last-of-type {
-    border-bottom: none;
-  }
-
   h2 {
     font-size: 1.5rem;
     font-weight: 600;
     margin: 0 0 1rem 0;
-    color: #1a1a1a;
+    color: $color-primary;
   }
 
   .step-disclaimer {
@@ -654,7 +673,7 @@ export default {
     margin-bottom: 1.5rem;
 
     .disclaimer-link {
-      color: #005eb8;
+      color: $color-accent;
       text-decoration: underline;
 
       &:hover {
@@ -667,6 +686,26 @@ export default {
     color: #666;
     font-size: 0.95rem;
     margin-bottom: 1.5rem;
+  }
+}
+
+.rewards-section {
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 1.5rem;
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.75rem 0;
+    color: $color-primary;
+  }
+
+  .step-description {
+    color: #666;
+    font-size: 0.875rem;
+    margin-bottom: 1.25rem;
   }
 }
 
@@ -685,12 +724,12 @@ export default {
   cursor: pointer;
 
   &:hover {
-    border-color: #005eb8;
+    border-color: $color-accent;
   }
 
   &.selected {
-    border-color: #005eb8;
-    box-shadow: 0 0 0 1px #005eb8;
+    border-color: $color-accent;
+    box-shadow: 0 0 0 1px $color-accent;
   }
 
   &.collapsed {
@@ -731,7 +770,7 @@ export default {
     .fare-price {
       font-size: 1.5rem;
       font-weight: 700;
-      color: #1a1a1a;
+      color: $color-primary;
       transition: font-size 0.3s ease;
     }
   }
@@ -841,7 +880,7 @@ export default {
     .option-title {
       font-weight: 600;
       font-size: 1.05rem;
-      color: #1a1a1a;
+      color: $color-primary;
     }
 
     .option-price {
@@ -873,7 +912,7 @@ export default {
     display: block;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: #1a1a1a;
+    color: $color-primary;
   }
 
   .points-input {
@@ -930,13 +969,11 @@ export default {
 }
 
 .flight-details-section {
-  padding: 1.5rem 0;
-
   h2 {
     font-size: 1.5rem;
     font-weight: 600;
     margin: 0 0 1rem 0;
-    color: #1a1a1a;
+    color: $color-primary;
   }
 }
 
@@ -975,7 +1012,7 @@ export default {
     .airline-name {
       font-weight: 600;
       font-size: 1rem;
-      color: #1a1a1a;
+      color: $color-primary;
     }
 
     .airline-label {
@@ -1028,7 +1065,7 @@ export default {
         font-size: 1.5rem;
         font-weight: 700;
         margin-bottom: 0.25rem;
-        color: #1a1a1a;
+        color: $color-primary;
       }
 
       .airport {
@@ -1125,8 +1162,6 @@ export default {
 }
 
 .book-section {
-  padding: 1.5rem 0;
-
   .book-button {
     width: 100%;
     padding: 1rem 2rem;
