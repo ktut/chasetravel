@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import NavBar from '@/components/NavBar.vue'
 import SearchWidget from '@/components/SearchWidget.vue'
@@ -30,6 +30,39 @@ watch(
   },
   { immediate: true }
 )
+
+// Function to apply the correct overflow based on current route
+const applyOverflow = () => {
+  document.body.style.overflowY = route.path === '/' ? 'hidden' : ''
+}
+
+// Handle body overflow based on route
+watch(() => route.path, applyOverflow, { immediate: true })
+
+// Use MutationObserver to re-apply overflow when other components modify body.style
+let observer: MutationObserver | null = null
+
+onMounted(() => {
+  observer = new MutationObserver(() => {
+    // Re-apply overflow if it's been changed by another component
+    const currentOverflow = document.body.style.overflowY
+    const expectedOverflow = route.path === '/' ? 'hidden' : ''
+    if (currentOverflow !== expectedOverflow) {
+      applyOverflow()
+    }
+  })
+
+  observer.observe(document.body, {
+    attributes: true,
+    attributeFilter: ['style']
+  })
+})
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect()
+  }
+})
 </script>
 
 <template>

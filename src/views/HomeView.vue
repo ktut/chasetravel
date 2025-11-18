@@ -24,14 +24,6 @@ export default {
     setTimeout(() => {
       this.isLoaded = true;
     }, 100);
-  },
-  activated() {
-    // Set overflow-y: hidden on body when homepage is activated (works with KeepAlive)
-    document.body.style.overflowY = 'hidden';
-  },
-  deactivated() {
-    // Restore default overflow behavior when homepage is deactivated (works with KeepAlive)
-    document.body.style.overflowY = '';
   }
 }
 </script>
