@@ -486,7 +486,6 @@ export default {
                         <span class="current-total">{{ formatPrice(getRoomTotalPrice(room)) }} total</span>
                       </div>
                       <div class="price-note">✓ Total includes taxes and fees</div>
-                      <div class="payment-option">Pay over time with affirm</div>
                     </div>
                   </div>
 
@@ -1005,6 +1004,11 @@ export default {
       border-radius: 8px;
       overflow: hidden;
       height: 200px;
+      @media (max-width: 968px) {
+        position: absolute;
+        height: 100px;
+        width: 100px;
+      }
 
       img {
         width: 100%;
@@ -1018,12 +1022,31 @@ export default {
       flex-direction: column;
       gap: 0.75rem;
       margin-top: 1rem;
+      @media (max-width: 968px) {
+        margin-top: 0;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: baseline;
+      }
 
       .room-name {
         font-size: 1.25rem;
         font-weight: 600;
         margin: 0;
         color: $color-primary;
+        text-wrap: balance;
+        @media (max-width: 968px) {
+          display: flex;
+          align-items: center;
+          flex-basis: 100%;
+          padding-left: 2rem;
+          &:before {
+            content: '';
+            width: 100px;
+            height: 100px;
+            float: left;
+          }
+        }
       }
 
       .room-capacity {
@@ -1041,6 +1064,9 @@ export default {
         flex-wrap: wrap;
         gap: 0.75rem;
         margin: 0.5rem 0;
+        @media (max-width: 968px) {
+          display: none;
+        }
 
         .feature {
           color: $color-text;
@@ -1061,6 +1087,11 @@ export default {
 
       .room-pricing {
         margin: 1rem 0;
+        @media (max-width: 968px) {
+          order: 1;
+          flex-basis: 100%;
+          margin: 0;
+        }
 
         .discount-badge {
           background: #d32f2f;
@@ -1104,11 +1135,9 @@ export default {
             color: $color-text-light;
             font-size: 0.85rem;
             margin-bottom: 0.25rem;
-          }
-
-          .payment-option {
-            color: $color-text-light;
-            font-size: 0.85rem;
+            @media (max-width: 968px) {
+              display: none;
+            }
           }
         }
       }
@@ -1122,11 +1151,17 @@ export default {
         margin-top: 0.5rem;
         padding: 0.75rem 2rem;
         width: fit-content;
+        @media (max-width: 968px) {
+          order: 2;
+        }
       }
 
       .charge-note {
         color: $color-text-light;
         font-size: 0.85rem;
+        @media (max-width: 968px) {
+          display: none;
+        }
       }
     }
   }
