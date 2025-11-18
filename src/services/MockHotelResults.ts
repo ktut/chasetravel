@@ -11,7 +11,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
-      amenities: ['Free WiFi', 'Spa', 'Fine Dining', 'Concierge', 'Valet Parking', 'Butler Service', 'Champagne Bar'],
+      amenities: ['Free Wifi', 'Spa', 'On-site Restaurant', 'Bar'],
       coordinates: { lat: 40.7645, lng: -73.9744 }
     },
     {
@@ -22,7 +22,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
-      amenities: ['Free WiFi', 'Butler Service', 'Spa', 'Fitness Center', 'Fine Dining', 'Bar', 'Room Service'],
+      amenities: ['Free Wifi', 'Spa', 'Fitness Center', 'On-site Restaurant', 'Bar'],
       coordinates: { lat: 40.7614, lng: -73.9745 }
     },
     {
@@ -33,7 +33,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.7,
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
-      amenities: ['Rooftop Bar', 'Spa', 'Pool', 'Free WiFi', 'Fitness Center', 'Fine Dining', 'Valet Parking'],
+      amenities: ['Bar', 'Spa', 'Pool', 'Free Wifi', 'Fitness Center', 'On-site Restaurant'],
       coordinates: { lat: 40.7623, lng: -73.9754 }
     },
     {
@@ -44,7 +44,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
-      amenities: ['Spa', 'Pool', 'Free WiFi', 'Fitness Center', 'Michelin-Star Restaurant', 'Central Park Views', 'Concierge'],
+      amenities: ['Spa', 'Pool', 'Free Wifi', 'Fitness Center', 'On-site Restaurant'],
       coordinates: { lat: 40.7681, lng: -73.9819 }
     },
     {
@@ -55,7 +55,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
-      amenities: ['Bemelmans Bar', 'Café Carlyle', 'Spa', 'Fitness Center', 'Free WiFi', 'Concierge', 'Pet Friendly'],
+      amenities: ['Bar', 'On-site Restaurant', 'Spa', 'Fitness Center', 'Free Wifi'],
       coordinates: { lat: 40.7747, lng: -73.9632 }
     },
     {
@@ -66,7 +66,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
-      amenities: ['Central Park Views', 'Spa', 'Fine Dining', 'Club Lounge', 'Free WiFi', 'Fitness Center', 'Valet Parking'],
+      amenities: ['Spa', 'On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 40.7654, lng: -73.9768 }
     },
     {
@@ -77,7 +77,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
-      amenities: ['Spa', 'Fine Dining', 'Free WiFi', 'Fitness Center', 'Bar', 'Concierge', 'Room Service'],
+      amenities: ['Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center', 'Bar'],
       coordinates: { lat: 40.7626, lng: -73.9722 }
     },
     {
@@ -88,7 +88,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
-      amenities: ['Spa', 'Pool', 'Fine Dining', 'Free WiFi', 'Fitness Center', 'Living Room Bar', 'Art Collection'],
+      amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center', 'Bar'],
       coordinates: { lat: 40.7651, lng: -73.9784 }
     },
     {
@@ -99,7 +99,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.7,
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
-      amenities: ['Fireplaces', 'Kitchenettes', 'Pembroke Room', 'Free WiFi', 'Fitness Center', 'Concierge', 'Pet Friendly'],
+      amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 40.7677, lng: -73.9684 }
     },
     {
@@ -110,7 +110,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
-      amenities: ['Temple Court Restaurant', 'Bar', 'Free WiFi', 'Fitness Center', 'Historic Architecture', 'Atrium', 'Concierge'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 40.7112, lng: -74.0058 }
     },
     {
@@ -121,7 +121,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
-      amenities: ['Rooftop Pool', 'Spa', 'Farm-to-Table Dining', 'Free WiFi', 'Fitness Center', 'Brooklyn Bridge Views', 'Eco-Friendly'],
+      amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 40.7024, lng: -73.9931 }
     },
     {
@@ -132,7 +132,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.7,
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
-      amenities: ['Shibui Spa', 'Pool', 'Italian Restaurant', 'Free WiFi', 'Fitness Center', 'Courtyard', 'Private Spaces'],
+      amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 40.7195, lng: -74.0097 }
     },
     {
@@ -143,7 +143,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
-      amenities: ['Spa de La Mer', 'Bar', 'Fine Dining', 'Crystal Decor', 'Free WiFi', 'Fitness Center', 'Concierge'],
+      amenities: ['Spa', 'Bar', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 40.7610, lng: -73.9760 }
     },
     {
@@ -154,7 +154,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
-      amenities: ['Jean-Georges Restaurant', 'Bar', 'Spa', 'Free WiFi', 'Fitness Center', 'Pet Friendly', 'Designer Interiors'],
+      amenities: ['On-site Restaurant', 'Bar', 'Spa', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 40.7756, lng: -73.9632 }
     },
     {
@@ -165,7 +165,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
-      amenities: ['Hudson River Views', 'Restaurants', 'Bar', 'Free WiFi', 'Fitness Center', 'Concierge', 'Business Center'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 40.7156, lng: -74.0157 }
     },
     {
@@ -176,7 +176,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.7,
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
-      amenities: ['Screening Room', 'Drawing Room', 'Terrace', 'Free WiFi', 'Fitness Center', 'Bar', 'British Design'],
+      amenities: ['Free Wifi', 'Fitness Center', 'Bar'],
       coordinates: { lat: 40.7217, lng: -73.9968 }
     },
     {
@@ -187,7 +187,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
-      amenities: ['NoMad Restaurant', 'Library', 'Rooftop', 'Free WiFi', 'Fitness Center', 'Bar', 'Classic Design'],
+      amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center', 'Bar'],
       coordinates: { lat: 40.7453, lng: -73.9881 }
     },
     {
@@ -198,7 +198,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
-      amenities: ['Rooftop Bar', 'Charlie Palmer Restaurant', 'Free WiFi', 'Fitness Center', 'Times Square Views', 'Concierge', 'Historic Building'],
+      amenities: ['Bar', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 40.7572, lng: -73.9868 }
     },
     {
@@ -209,7 +209,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
-      amenities: ['Dirty French Restaurant', 'Bar', 'Terrace', 'Free WiFi', 'Fitness Center', 'Lower East Side Location', 'Modern Design'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 40.7213, lng: -73.9883 }
     },
     {
@@ -220,7 +220,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
-      amenities: ['Gemma Restaurant', 'Lobby Bar', 'Free WiFi', 'Fitness Center', 'Floor-to-Ceiling Windows', 'Vintage Decor', 'Pet Friendly'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 40.7267, lng: -73.9919 }
     }
   ],
@@ -233,7 +233,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
-      amenities: ['Polo Lounge', 'Spa', 'Pool', 'Cabanas', 'Free WiFi', 'Fitness Center', 'Tennis Courts'],
+      amenities: ['Bar', 'Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 34.0789, lng: -118.4152 }
     },
     {
@@ -244,7 +244,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.7,
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
-      amenities: ['Spa', 'Pool', 'Wolfgang Puck Restaurant', 'Gardens', 'Free WiFi', 'Fitness Center', 'Swan Lake'],
+      amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 34.0970, lng: -118.4517 }
     },
     {
@@ -255,7 +255,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
-      amenities: ['Spa', 'Rooftop Pool', 'Culina Restaurant', 'Free WiFi', 'Fitness Center', 'Cabanas', 'Gardens'],
+      amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 34.0754, lng: -118.3842 }
     },
     {
@@ -266,7 +266,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.7,
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
-      amenities: ['Spa Montage', 'Rooftop Pool', 'Fine Dining', 'Free WiFi', 'Fitness Center', 'Concierge', 'Golden Triangle Location'],
+      amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 34.0687, lng: -118.3996 }
     },
     {
@@ -277,7 +277,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.7,
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
-      amenities: ['Rooftop Pool', 'Spa', 'The Belvedere Restaurant', 'Free WiFi', 'Fitness Center', 'Valet Parking', 'Gardens'],
+      amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 34.0667, lng: -118.4100 }
     },
     {
@@ -288,7 +288,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
-      amenities: ['Beach Access', 'Spa', 'Pool', 'One Pico Restaurant', 'Free WiFi', 'Fitness Center', 'Ocean Views'],
+      amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 34.0085, lng: -118.4987 }
     },
     {
@@ -299,7 +299,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
-      amenities: ['Pool', 'Spa', 'FIG Restaurant', 'Ocean Views', 'Free WiFi', 'Fitness Center', 'Bungalows'],
+      amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 34.0155, lng: -118.4995 }
     },
     {
@@ -310,7 +310,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
-      amenities: ['Tower Bar', 'Pool', 'Fitness Center', 'Free WiFi', 'Art Deco Architecture', 'Terrace', 'City Views'],
+      amenities: ['Bar', 'Pool', 'Fitness Center', 'Free Wifi'],
       coordinates: { lat: 34.0965, lng: -118.3770 }
     },
     {
@@ -321,7 +321,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
-      amenities: ['Rooftop Pool', 'Restaurant', 'Bar', 'Free WiFi', 'Fitness Center', 'Suites', 'City Views'],
+      amenities: ['Pool', 'On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 34.0900, lng: -118.3844 }
     },
     {
@@ -332,7 +332,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
-      amenities: ['Pool', 'Restaurant', 'Bar', 'Garden', 'Free WiFi', 'Bungalows', 'Historic Property'],
+      amenities: ['Pool', 'On-site Restaurant', 'Bar', 'Free Wifi'],
       coordinates: { lat: 34.0963, lng: -118.3689 }
     },
     {
@@ -343,7 +343,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
-      amenities: ['Rooftop Pool', 'Spa', 'Restaurants', 'Bar', 'Free WiFi', 'Fitness Center', 'Art Collection'],
+      amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 34.0461, lng: -118.2567 }
     },
     {
@@ -354,7 +354,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
-      amenities: ['Beach Access', 'Spa', 'Pool', 'Catch Restaurant', 'Free WiFi', 'Fitness Center', 'Ocean Views'],
+      amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 34.0096, lng: -118.4989 }
     },
     {
@@ -365,7 +365,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
-      amenities: ['Rooftop Pool', 'Spa', 'Jean-Georges Restaurant', 'Free WiFi', 'Fitness Center', 'City Views', 'Concierge'],
+      amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 34.0644, lng: -118.4131 }
     },
     {
@@ -376,7 +376,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
-      amenities: ['Rooftop Pool', 'Spa', 'WP24 Restaurant', 'Free WiFi', 'Fitness Center', 'City Views', 'Club Lounge'],
+      amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center', 'Bar'],
       coordinates: { lat: 34.0449, lng: -118.2663 }
     },
     {
@@ -387,7 +387,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
-      amenities: ['Rooftop Pool', 'Spa', 'Restaurant', 'Bar', 'Free WiFi', 'Fitness Center', 'City Views'],
+      amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 34.0506, lng: -118.2598 }
     },
     {
@@ -398,7 +398,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.3,
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
-      amenities: ['Rooftop Restaurant', 'Pool', 'Commissary Restaurant', 'Free WiFi', 'Fitness Center', 'Korean Spa', 'Modern Design'],
+      amenities: ['On-site Restaurant', 'Pool', 'Free Wifi', 'Fitness Center', 'Spa'],
       coordinates: { lat: 34.0614, lng: -118.3091 }
     },
     {
@@ -409,7 +409,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.2,
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
-      amenities: ['Rooftop Bar', 'LA Chapter Restaurant', 'Theater', 'Free WiFi', 'Fitness Center', 'Pool', 'Historic Building'],
+      amenities: ['Bar', 'On-site Restaurant', 'Free Wifi', 'Fitness Center', 'Pool'],
       coordinates: { lat: 34.0456, lng: -118.2565 }
     },
     {
@@ -420,7 +420,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.3,
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
-      amenities: ['Pool', 'Restaurants', 'Bars', 'Free WiFi', 'Fitness Center', 'Spanish Colonial Revival', 'Veranda'],
+      amenities: ['Pool', 'On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center', 'Spa'],
       coordinates: { lat: 34.0450, lng: -118.2622 }
     },
     {
@@ -431,7 +431,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.2,
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
-      amenities: ['Rooftop Bar', 'Restaurant', 'Pool', 'Free WiFi', 'Cafe', 'Exchange Workspace', 'Social Spaces'],
+      amenities: ['Bar', 'On-site Restaurant', 'Pool', 'Free Wifi', 'Spa'],
       coordinates: { lat: 34.0446, lng: -118.2605 }
     },
     {
@@ -442,7 +442,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
-      amenities: ['Pool', 'Spa', 'Bazaar Restaurant', 'Bar', 'Free WiFi', 'Fitness Center', 'Philippe Starck Design'],
+      amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 34.0755, lng: -118.3759 }
     }
   ],
@@ -455,7 +455,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.7,
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
-      amenities: ['Spa', 'Pool', 'Shanghai Terrace', 'Free WiFi', 'Fitness Center', 'Afternoon Tea', 'Concierge'],
+      amenities: ['Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 41.8957, lng: -87.6251 }
     },
     {
@@ -466,7 +466,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
-      amenities: ['Spa', 'Pool', 'Fine Dining', 'Lake Views', 'Free WiFi', 'Fitness Center', 'Concierge'],
+      amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 41.8992, lng: -87.6262 }
     },
     {
@@ -477,7 +477,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.7,
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
-      amenities: ['Chuan Spa', 'Pool', 'Travelle Restaurant', 'River Views', 'Free WiFi', 'Fitness Center', 'Afternoon Tea'],
+      amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 41.8880, lng: -87.6263 }
     },
     {
@@ -488,7 +488,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
-      amenities: ['Spa', 'Pool', 'Deca Restaurant', 'Water Tower Views', 'Free WiFi', 'Fitness Center', 'Club Lounge'],
+      amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center', 'Bar'],
       coordinates: { lat: 41.8979, lng: -87.6256 }
     },
     {
@@ -499,7 +499,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
-      amenities: ['Spa', 'Pool', 'NoMI Kitchen', 'Water Tower Views', 'Free WiFi', 'Fitness Center', 'Art Collection'],
+      amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 41.8978, lng: -87.6238 }
     },
     {
@@ -510,7 +510,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
-      amenities: ['Spa', 'Pool', 'Bernard\'s Bar', 'Free WiFi', 'Fitness Center', 'Gold Coast Location', 'Concierge'],
+      amenities: ['Spa', 'Pool', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 41.9006, lng: -87.6265 }
     },
     {
@@ -521,7 +521,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
-      amenities: ['Rooftop Terrace', 'Upstairs Restaurant', 'Bar', 'Free WiFi', 'Fitness Center', 'Art Deco', 'River North'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 41.8920, lng: -87.6266 }
     },
     {
@@ -532,7 +532,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
-      amenities: ['Café des Architectes', 'Bar', 'Free WiFi', 'Fitness Center', 'French Design', 'Spa Services', 'City Views'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center', 'Spa'],
       coordinates: { lat: 41.8981, lng: -87.6278 }
     },
     {
@@ -543,7 +543,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
-      amenities: ['Nico Osteria', 'Rooftop Bar', 'Free WiFi', 'Fitness Center', 'Modern Design', 'Gold Coast', 'Pet Friendly'],
+      amenities: ['Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 41.8996, lng: -87.6277 }
     },
     {
@@ -554,7 +554,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
-      amenities: ['Cindy\'s Rooftop', 'Cherry Circle Room', 'Game Room', 'Free WiFi', 'Fitness Center', 'Historic Building', 'Millennium Park Views'],
+      amenities: ['Free Wifi', 'Fitness Center'],
       coordinates: { lat: 41.8814, lng: -87.6245 }
     },
     {
@@ -565,7 +565,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
-      amenities: ['Rooftop Bar', 'Somerset Restaurant', 'Free WiFi', 'Fitness Center', 'Gold Coast', 'Modern Design', 'City Views'],
+      amenities: ['Bar', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 41.9034, lng: -87.6281 }
     },
     {
@@ -576,7 +576,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
-      amenities: ['Cira Restaurant', 'Rooftop Bar', 'Free WiFi', 'Coffee & Pastries', 'West Loop', 'Industrial Design', 'Open Lobby'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi'],
       coordinates: { lat: 41.8859, lng: -87.6488 }
     },
     {
@@ -587,7 +587,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.3,
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
-      amenities: ['South Water Kitchen', 'Wine Hour', 'Free WiFi', 'Fitness Center', 'Pet Friendly', 'Bikes', 'Theater District'],
+      amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 41.8866, lng: -87.6259 }
     },
     {
@@ -598,7 +598,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
-      amenities: ['Albert Restaurant', 'Bar', 'Free WiFi', 'Fitness Center', 'Science Theme', 'Art Installation', 'Streeterville'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 41.8933, lng: -87.6218 }
     },
     {
@@ -609,7 +609,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.3,
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
-      amenities: ['Miss Ricky\'s', 'Cerise Rooftop', 'Free WiFi', 'Fitness Center', 'Modern Design', 'Loop Location', 'Commons Club'],
+      amenities: ['Free Wifi', 'Fitness Center'],
       coordinates: { lat: 41.8863, lng: -87.6262 }
     },
     {
@@ -620,7 +620,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
-      amenities: ['Café Robey', 'Rooftop Bar', 'Free WiFi', 'Wicker Park', 'Mid-Century Design', 'City Views', 'Neighborhood Location'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi'],
       coordinates: { lat: 41.9104, lng: -87.6777 }
     },
     {
@@ -631,7 +631,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.2,
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
-      amenities: ['City Mouse Restaurant', 'Coffee Bar', 'Free WiFi', 'Fitness Center', 'West Loop', 'Industrial Design', 'Co-Working'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 41.8878, lng: -87.6518 }
     },
     {
@@ -642,7 +642,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.1,
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
-      amenities: ['Broken Shaker Bar', 'Café', 'Free WiFi', 'Social Spaces', 'River North', 'Vintage Design', 'Co-Working'],
+      amenities: ['Bar', 'On-site Restaurant', 'Free Wifi', 'Spa'],
       coordinates: { lat: 41.8923, lng: -87.6279 }
     },
     {
@@ -653,7 +653,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.3,
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
-      amenities: ['Perennial Virant', 'J. Parker Rooftop', 'Free WiFi', 'Lincoln Park', 'Park Views', 'Bikes', 'Pet Friendly'],
+      amenities: ['Free Wifi'],
       coordinates: { lat: 41.9154, lng: -87.6352 }
     },
     {
@@ -664,7 +664,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
-      amenities: ['Rooftop Bar', 'Spa', 'Pool', 'Restaurants', 'Free WiFi', 'Fitness Center', 'River Views'],
+      amenities: ['Bar', 'Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 41.8865, lng: -87.6243 }
     }
   ],
@@ -677,7 +677,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
-      amenities: ['Spa', 'Pool', 'MKT Restaurant', 'Free WiFi', 'Fitness Center', 'Bay Views', 'Concierge'],
+      amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 37.7856, lng: -122.4053 }
     },
     {
@@ -688,7 +688,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
-      amenities: ['Spa', 'Parallel 37 Restaurant', 'Club Lounge', 'Free WiFi', 'Fitness Center', 'Nob Hill', 'Concierge'],
+      amenities: ['Spa', 'On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 37.7921, lng: -122.4106 }
     },
     {
@@ -699,7 +699,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.7,
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
-      amenities: ['Remède Spa', 'Grill Restaurant', 'Butler Service', 'Free WiFi', 'Fitness Center', 'Museum Tower', 'Art Collection'],
+      amenities: ['Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 37.7856, lng: -122.4008 }
     },
     {
@@ -710,7 +710,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
-      amenities: ['Tonga Room', 'Laurel Court', 'Spa', 'Free WiFi', 'Fitness Center', 'Nob Hill', 'Historic Property'],
+      amenities: ['Spa', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 37.7925, lng: -122.4106 }
     },
     {
@@ -721,7 +721,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
-      amenities: ['Garden Court', 'Pied Piper Bar', 'Pool', 'Free WiFi', 'Fitness Center', 'Historic Property', 'Grand Ballroom'],
+      amenities: ['Bar', 'Pool', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 37.7883, lng: -122.4011 }
     },
     {
@@ -732,7 +732,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.7,
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
-      amenities: ['Bay Views', 'Full Kitchens', 'Spa', 'Pool', 'Free WiFi', 'Fitness Center', 'Ghirardelli Square'],
+      amenities: ['On-site Restaurant', 'Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 37.8058, lng: -122.4224 }
     },
     {
@@ -743,7 +743,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
-      amenities: ['Pool', 'Anzu Restaurant', 'Fitness Center', 'Free WiFi', 'Union Square', 'Japanese-Inspired', 'Sauna'],
+      amenities: ['Pool', 'On-site Restaurant', 'Fitness Center', 'Free Wifi'],
       coordinates: { lat: 37.7856, lng: -122.4094 }
     },
     {
@@ -754,7 +754,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
-      amenities: ['Top of the Mark', 'Fitness Center', 'Free WiFi', 'Nob Hill', 'Panoramic Views', 'Historic Property', 'Concierge'],
+      amenities: ['Fitness Center', 'Free Wifi'],
       coordinates: { lat: 37.7923, lng: -122.4115 }
     },
     {
@@ -765,7 +765,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
-      amenities: ['Oak Room Restaurant', 'Clock Bar', 'Free WiFi', 'Fitness Center', 'Union Square', 'Historic Property', 'City Views'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 37.7877, lng: -122.4082 }
     },
     {
@@ -776,7 +776,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.3,
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
-      amenities: ['Velvet Room', 'Redwood Room', 'Free WiFi', 'Fitness Center', 'Union Square', 'Philippe Starck Design', 'Art Collection'],
+      amenities: ['Free Wifi', 'Fitness Center'],
       coordinates: { lat: 37.7867, lng: -122.4109 }
     },
     {
@@ -787,7 +787,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.2,
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
-      amenities: ['Bay Views', 'Fisherman\'s Wharf', 'Restaurant', 'Free WiFi', 'Fitness Center', 'Games', 'Nautical Theme'],
+      amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 37.8082, lng: -122.4152 }
     },
     {
@@ -798,7 +798,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.3,
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
-      amenities: ['Tratto Restaurant', 'Bar', 'Free WiFi', 'Fitness Center', 'Union Square', 'Theater District', 'Pet Friendly'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 37.7867, lng: -122.4115 }
     },
     {
@@ -809,7 +809,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.3,
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
-      amenities: ['Dirty Habit Restaurant', 'Bar', 'Free WiFi', 'Fitness Center', 'SoMa', 'Modern Design', 'Art Collection'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 37.7853, lng: -122.4043 }
     },
     {
@@ -820,7 +820,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.3,
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
-      amenities: ['Cavalier Restaurant', 'Playroom', 'Free WiFi', 'Fitness Center', 'SoMa', 'Tech-Friendly', 'Games'],
+      amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 37.7839, lng: -122.4060 }
     },
     {
@@ -831,7 +831,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
-      amenities: ['Villon Restaurant', 'Rooftop Bar', 'Free WiFi', 'Fitness Center', 'Mid-Market', 'Kelly Wearstler Design', 'Art Collection'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 37.7815, lng: -122.4115 }
     },
     {
@@ -842,7 +842,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
-      amenities: ['Americano Restaurant', 'Spa', 'Bay Views', 'Free WiFi', 'Fitness Center', 'Embarcadero', 'Rooftop Soaking Tubs'],
+      amenities: ['On-site Restaurant', 'Spa', 'Free Wifi', 'Fitness Center', 'Bar', 'Hot Tub'],
       coordinates: { lat: 37.7937, lng: -122.3933 }
     },
     {
@@ -853,7 +853,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
-      amenities: ['Bob\'s Steak & Chop House', 'Financial District', 'Free WiFi', 'Fitness Center', 'Cable Car Access', 'Historic Building', 'Concierge'],
+      amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 37.7930, lng: -122.4034 }
     },
     {
@@ -864,7 +864,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.2,
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
-      amenities: ['Ippongi Restaurant', 'Bar', 'Free WiFi', 'Fitness Center', 'Japantown', 'Japanese-Inspired', 'Zen Garden'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 37.7850, lng: -122.4309 }
     },
     {
@@ -875,7 +875,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.0,
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
-      amenities: ['Pool', 'Chambers Restaurant', 'Free WiFi', 'Tenderloin', 'Rock \'n\' Roll Theme', 'Murals', 'Boutique'],
+      amenities: ['Pool', 'On-site Restaurant', 'Free Wifi'],
       coordinates: { lat: 37.7833, lng: -122.4188 }
     },
     {
@@ -886,7 +886,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.3,
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
-      amenities: ['Restaurant', 'Bar', 'Free WiFi', 'Fitness Center', 'Mid-Market', 'Modern Design', 'Social Spaces'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center', 'Spa'],
       coordinates: { lat: 37.7814, lng: -122.4119 }
     }
   ],
@@ -899,7 +899,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
-      amenities: ['LIV Nightclub', 'Spa', 'Multiple Pools', 'Beach Access', 'Free WiFi', 'Restaurants', 'Fitness Center'],
+      amenities: ['Bar', 'Spa', 'Pool', 'Free Wifi', 'On-site Restaurant', 'Fitness Center'],
       coordinates: { lat: 25.8193, lng: -80.1240 }
     },
     {
@@ -910,7 +910,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.7,
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
-      amenities: ['Faena Theater', 'Spa', 'Beach Access', 'Pool', 'Fine Dining', 'Free WiFi', 'Art Collection'],
+      amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi'],
       coordinates: { lat: 25.8096, lng: -80.1229 }
     },
     {
@@ -921,7 +921,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
-      amenities: ['Three Pools', 'Spa', 'Beach Access', 'Asian-Fusion Dining', 'Free WiFi', 'Fitness Center', 'Art Deco'],
+      amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 25.7913, lng: -80.1300 }
     },
     {
@@ -932,7 +932,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
-      amenities: ['Edge Steak & Bar', 'Spa', 'Rooftop Pool', 'Free WiFi', 'Fitness Center', 'Brickell', 'Bay Views'],
+      amenities: ['Bar', 'Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 25.7617, lng: -80.1918 }
     },
     {
@@ -943,7 +943,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
-      amenities: ['La Mar Restaurant', 'Spa', 'Beach Access', 'Pool', 'Free WiFi', 'Fitness Center', 'Private Island'],
+      amenities: ['On-site Restaurant', 'Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 25.7658, lng: -80.1867 }
     },
     {
@@ -954,7 +954,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
-      amenities: ['DiLido Beach Club', 'Spa', 'Beach Access', 'Pool', 'Free WiFi', 'Fitness Center', 'Art Deco'],
+      amenities: ['Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 25.7809, lng: -80.1300 }
     },
     {
@@ -965,7 +965,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
-      amenities: ['Mr Chow', 'WALL Lounge', 'Beach Access', 'Pool', 'Free WiFi', 'Fitness Center', 'Spa'],
+      amenities: ['Bar', 'Pool', 'Free Wifi', 'Fitness Center', 'Spa'],
       coordinates: { lat: 25.7932, lng: -80.1299 }
     },
     {
@@ -976,7 +976,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.3,
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
-      amenities: ['Hyde Beach', 'Katsuya Restaurant', 'Pool', 'Beach Access', 'Free WiFi', 'Fitness Center', 'Philippe Starck Design'],
+      amenities: ['On-site Restaurant', 'Pool', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 25.7900, lng: -80.1301 }
     },
     {
@@ -987,7 +987,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
-      amenities: ['Watr Rooftop', 'Spa', 'Beach Access', 'Pool', 'Free WiFi', 'Fitness Center', 'Eco-Friendly'],
+      amenities: ['Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 25.7946, lng: -80.1298 }
     },
     {
@@ -998,7 +998,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
-      amenities: ['LT Steak & Seafood', 'Rooftop', 'Beach Access', 'Pool', 'Free WiFi', 'Fitness Center', 'Writers Room'],
+      amenities: ['On-site Restaurant', 'Pool', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 25.7810, lng: -80.1299 }
     },
     {
@@ -1009,7 +1009,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
-      amenities: ['Cecconi\'s Restaurant', 'Cowshed Spa', 'Beach Access', 'Pool', 'Free WiFi', 'Fitness Center', 'Members Club'],
+      amenities: ['On-site Restaurant', 'Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 25.8182, lng: -80.1241 }
     },
     {
@@ -1020,7 +1020,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.3,
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
-      amenities: ['Bird & Bone', 'Backyard', 'Beach Access', 'Pool', 'Free WiFi', 'Fitness Center', 'Retro Design'],
+      amenities: ['Pool', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 25.8146, lng: -80.1234 }
     },
     {
@@ -1031,7 +1031,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
-      amenities: ['Essensia Restaurant', 'Spa', 'Beach Access', 'Pool', 'Free WiFi', 'Fitness Center', 'Wellness Focus'],
+      amenities: ['On-site Restaurant', 'Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 25.8073, lng: -80.1227 }
     },
     {
@@ -1042,7 +1042,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
-      amenities: ['Skybar', 'Restaurant', 'Beach Access', 'Pool', 'Free WiFi', 'Fitness Center', 'Gardens'],
+      amenities: ['Bar', 'On-site Restaurant', 'Pool', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 25.7910, lng: -80.1300 }
     },
     {
@@ -1053,7 +1053,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
-      amenities: ['Area 31 Restaurant', 'Rooftop Pool', 'Spa', 'Free WiFi', 'Fitness Center', 'Bay Views', 'Pet Friendly'],
+      amenities: ['On-site Restaurant', 'Pool', 'Spa', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 25.7705, lng: -80.1871 }
     },
     {
@@ -1064,7 +1064,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
-      amenities: ['Nautilus Cabana Club', 'Pool', 'Beach Access', 'Free WiFi', 'Fitness Center', 'Art Deco', 'Tropicale Restaurant'],
+      amenities: ['Pool', 'Free Wifi', 'Fitness Center', 'On-site Restaurant'],
       coordinates: { lat: 25.7896, lng: -80.1301 }
     },
     {
@@ -1075,7 +1075,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.3,
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
-      amenities: ['Bianca Restaurant', 'Pool', 'Beach Access', 'Spa', 'Free WiFi', 'Fitness Center', 'White Design'],
+      amenities: ['On-site Restaurant', 'Pool', 'Spa', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 25.7898, lng: -80.1301 }
     },
     {
@@ -1086,7 +1086,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
-      amenities: ['Matador Room', 'Basement Nightclub', 'Beach Access', 'Pool', 'Free WiFi', 'Fitness Center', 'Ice Skating Rink'],
+      amenities: ['Bar', 'Pool', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 25.8066, lng: -80.1227 }
     },
     {
@@ -1097,7 +1097,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.2,
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
-      amenities: ['Pawn Broker', 'Pool', 'Beach Access', 'Free WiFi', 'Fitness Center', 'Art Deco', 'Ocean Drive'],
+      amenities: ['Pool', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 25.7806, lng: -80.1299 }
     },
     {
@@ -1108,7 +1108,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
-      amenities: ['Florida Cookery', 'Pool', 'Beach Access', 'Free WiFi', 'Fitness Center', 'Art Deco', 'Garden'],
+      amenities: ['Pool', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 25.7876, lng: -80.1302 }
     }
   ],
@@ -1121,7 +1121,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.7,
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
-      amenities: ['Spa', 'Pool', 'Bristol Lounge', 'Free WiFi', 'Fitness Center', 'Public Garden Views', 'Concierge'],
+      amenities: ['Spa', 'Pool', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 42.3519, lng: -71.0707 }
     },
     {
@@ -1132,7 +1132,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
-      amenities: ['Grill 23 & Bar', 'Bond Lounge', 'Spa', 'Free WiFi', 'Fitness Center', 'Former Federal Reserve', 'Concierge'],
+      amenities: ['Bar', 'Spa', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 42.3558, lng: -71.0539 }
     },
     {
@@ -1143,7 +1143,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.7,
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
-      amenities: ['Rowes Wharf Bar', 'Spa', 'Harbor Views', 'Free WiFi', 'Fitness Center', 'Boat Access', 'Wine Festival'],
+      amenities: ['Bar', 'Spa', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 42.3561, lng: -71.0502 }
     },
     {
@@ -1154,7 +1154,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
-      amenities: ['Bar Boulud', 'Spa', 'Free WiFi', 'Fitness Center', 'Back Bay', 'Fenway Park Views', 'Concierge'],
+      amenities: ['Bar', 'Spa', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 42.3478, lng: -71.0827 }
     },
     {
@@ -1165,7 +1165,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
-      amenities: ['Artisan Bistro', 'Spa', 'Free WiFi', 'Fitness Center', 'Downtown Crossing', 'Theater District', 'Club Lounge'],
+      amenities: ['On-site Restaurant', 'Spa', 'Free Wifi', 'Fitness Center', 'Bar'],
       coordinates: { lat: 42.3531, lng: -71.0623 }
     },
     {
@@ -1176,7 +1176,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
-      amenities: ['Mooo.... Restaurant', 'Free WiFi', 'Fitness Center', 'Beacon Hill', 'Gas Fireplaces', 'Pet Friendly', 'Custom Minibar'],
+      amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center', 'Bar'],
       coordinates: { lat: 42.3586, lng: -71.0633 }
     },
     {
@@ -1187,7 +1187,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
-      amenities: ['Clink. Restaurant', 'Alibi Bar', 'Free WiFi', 'Fitness Center', 'Former Jail', 'Historic Property', 'Unique Design'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 42.3612, lng: -71.0683 }
     },
     {
@@ -1198,7 +1198,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
-      amenities: ['OAK Long Bar + Kitchen', 'Free WiFi', 'Fitness Center', 'Back Bay', 'Historic Property', 'Grand Ballroom', 'Pet Friendly'],
+      amenities: ['Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 42.3495, lng: -71.0771 }
     },
     {
@@ -1209,7 +1209,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
-      amenities: ['Contessa Restaurant', 'Rooftop', 'Free WiFi', 'Fitness Center', 'Public Garden Views', 'Newbury Street', 'Spa'],
+      amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center', 'Spa'],
       coordinates: { lat: 42.3536, lng: -71.0708 }
     },
     {
@@ -1220,7 +1220,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.6,
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
-      amenities: ['Uni Restaurant', 'Free WiFi', 'Fitness Center', 'Back Bay', 'Suites', 'Kitchenettes', 'Pet Friendly'],
+      amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 42.3495, lng: -71.0884 }
     },
     {
@@ -1231,7 +1231,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.3,
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
-      amenities: ['Parker\'s Restaurant', 'Last Hurrah Bar', 'Free WiFi', 'Fitness Center', 'Oldest Hotel', 'Freedom Trail', 'Boston Cream Pie'],
+      amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 42.3579, lng: -71.0599 }
     },
     {
@@ -1242,7 +1242,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
-      amenities: ['City Table', 'City Bar', 'Free WiFi', 'Fitness Center', 'Back Bay', 'Fireplaces', 'Historic Property'],
+      amenities: ['Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 42.3493, lng: -71.0794 }
     },
     {
@@ -1253,7 +1253,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
-      amenities: ['Island Creek Oyster Bar', 'Hawthorne Bar', 'Free WiFi', 'Fitness Center', 'Fenway', 'Red Sox', 'Rooftop'],
+      amenities: ['Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 42.3487, lng: -71.0969 }
     },
     {
@@ -1264,7 +1264,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.5,
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
-      amenities: ['Rooftop Pool', 'Spa', 'Restaurants', 'Free WiFi', 'Fitness Center', 'Seaport', 'Harbor Views'],
+      amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 42.3479, lng: -71.0421 }
     },
     {
@@ -1275,7 +1275,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.3,
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
-      amenities: ['RUKA Restobar', 'George Howell Coffee', 'Free WiFi', 'Fitness Center', 'Downtown Crossing', 'Modern Design', 'Pet Friendly'],
+      amenities: ['Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 42.3544, lng: -71.0631 }
     },
     {
@@ -1286,7 +1286,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.3,
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
-      amenities: ['North 26 Restaurant', 'Free WiFi', 'Fitness Center', 'Faneuil Hall', 'Waterfront', 'Historic District', 'Balconies'],
+      amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 42.3602, lng: -71.0556 }
     },
     {
@@ -1297,7 +1297,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
-      amenities: ['CanteenM', 'CloudM Bar', 'Free WiFi', '24hr Gym', 'North Station', 'TD Garden', 'Modern Design'],
+      amenities: ['Bar', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 42.3661, lng: -71.0621 }
     },
     {
@@ -1308,7 +1308,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.4,
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
-      amenities: ['Hojoko Restaurant', 'Pool', 'Free WiFi', 'Fenway Park', 'Rock \'n\' Roll Theme', 'Vinyl Records', 'Retro Design'],
+      amenities: ['On-site Restaurant', 'Pool', 'Free Wifi'],
       coordinates: { lat: 42.3473, lng: -71.1007 }
     },
     {
@@ -1319,7 +1319,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.2,
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
-      amenities: ['Cosmica Restaurant', 'Free WiFi', 'Fitness Center', 'South End', 'Modern Design', 'Co-Working', 'Budget Luxury'],
+      amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 42.3507, lng: -71.0721 }
     },
     {
@@ -1330,7 +1330,7 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       rating: 4.3,
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
-      amenities: ['Finch Restaurant', 'Free WiFi', 'Fitness Center', 'West End', 'Boutique', 'Pet Friendly', 'TD Garden'],
+      amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
       coordinates: { lat: 42.3639, lng: -71.0625 }
     }
   ]
@@ -1368,7 +1368,7 @@ export function getMockRoomsForHotel(hotelId: number): Room[] {
       capacity: 'Sleeps 4',
       bedConfig: '1 Double Sofa Bed and 1 King Bed',
       bedCount: 2,
-      features: ['✓ Reserve now, pay later', 'Free WiFi', 'Partially refundable'],
+      features: ['✓ Reserve now, pay later', 'Free Wifi', 'Partially refundable'],
       basePrice: 190,
       imageCount: 7
     },
@@ -1377,7 +1377,7 @@ export function getMockRoomsForHotel(hotelId: number): Room[] {
       capacity: 'Sleeps 4',
       bedConfig: '1 Double Sofa Bed and 1 King Bed',
       bedCount: 2,
-      features: ['✓ Reserve now, pay later', 'Free WiFi', 'Partially refundable'],
+      features: ['✓ Reserve now, pay later', 'Free Wifi', 'Partially refundable'],
       basePrice: 239,
       imageCount: 8,
       hasDiscount: true,
@@ -1388,7 +1388,7 @@ export function getMockRoomsForHotel(hotelId: number): Room[] {
       capacity: 'Sleeps 4',
       bedConfig: '1 King Bed and 1 Double Sofa Bed',
       bedCount: 2,
-      features: ['✓ Reserve now, pay later', 'Free WiFi', 'Partially refundable'],
+      features: ['✓ Reserve now, pay later', 'Free Wifi', 'Partially refundable'],
       basePrice: 260,
       imageCount: 9,
       hasDiscount: true,
@@ -1399,7 +1399,7 @@ export function getMockRoomsForHotel(hotelId: number): Room[] {
       capacity: 'Sleeps 6',
       bedConfig: '1 King Bed and 2 Queen Beds',
       bedCount: 3,
-      features: ['✓ Reserve now, pay later', 'Free WiFi', 'Fully refundable', 'City View'],
+      features: ['✓ Reserve now, pay later', 'Free Wifi', 'Fully refundable', 'City View'],
       basePrice: 450,
       imageCount: 10
     },
@@ -1408,7 +1408,7 @@ export function getMockRoomsForHotel(hotelId: number): Room[] {
       capacity: 'Sleeps 2',
       bedConfig: '1 King Bed',
       bedCount: 1,
-      features: ['✓ Reserve now, pay later', 'Free WiFi', 'Partially refundable'],
+      features: ['✓ Reserve now, pay later', 'Free Wifi', 'Partially refundable'],
       basePrice: 150,
       imageCount: 5
     },
@@ -1417,7 +1417,7 @@ export function getMockRoomsForHotel(hotelId: number): Room[] {
       capacity: 'Sleeps 6',
       bedConfig: '2 Queen Beds and 1 Sofa Bed',
       bedCount: 3,
-      features: ['✓ Reserve now, pay later', 'Free WiFi', 'Partially refundable', 'Kitchenette'],
+      features: ['✓ Reserve now, pay later', 'Free Wifi', 'Partially refundable', 'Kitchenette'],
       basePrice: 320,
       imageCount: 8
     }

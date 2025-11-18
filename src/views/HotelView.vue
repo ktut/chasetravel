@@ -201,10 +201,13 @@ export default {
     },
     getAmenityIcon(amenity: string): string {
       const icons: Record<string, string> = {
-        'Free WiFi': '📶',
+        'Free Wifi': '📶',
         'Spa': '💆',
         'Pool': '🏊',
         'Fitness Center': '💪',
+        'Hot Tub': '🛁',
+        'Bar': '🍸',
+        'On-site Restaurant': '🍽️',
         'Parking': 'P',
         'Self-parking available': 'P',
         'Valet Parking': 'P',

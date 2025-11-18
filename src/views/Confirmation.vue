@@ -235,7 +235,54 @@ export default {
       }).format(price)
     },
     goBack() {
-      this.$router.back()
+      // Always go back to search results page
+      if (!this.searchData) {
+        this.$router.back()
+        return
+      }
+
+      // Build query params from search data
+      const query: any = {
+        type: this.searchData.searchType,
+        from: this.searchData.location,
+        adults: this.searchData.passengers.adults.toString()
+      }
+
+      // Only add children if > 0
+      if (this.searchData.passengers.children > 0) {
+        query.children = this.searchData.passengers.children.toString()
+      }
+
+      if (this.searchData.destination) {
+        query.to = this.searchData.destination
+      }
+
+      // Handle checkIn - convert to Date if string, then to ISO string
+      if (this.searchData.checkIn) {
+        const checkIn = this.searchData.checkIn instanceof Date 
+          ? this.searchData.checkIn 
+          : new Date(this.searchData.checkIn)
+        query.checkIn = checkIn.toISOString()
+      }
+
+      // Handle checkOut - convert to Date if string, then to ISO string
+      if (this.searchData.checkOut) {
+        const checkOut = this.searchData.checkOut instanceof Date 
+          ? this.searchData.checkOut 
+          : new Date(this.searchData.checkOut)
+        query.checkOut = checkOut.toISOString()
+      }
+
+      if (this.searchData.checkInFlexibility) {
+        query.checkInFlex = this.searchData.checkInFlexibility
+      }
+
+      if (this.searchData.checkOutFlexibility) {
+        query.checkOutFlex = this.searchData.checkOutFlexibility
+      }
+
+      // Navigate to search results page
+      this.$router.push({ path: '/search', query })
     },
     proceedToBook() {
       // This would normally proceed to actual booking
