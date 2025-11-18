@@ -166,6 +166,10 @@ export default {
       immediate: true
     }
   },
+  beforeUnmount() {
+    // Ensure body scroll is restored when component is destroyed
+    document.body.style.overflow = ''
+  },
   methods: {
     formatPrice(price: number): string {
       return new Intl.NumberFormat('en-US', {
@@ -190,11 +194,18 @@ export default {
     toggleFilters() {
       this.showFilters = !this.showFilters
 
-      // If opening filters on mobile, scroll to top
+      // If opening filters on mobile, scroll to top and prevent body scroll
       if (this.showFilters) {
         this.$nextTick(() => {
           window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
         })
+        // Prevent body scroll on mobile
+        if (window.innerWidth <= 968) {
+          document.body.style.overflow = 'hidden'
+        }
+      } else {
+        // Re-enable body scroll
+        document.body.style.overflow = ''
       }
     },
     loadResultsProgressively(results: (Flight | Hotel)[]) {
@@ -228,16 +239,17 @@ export default {
 <template>
   <div class="results-wrapper">
     <!-- Filter Toggle Button (Mobile Only) -->
-    <button class="mobile-filter-toggle" @click="toggleFilters" ref="filterToggle">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="4" y1="6" x2="20" y2="6"></line>
-        <line x1="4" y1="12" x2="20" y2="12"></line>
-        <line x1="4" y1="18" x2="20" y2="18"></line>
-      </svg>
-      <span>{{ showFilters ? 'Hide Filters' : 'Show Filters' }}</span>
-      <span v-if="activeFiltersCount > 0" class="filter-badge">{{ activeFiltersCount }}</span>
-    </button>
-
+     <div class="mobile-filter-toggle-container">
+      <button class="mobile-filter-toggle" @click="toggleFilters" ref="filterToggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="6" x2="20" y2="6"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="18" x2="20" y2="18"></line>
+        </svg>
+        <span>{{ showFilters ? 'Hide Filters' : 'Show Filters' }}</span>
+        <span v-if="activeFiltersCount > 0" class="filter-badge">{{ activeFiltersCount }}</span>
+      </button>
+    </div> 
     <!-- Filters Sidebar -->
     <aside class="filters-sidebar" :class="{ 'filters-visible': showFilters }">
       <div class="filters-header">
@@ -373,15 +385,25 @@ export default {
     "filters results";
   gap: 2rem;
   max-width: 1400px;
+  padding: 0 2rem;
   margin: 0 auto;
-  padding: 2rem;
   position: relative;
 
   @media (max-width: 968px) {
     display: flex;
     flex-direction: column;
-    padding: 0.5rem 1rem;
     gap: 0;
+    padding: unset;
+  }
+}
+
+.mobile-filter-toggle-container {
+  @media (max-width: 968px) {
+    padding: 0.5rem 1rem 0;
+    background: white;
+    position: sticky;
+    top: 125px;
+    z-index: 10;
   }
 }
 
@@ -402,10 +424,7 @@ export default {
     font-weight: 600;
     color: $color-text;
     width: 100%;
-    position: sticky;
-    top: 146px;
-    z-index: 10;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 
     svg {
       width: 20px;
@@ -453,11 +472,14 @@ export default {
     z-index: 9;
 
     &.filters-visible {
-      max-height: 1000px;
+      max-height: 60vh;
+      overflow-y: auto;
+      box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.5);
       opacity: 1;
-      padding: 1.5rem;
-      border: 1px solid $color-light-grey;
+      padding: 0 1.5rem 1.5rem;
       margin-bottom: 1rem;
+      border: 1px solid $color-light-grey;
+      border-radius: 8px;
     }
   }
 
@@ -543,7 +565,10 @@ export default {
 .results-main {
   grid-area: results;
   min-height: 500px;
-  padding-top: 1rem;
+  padding: 2rem;
+  @media (max-width: 968px) {
+    padding: 1rem;
+  }
 }
 
 .results-header {
