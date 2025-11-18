@@ -36,12 +36,18 @@ export interface Hotel {
   id: number
   name: string
   location: string
+  address: string
   stars: number
   rating: number
   reviewCount: number
   pricePerNight: number
   image: string
+  images: string[]
   amenities: string[]
+  coordinates: {
+    lat: number
+    lng: number
+  }
 }
 
 // URL param validation

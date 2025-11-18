@@ -65,28 +65,36 @@ export default {
 
     <div class="hotel-details">
       <div class="hotel-header">
-        <div class="hotel-name">{{ hotel.name }}</div>
-        <div class="hotel-stars">
-          <span v-for="star in getStarsArray(hotel.stars)" :key="star" class="star">★</span>
+        <div class="hotel-name-wrapper">
+          <div class="hotel-name">{{ hotel.name }}</div>
+          <div class="hotel-rating-compact">
+            <span class="rating-score">{{ hotel.rating }}</span>
+            <span class="rating-reviews">({{ hotel.reviewCount }})</span>
+            <div class="hotel-stars">
+              <span v-for="star in getStarsArray(hotel.stars)" :key="star" class="star">★</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="hotel-location">{{ hotel.location }}</div>
-
-      <div class="hotel-rating">
-        <span class="rating-score">{{ hotel.rating }}</span>
-        <span class="rating-reviews">({{ hotel.reviewCount }} reviews)</span>
-      </div>
-
-      <div class="hotel-amenities">
-        <span v-for="amenity in hotel.amenities" :key="amenity" class="amenity">{{ amenity }}</span>
+      <div class="hotel-amenities-container">
+        <div class="hotel-amenities">
+          <span v-for="amenity in hotel.amenities" :key="amenity" class="amenity">{{ amenity }}</span>
+        </div>
       </div>
     </div>
 
-    <div class="hotel-price">
+    <div class="hotel-price desktop-only">
       <div class="price-label">Per night</div>
       <div class="price">{{ formatPrice(hotel.pricePerNight) }}</div>
       <button @click="selectHotel" class="btn-primary select-btn">Select</button>
+    </div>
+
+    <div class="hotel-price-mobile">
+      <button @click="selectHotel" class="btn-primary select-btn">
+        <span class="price-text">{{ formatPrice(hotel.pricePerNight) }}</span>
+        <span class="per-night">/night</span>
+      </button>
     </div>
   </div>
 </template>
@@ -98,17 +106,24 @@ export default {
   border-radius: 8px;
   overflow: hidden;
   display: grid;
-  grid-template-columns: 260px 1fr 200px;
+  grid-template-columns: 260px 1fr 145px;
   transition: all 0.2s;
   cursor: pointer;
 
   @media (max-width: 968px) {
     grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
   }
 
   &:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border-color: $color-accent;
+  }
+}
+
+.desktop-only {
+  @media (max-width: 968px) {
+    display: none !important;
   }
 }
 
@@ -122,6 +137,11 @@ export default {
     object-fit: cover;
     min-height: 200px;
     transition: transform 0.3s;
+
+    @media (max-width: 968px) {
+      min-height: 120px;
+      max-height: 120px;
+    }
   }
 
   &:hover img {
@@ -136,7 +156,8 @@ export default {
   gap: 0.75rem;
 
   @media (max-width: 968px) {
-    padding: 1rem;
+    padding: 0.75rem;
+    gap: 0.5rem;
   }
 }
 
@@ -146,45 +167,93 @@ export default {
   justify-content: space-between;
   gap: 1rem;
 
+  .hotel-name-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    @media (max-width: 968px) {
+      gap: 0.35rem;
+    }
+  }
+
   .hotel-name {
     font-size: 1.1rem;
     font-weight: 600;
     color: $color-text;
     line-height: 1.3;
+
+    @media (max-width: 968px) {
+      font-size: 1rem;
+      line-height: 1.2;
+    }
   }
 
-  .hotel-stars {
-    color: #ffa500;
-    flex-shrink: 0;
+  .hotel-rating-compact {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
 
-    .star {
-      font-size: 0.9rem;
+    @media (max-width: 968px) {
+      gap: 0.35rem;
+    }
+
+    .rating-score {
+      background: $color-accent;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.8rem;
+
+      @media (max-width: 968px) {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.75rem;
+      }
+    }
+
+    .rating-reviews {
+      color: $color-text-light;
+      font-size: 0.8rem;
+
+      @media (max-width: 968px) {
+        font-size: 0.75rem;
+      }
+    }
+
+    .hotel-stars {
+      color: #ffa500;
+      display: flex;
+      gap: 1px;
+
+      .star {
+        font-size: 0.85rem;
+
+        @media (max-width: 968px) {
+          font-size: 0.75rem;
+        }
+      }
     }
   }
 }
 
-.hotel-location {
-  color: $color-text-light;
-  font-size: 0.9rem;
-}
+.hotel-amenities-container {
+  position: relative;
+  overflow: hidden;
 
-.hotel-rating {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  .rating-score {
-    background: $color-accent;
-    color: white;
-    padding: 0.3rem 0.6rem;
-    border-radius: 4px;
-    font-weight: 600;
-    font-size: 0.9rem;
-  }
-
-  .rating-reviews {
-    color: $color-text-light;
-    font-size: 0.85rem;
+  @media (max-width: 968px) {
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 40px;
+      background: linear-gradient(to left, white, transparent);
+      pointer-events: none;
+    }
   }
 }
 
@@ -194,13 +263,35 @@ export default {
   gap: 0.5rem;
   margin-top: 0.25rem;
 
+  @media (max-width: 968px) {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none; // Firefox
+    -ms-overflow-style: none; // IE/Edge
+    gap: 0.4rem;
+    margin-top: 0;
+    padding-bottom: 2px;
+
+    &::-webkit-scrollbar {
+      display: none; // Chrome/Safari
+    }
+  }
+
   .amenity {
     background: $color-bg-light;
-    padding: 0.25rem 0.65rem;
+    padding: 0.03rem 0.65rem;
     border-radius: 4px;
     font-size: 0.8rem;
     color: $color-text-light;
     border: 1px solid $color-light-grey;
+
+    @media (max-width: 968px) {
+      padding: 0.2rem 0.5rem;
+      font-size: 0.7rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
   }
 }
 
@@ -213,13 +304,6 @@ export default {
   gap: 0.5rem;
   background: $color-bg-light;
   border-left: 1px solid $color-light-grey;
-
-  @media (max-width: 968px) {
-    align-items: stretch;
-    border-left: none;
-    border-top: 1px solid $color-light-grey;
-    padding: 1rem;
-  }
 
   .price-label {
     color: $color-text-light;
@@ -237,6 +321,40 @@ export default {
     margin-top: 0.5rem;
     white-space: nowrap;
     font-size: 0.95rem;
+  }
+}
+
+.hotel-price-mobile {
+  display: none;
+
+  @media (max-width: 968px) {
+    display: block;
+    padding: 0.75rem;
+    border-top: 1px solid $color-light-grey;
+    background: white;
+
+    .select-btn {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 0.2rem;
+
+      .price-text {
+        font-size: 1.15rem;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .per-night {
+        font-size: 0.9rem;
+        font-weight: 500;
+        line-height: 1;
+      }
+    }
   }
 }
 </style>

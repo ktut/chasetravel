@@ -40,8 +40,8 @@ export default {
       loadingBatchSize: 3,
       isLoading: false,
 
-      // Mobile filters
-      showMobileFilters: false
+      // Filters visibility
+      showFilters: false
     }
   },
   computed: {
@@ -187,22 +187,15 @@ export default {
         this.selectedAirlines.push(airline)
       }
     },
-    openMobileFilters() {
-      this.showMobileFilters = true
-      // Scroll the filter toggle button to the top
-      this.$nextTick(() => {
-        const filterToggle = this.$refs.filterToggle as HTMLElement
-        if (filterToggle) {
-          filterToggle.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }
-      })
-    },
-    closeMobileFilters() {
-      this.showMobileFilters = false
-      // Scroll to the top of results
-      this.$nextTick(() => {
-        window.scroll({ top: -1, left: 0, behavior: "smooth" });
-      })
+    toggleFilters() {
+      this.showFilters = !this.showFilters
+
+      // If opening filters on mobile, scroll to top
+      if (this.showFilters) {
+        this.$nextTick(() => {
+          window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+        })
+      }
     },
     loadResultsProgressively(results: (Flight | Hotel)[]) {
       this.displayedResults = []
@@ -234,34 +227,21 @@ export default {
 
 <template>
   <div class="results-wrapper">
-    <!-- Mobile Backdrop -->
-    <div
-      v-if="showMobileFilters"
-      class="mobile-backdrop"
-      @click="closeMobileFilters"
-    ></div>
-
-    <!-- Mobile Filter Toggle Button -->
-    <button class="mobile-filter-toggle" @click="openMobileFilters">
+    <!-- Filter Toggle Button (Mobile Only) -->
+    <button class="mobile-filter-toggle" @click="toggleFilters" ref="filterToggle">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="4" y1="6" x2="20" y2="6"></line>
         <line x1="4" y1="12" x2="20" y2="12"></line>
         <line x1="4" y1="18" x2="20" y2="18"></line>
       </svg>
-      <span>{{ showMobileFilters ? 'Hide Filters' : 'Show Filters' }}</span>
+      <span>{{ showFilters ? 'Hide Filters' : 'Show Filters' }}</span>
       <span v-if="activeFiltersCount > 0" class="filter-badge">{{ activeFiltersCount }}</span>
     </button>
 
     <!-- Filters Sidebar -->
-    <aside class="filters-sidebar" :class="{ 'mobile-visible': showMobileFilters }" ref="filterToggle">
+    <aside class="filters-sidebar" :class="{ 'filters-visible': showFilters }">
       <div class="filters-header">
         <h3>Filters</h3>
-        <button class="close-filters-btn" @click="closeMobileFilters">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
       </div>
 
       <!-- Flight-specific filters -->
@@ -389,6 +369,8 @@ export default {
 .results-wrapper {
   display: grid;
   grid-template-columns: minmax(190px, 280px) 1fr;
+  grid-template-areas:
+    "filters results";
   gap: 2rem;
   max-width: 1400px;
   margin: 0 auto;
@@ -396,25 +378,10 @@ export default {
   position: relative;
 
   @media (max-width: 968px) {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     padding: 0.5rem 1rem;
     gap: 0;
-  }
-}
-
-/* Mobile Backdrop */
-.mobile-backdrop {
-  display: none;
-
-  @media (max-width: 968px) {
-    display: block;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
   }
 }
 
@@ -431,13 +398,14 @@ export default {
     border: 1px solid $color-light-grey;
     border-radius: 8px;
     cursor: pointer;
-    margin-bottom: 1rem;
     font-size: 0.95rem;
     font-weight: 600;
     color: $color-text;
+    width: 100%;
     position: sticky;
     top: 146px;
-    z-index: 1;
+    z-index: 10;
+    margin-bottom: 1rem;
 
     svg {
       width: 20px;
@@ -464,6 +432,7 @@ export default {
 
 /* Filters Sidebar */
 .filters-sidebar {
+  grid-area: filters;
   background: white;
   border: 1px solid $color-light-grey;
   border-radius: 8px;
@@ -473,24 +442,22 @@ export default {
   top: 9rem;
 
   @media (max-width: 968px) {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    max-width: 400px;
-    z-index: 1001;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding: 0;
     border: none;
-    border-radius: 0;
-    overflow-y: auto;
-    transform: translateX(-150%);
-    transition: transform 0.3s ease;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
-    scroll-margin-top: 70px;
+    transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+    position: sticky;
+    top: 210px;
+    z-index: 9;
 
-    &.mobile-visible {
-      transform: translateX(0);
+    &.filters-visible {
+      max-height: 1000px;
+      opacity: 1;
+      padding: 1.5rem;
+      border: 1px solid $color-light-grey;
+      margin-bottom: 1rem;
     }
   }
 
@@ -505,28 +472,6 @@ export default {
       font-weight: 600;
       margin: 0;
       color: $color-text;
-    }
-
-    .close-filters-btn {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0.5rem;
-      color: $color-text-light;
-
-      @media (max-width: 968px) {
-        display: block;
-      }
-
-      svg {
-        width: 24px;
-        height: 24px;
-      }
-
-      &:hover {
-        color: $color-text;
-      }
     }
   }
 
@@ -596,6 +541,7 @@ export default {
 
 /* Main Results Area */
 .results-main {
+  grid-area: results;
   min-height: 500px;
   padding-top: 1rem;
 }
