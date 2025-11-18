@@ -298,6 +298,9 @@ export default {
           checkIn: this.checkIn,
           checkOut: this.checkOut
         })
+
+        // Close the calendar after end date is selected
+        this.closeCalendar()
       }
     },
     validateFlexibilityOptions() {
