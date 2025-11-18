@@ -522,13 +522,30 @@ export default {
                     <strong>{{ numberOfNights }} night{{ numberOfNights > 1 ? 's' : '' }}</strong>
                   </div>
                   <div class="stay-detail" v-if="room">
-                    <strong>Room:</strong> {{ room.name }}
-                  </div>
-                  <div class="stay-detail" v-if="room">
                     <strong>Price per night:</strong> {{ formatPrice(room.pricePerNight) }}
                   </div>
                   <div class="stay-detail" v-else>
                     <strong>Price per night:</strong> {{ formatPrice(hotel.pricePerNight) }}
+                  </div>
+                </div>
+
+                <!-- Room Type Details -->
+                <div class="room-type-details" v-if="room">
+                  <h4>Room Details</h4>
+                  <div class="room-detail-item">
+                    <strong>Room Type:</strong> {{ room.name }}
+                  </div>
+                  <div class="room-detail-item" v-if="room.capacity">
+                    <strong>Capacity:</strong> {{ room.capacity }}
+                  </div>
+                  <div class="room-detail-item" v-if="room.bedConfig">
+                    <strong>Bed Configuration:</strong> {{ room.bedConfig }}
+                  </div>
+                  <div class="room-features" v-if="room.features && room.features.length">
+                    <strong>Room Features:</strong>
+                    <div class="features-list">
+                      <span v-for="feature in room.features" :key="feature" class="feature-tag">{{ feature }}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1578,6 +1595,59 @@ export default {
         strong {
           color: $color-primary;
           font-weight: 600;
+        }
+      }
+    }
+
+    .room-type-details {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e5e5;
+
+      h4 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin: 0 0 1rem 0;
+        color: $color-primary;
+      }
+
+      .room-detail-item {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 0.75rem;
+
+        strong {
+          color: $color-primary;
+          font-weight: 600;
+          display: inline-block;
+          min-width: 150px;
+        }
+      }
+
+      .room-features {
+        margin-top: 0.75rem;
+
+        strong {
+          color: $color-primary;
+          font-weight: 600;
+          display: block;
+          margin-bottom: 0.5rem;
+        }
+
+        .features-list {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+
+          .feature-tag {
+            background: #f0f7ff;
+            color: $color-accent;
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            border: 1px solid #d0e7ff;
+            font-weight: 500;
+          }
         }
       }
     }
