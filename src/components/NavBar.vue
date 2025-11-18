@@ -10,6 +10,7 @@ export default {
   data() {
     return {
       isLoading: false,
+      isSigningOut: false,
       isPopoverVisible: false
     }
   },
@@ -39,6 +40,16 @@ export default {
       setTimeout(() => {
         this.isLoading = false
         this.searchStore.signIn()
+      }, 2000)
+    },
+    handleSignOut() {
+      if (this.isSigningOut) return
+
+      this.isSigningOut = true
+
+      setTimeout(() => {
+        this.isSigningOut = false
+        this.searchStore.signOut()
       }, 2000)
     },
     showPopover() {
@@ -118,6 +129,51 @@ export default {
             @close="closePopover"
           />
         </div>
+
+        <!-- Sign Out Button (shown after sign in) -->
+        <button
+          v-if="isSignedIn"
+          @click="handleSignOut"
+          :disabled="isSigningOut"
+          class="navbar__signin-btn btn-primary"
+        >
+          <svg
+            v-if="isSigningOut"
+            class="navbar__spinner"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="white"
+              stroke-width="3"
+              fill="none"
+              opacity="0.25"
+            />
+            <path
+              d="M12 2C6.47715 2 2 6.47715 2 12"
+              stroke="white"
+              stroke-width="3"
+              fill="none"
+              stroke-linecap="round"
+            />
+          </svg>
+          <template v-else>
+            <span class="navbar__signout-text">Sign out</span>
+            <svg class="navbar__signout-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.59L17 17L22 12L17 7Z"
+                fill="currentColor"
+              />
+              <path
+                d="M4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z"
+                fill="currentColor"
+              />
+            </svg>
+          </template>
+        </button>
 
         <!-- User Profile Icon -->
         <!-- <button class="navbar__icon-btn" aria-label="User profile">
@@ -209,6 +265,16 @@ export default {
     font-size: 0.875rem;
     min-width: 100px;
     height: 36px;
+  }
+
+  &__signout-text {
+    display: inline;
+  }
+
+  &__signout-icon {
+    display: none;
+    width: 20px;
+    height: 20px;
   }
 
   &__spinner {
@@ -321,6 +387,19 @@ export default {
       padding: 0.375rem 1.25rem;
       font-size: 0.8125rem;
       min-width: 90px;
+
+      &:has(.navbar__signout-icon), &:has(.navbar__spinner):disabled {
+        min-width: auto;
+        padding: 0.5rem;
+      }
+    }
+
+    &__signout-text {
+      display: none;
+    }
+
+    &__signout-icon {
+      display: block;
     }
 
     &__points {
