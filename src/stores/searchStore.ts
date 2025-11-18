@@ -36,5 +36,7 @@ export const useSearchStore = defineStore('search', {
     signOut() {
       this.isSignedIn = false
     }
-  }
+  },
+
+  persist: true
 })

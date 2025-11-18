@@ -9,18 +9,16 @@ export default {
   },
   data() {
     return {
-      isSignedIn: false,
       isLoading: false,
       isPopoverVisible: false
     }
   },
-  mounted() {
-    // Sync local state with store
-    this.isSignedIn = this.searchStore.isSignedIn
-  },
   computed: {
     searchStore() {
       return useSearchStore()
+    },
+    isSignedIn(): boolean {
+      return this.searchStore.isSignedIn
     },
     points(): number {
       return this.searchStore.pointsBalance
@@ -40,7 +38,6 @@ export default {
 
       setTimeout(() => {
         this.isLoading = false
-        this.isSignedIn = true
         this.searchStore.signIn()
       }, 2000)
     },
