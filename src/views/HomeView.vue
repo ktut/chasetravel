@@ -61,6 +61,14 @@ export default {
       <div class="search">
         <div class="search-section">
           <SearchWidget />
+          <div class="bookings-button-container">
+            <router-link to="/mybookings" class="btn-primary bookings-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+              </svg>
+              View My Bookings
+            </router-link>
+          </div>
         </div>
         <br></br>
 
@@ -183,6 +191,23 @@ export default {
   margin: -3rem auto 0;
   @media (max-width: $breakpoint-mobile) {
     margin-top: -3rem;
+  }
+}
+
+.bookings-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: $spacing-lg;
+
+  .bookings-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 }
 

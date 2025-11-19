@@ -464,10 +464,10 @@ export default {
 
 // Date Group
 .date-group {
-  margin-bottom: 2rem;
+  margin-top: 4rem;
 
-  &:last-child {
-    margin-bottom: 0;
+  &:first-of-type {
+    margin-top: 2rem;;
   }
 }
 
