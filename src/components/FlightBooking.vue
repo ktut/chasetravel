@@ -36,32 +36,28 @@ export default {
 <template>
   <div class="booking-card">
     <div class="booking-content">
-      <div class="booking-header">
-        <div class="booking-type-badge flight">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"></path>
-          </svg>
-          Flight
-        </div>
+      <div class="booking-type-badge flight">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"></path>
+        </svg>
+        Flight
       </div>
 
       <div class="booking-details">
         <div class="flight-info">
           <h3>{{ booking.flight.departure.airport }} → {{ booking.flight.arrival.airport }}</h3>
-          <div v-if="booking.searchData" class="reservation-date">
-            {{ formatDate(booking.searchData.checkIn) }}
-          </div>
           <div class="flight-meta">
             <span>{{ booking.flight.airline }} {{ booking.flight.flightNumber }}</span>
-          </div>
-          <div class="time-info">
+            <span class="separator">•</span>
             <span class="time">{{ booking.flight.departure.time }}</span>
-            <span class="duration">{{ booking.flight.duration }}</span>
+            <span class="separator">→</span>
             <span class="time">{{ booking.flight.arrival.time }}</span>
+            <span class="separator">•</span>
+            <span class="duration">{{ booking.flight.duration }}</span>
           </div>
         </div>
         <div class="booking-actions">
-          <button @click="cancelBooking" class="btn-cancel">Cancel Booking</button>
+          <button @click="cancelBooking" class="btn-cancel">Cancel</button>
         </div>
       </div>
     </div>
@@ -73,12 +69,13 @@ export default {
   background: white;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   transition: all 0.2s;
 
   &:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   }
 
   &.past {
@@ -89,46 +86,28 @@ export default {
 .booking-content {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-}
-
-.booking-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #e5e5e5;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
+  gap: 0.75rem;
 }
 
 .booking-type-badge {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  gap: 0.4rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  width: fit-content;
 
   svg {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
   }
 
   &.flight {
     background: #e6f2ff;
     color: $color-accent;
   }
-}
-
-.booking-date {
-  color: #666;
-  font-size: 0.875rem;
 }
 
 .booking-details {
@@ -147,37 +126,23 @@ export default {
   flex: 1;
 
   h3 {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 600;
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.4rem 0;
     color: $color-primary;
-  }
-
-  .reservation-date {
-    font-size: 0.875rem;
-    color: #666;
-    margin-bottom: 0.5rem;
   }
 
   .flight-meta {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 0.5rem;
     font-size: 0.875rem;
     color: #666;
-    margin-bottom: 0.5rem;
 
     .separator {
       color: #ccc;
     }
-  }
-
-  .time-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    font-size: 0.9rem;
-    color: #666;
 
     .time {
       font-weight: 600;
@@ -203,12 +168,12 @@ export default {
 }
 
 .btn-cancel {
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.875rem;
   border: 1px solid #e5e5e5;
-  border-radius: 6px;
+  border-radius: 4px;
   background: white;
   color: #666;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;

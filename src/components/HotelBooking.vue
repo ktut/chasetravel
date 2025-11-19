@@ -60,34 +60,35 @@ export default {
 <template>
   <div class="booking-card">
     <div class="booking-content">
-      <div class="booking-header">
-        <div class="booking-type-badge hotel">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-          </svg>
-          Hotel
-        </div>
+      <div class="booking-type-badge hotel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        Hotel
       </div>
 
-      <div class="booking-details hotel-details">
+      <div class="booking-details">
         <div class="hotel-image-container">
           <img :src="booking.hotel.image" :alt="booking.hotel.name" class="hotel-thumbnail" />
         </div>
         <div class="hotel-info">
           <h3>{{ booking.hotel.name }}</h3>
-          <div class="hotel-location">{{ booking.hotel.location }}</div>
-          <div class="hotel-stars">
-            <span v-for="star in booking.hotel.stars" :key="star" class="star">★</span>
-          </div>
-          <div v-if="booking.searchData" class="reservation-date">
-            {{ formatShortDate(booking.searchData.checkIn) }} - {{ formatShortDate(booking.searchData.checkOut) }}
-            <span class="nights-label">• {{ calculateNights(booking.searchData.checkIn, booking.searchData.checkOut) }} night{{ calculateNights(booking.searchData.checkIn, booking.searchData.checkOut) > 1 ? 's' : '' }}</span>
+          <div class="hotel-meta">
+            <span class="hotel-location">{{ booking.hotel.location }}</span>
+            <span class="separator">•</span>
+            <span class="hotel-stars">
+              <span v-for="star in booking.hotel.stars" :key="star" class="star">★</span>
+            </span>
+            <template v-if="booking.searchData">
+              <span class="separator">•</span>
+              <span>{{ calculateNights(booking.searchData.checkIn, booking.searchData.checkOut) }} night{{ calculateNights(booking.searchData.checkIn, booking.searchData.checkOut) > 1 ? 's' : '' }}</span>
+            </template>
           </div>
           <div v-if="booking.room" class="room-name">{{ booking.room.name }}</div>
         </div>
         <div class="booking-actions">
-          <button @click="cancelBooking" class="btn-cancel">Cancel Booking</button>
+          <button @click="cancelBooking" class="btn-cancel">Cancel</button>
         </div>
       </div>
     </div>
@@ -99,12 +100,13 @@ export default {
   background: white;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   transition: all 0.2s;
 
   &:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   }
 
   &.past {
@@ -115,35 +117,22 @@ export default {
 .booking-content {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-}
-
-.booking-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #e5e5e5;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
+  gap: 0.75rem;
 }
 
 .booking-type-badge {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  gap: 0.4rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  width: fit-content;
 
   svg {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
   }
 
   &.hotel {
@@ -152,45 +141,27 @@ export default {
   }
 }
 
-.booking-date {
-  color: #666;
-  font-size: 0.875rem;
-}
-
 .booking-details {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 1rem;
   align-items: center;
-  gap: 1.5rem;
 
   @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  &.hotel-details {
-    align-items: flex-start;
-    display: grid;
-    grid-template-columns: 100px 1fr auto;
-    gap: 1rem;
-    align-items: center;
-
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-    }
+    grid-template-columns: 1fr;
   }
 }
 
 .hotel-image-container {
   .hotel-thumbnail {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 4px;
 
     @media (max-width: 768px) {
       width: 100%;
-      height: 150px;
+      height: 120px;
     }
   }
 }
@@ -201,35 +172,31 @@ export default {
   h3 {
     font-size: 1.125rem;
     font-weight: 600;
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.4rem 0;
     color: $color-primary;
   }
 
-  .hotel-location {
-    color: #666;
-    font-size: 0.875rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .hotel-stars {
-    color: #ffa500;
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .reservation-date {
+  .hotel-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     font-size: 0.875rem;
     color: #666;
-    margin-bottom: 0.5rem;
 
-    .nights-label {
-      color: #999;
+    .separator {
+      color: #ccc;
+    }
+
+    .hotel-stars {
+      color: #ffa500;
+      display: inline-flex;
     }
   }
 
   .room-name {
     color: #666;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     margin-top: 0.25rem;
     font-style: italic;
   }
@@ -248,12 +215,12 @@ export default {
 }
 
 .btn-cancel {
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.875rem;
   border: 1px solid #e5e5e5;
-  border-radius: 6px;
+  border-radius: 4px;
   background: white;
   color: #666;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
