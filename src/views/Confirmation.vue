@@ -285,8 +285,29 @@ export default {
       this.$router.push({ path: '/search', query })
     },
     proceedToBook() {
-      // This would normally proceed to actual booking
-      alert('Booking functionality would be implemented here')
+      // Save booking to store
+      if (this.isFlightBooking && this.localFlight) {
+        this.searchStore.addBooking({
+          type: 'flight',
+          flight: this.localFlight,
+          searchData: this.localSearchData
+        })
+      } else if (this.isHotelBooking && this.localHotel) {
+        this.searchStore.addBooking({
+          type: 'hotel',
+          hotel: this.localHotel,
+          room: this.localRoom,
+          searchData: this.localSearchData
+        })
+      }
+
+      // Redeem points if selected
+      if (this.usePoints && this.pointsToRedeem > 0) {
+        this.searchStore.redeemPoints(this.pointsToRedeem)
+      }
+
+      // Redirect to My Bookings
+      this.$router.push('/mybookings')
     },
     selectFare(fareType: string) {
       if (this.expandedFare === fareType) {
