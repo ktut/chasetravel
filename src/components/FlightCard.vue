@@ -1,6 +1,7 @@
 <script lang="ts">
 import { useSearchStore } from '@/stores/searchStore'
 import type { Flight } from '@/types/search'
+import { getAirlineLogo } from '@/utils/airlineLogos'
 
 export default {
   name: 'FlightCard',
@@ -17,6 +18,9 @@ export default {
   computed: {
     searchStore() {
       return useSearchStore()
+    },
+    airlineLogo() {
+      return getAirlineLogo(this.flight.airline)
     }
   },
   methods: {
@@ -63,9 +67,12 @@ export default {
 <template>
   <div class="flight-card">
     <div class="flight-main">
-      <div class="flight-info">
-        <div class="airline">{{ flight.airline }}</div>
-        <div class="flight-number">{{ flight.flightNumber }}</div>
+      <div class="flight-info-wrapper">
+        <img v-if="airlineLogo" :src="airlineLogo" :alt="flight.airline" class="airline-logo" />
+        <div class="flight-info">
+          <div class="airline">{{ flight.airline }}</div>
+          <div class="flight-number">{{ flight.flightNumber }}</div>
+        </div>
       </div>
 
       <div class="flight-route">
@@ -130,14 +137,32 @@ export default {
   }
 }
 
-.flight-info {
+.flight-info-wrapper {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  align-items: center;
+  gap: 0.75rem;
 
   @media (max-width: 768px) {
     order: 1;
   }
+}
+
+.airline-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.flight-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 
   .airline {
     font-weight: 600;

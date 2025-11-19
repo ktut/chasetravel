@@ -1,5 +1,6 @@
 <script lang="ts">
 import { useSearchStore } from '@/stores/searchStore'
+import { getAirlineLogo } from '@/utils/airlineLogos'
 
 export default {
   name: 'Confirmation',
@@ -128,6 +129,10 @@ export default {
       const diffTime = Math.abs(checkOut.getTime() - checkIn.getTime())
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
       return diffDays || 1
+    },
+    airlineLogo(): string | null {
+      if (!this.flight) return null
+      return getAirlineLogo(this.flight.airline)
     }
   },
   watch: {
@@ -581,8 +586,9 @@ export default {
           <div class="flight-header">
             <div class="airline-info">
               <img
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%230066CC'/%3E%3Ctext x='50' y='60' font-size='40' fill='white' text-anchor='middle' font-family='Arial'%3E✈%3C/text%3E%3C/svg%3E"
-                alt="Airline"
+                v-if="airlineLogo"
+                :src="airlineLogo"
+                :alt="flight.airline"
                 class="airline-logo"
               />
               <div>
@@ -1261,7 +1267,8 @@ export default {
     .airline-logo {
       width: 40px;
       height: 40px;
-      border-radius: 50%;
+      object-fit: contain;
+      flex-shrink: 0;
     }
 
     .airline-name {

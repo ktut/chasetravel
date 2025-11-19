@@ -1,5 +1,6 @@
 <script lang="ts">
 import type { Booking } from '@/stores/searchStore'
+import { getAirlineLogo } from '@/utils/airlineLogos'
 
 export default {
   name: 'FlightBooking',
@@ -7,6 +8,12 @@ export default {
     booking: {
       type: Object as () => Booking,
       required: true
+    }
+  },
+  computed: {
+    airlineLogo() {
+      if (!this.booking.flight) return null
+      return getAirlineLogo(this.booking.flight.airline)
     }
   },
   methods: {
@@ -44,16 +51,19 @@ export default {
       </div>
 
       <div class="booking-details">
-        <div class="flight-info">
-          <h3>{{ booking.flight.departure.airport }} → {{ booking.flight.arrival.airport }}</h3>
-          <div class="flight-meta">
-            <span>{{ booking.flight.airline }} {{ booking.flight.flightNumber }}</span>
-            <span class="separator">•</span>
-            <span class="time">{{ booking.flight.departure.time }}</span>
-            <span class="separator">→</span>
-            <span class="time">{{ booking.flight.arrival.time }}</span>
-            <span class="separator">•</span>
-            <span class="duration">{{ booking.flight.duration }}</span>
+        <div class="flight-info-wrapper">
+          <img v-if="airlineLogo" :src="airlineLogo" :alt="booking.flight.airline" class="airline-logo" />
+          <div class="flight-info">
+            <h3>{{ booking.flight.departure.airport }} → {{ booking.flight.arrival.airport }}</h3>
+            <div class="flight-meta">
+              <span>{{ booking.flight.airline }} {{ booking.flight.flightNumber }}</span>
+              <span class="separator">•</span>
+              <span class="time">{{ booking.flight.departure.time }}</span>
+              <span class="separator">→</span>
+              <span class="time">{{ booking.flight.arrival.time }}</span>
+              <span class="separator">•</span>
+              <span class="duration">{{ booking.flight.duration }}</span>
+            </div>
           </div>
         </div>
         <div class="booking-actions">
@@ -119,6 +129,26 @@ export default {
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+.flight-info-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.airline-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 4px;
+
+  @media (max-width: 768px) {
+    width: 80px;
+    height: 80px;
   }
 }
 
