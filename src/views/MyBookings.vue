@@ -1,9 +1,15 @@
 <script lang="ts">
 import { useSearchStore } from '@/stores/searchStore'
 import type { Booking } from '@/stores/searchStore'
+import FlightBooking from '@/components/FlightBooking.vue'
+import HotelBooking from '@/components/HotelBooking.vue'
 
 export default {
   name: 'MyBookings',
+  components: {
+    FlightBooking,
+    HotelBooking
+  },
   data() {
     return {
       showPastBookings: false,
@@ -60,6 +66,44 @@ export default {
     },
     hasBookings(): boolean {
       return this.allBookings.length > 0
+    },
+    groupedCurrentBookings(): { date: string; bookings: Booking[] }[] {
+      const groups = new Map<string, Booking[]>()
+
+      this.currentBookings.forEach(booking => {
+        const dateKey = booking.searchData?.checkIn
+          ? new Date(booking.searchData.checkIn).toDateString()
+          : new Date(booking.bookingDate).toDateString()
+
+        if (!groups.has(dateKey)) {
+          groups.set(dateKey, [])
+        }
+        groups.get(dateKey)!.push(booking)
+      })
+
+      return Array.from(groups.entries()).map(([date, bookings]) => ({
+        date,
+        bookings: this.sortBookingsWithinGroup(bookings)
+      }))
+    },
+    groupedPastBookings(): { date: string; bookings: Booking[] }[] {
+      const groups = new Map<string, Booking[]>()
+
+      this.pastBookings.forEach(booking => {
+        const dateKey = booking.searchData?.checkIn
+          ? new Date(booking.searchData.checkIn).toDateString()
+          : new Date(booking.bookingDate).toDateString()
+
+        if (!groups.has(dateKey)) {
+          groups.set(dateKey, [])
+        }
+        groups.get(dateKey)!.push(booking)
+      })
+
+      return Array.from(groups.entries()).map(([date, bookings]) => ({
+        date,
+        bookings: this.sortBookingsWithinGroup(bookings)
+      }))
     }
   },
   methods: {
@@ -84,6 +128,15 @@ export default {
       return d.toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric'
+      })
+    },
+    formatDateHeader(dateString: string): string {
+      const date = new Date(dateString)
+      return date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
       })
     },
     getBookingPrice(booking: Booking): number {
@@ -116,6 +169,34 @@ export default {
       if (confirm('Are you sure you want to cancel this booking? This action cannot be undone.')) {
         this.searchStore.removeBooking(bookingId)
       }
+    },
+    sortBookingsWithinGroup(bookings: Booking[]): Booking[] {
+      // Sort bookings: flights first (by departure time), then hotels, then return flights
+      return [...bookings].sort((a, b) => {
+        // Both are flights
+        if (a.type === 'flight' && b.type === 'flight') {
+          // Sort by departure time if available
+          if (a.flight?.departure?.time && b.flight?.departure?.time) {
+            return a.flight.departure.time.localeCompare(b.flight.departure.time)
+          }
+          return 0
+        }
+
+        // Both are hotels
+        if (a.type === 'hotel' && b.type === 'hotel') {
+          return 0
+        }
+
+        // Mixed types: flights before hotels
+        if (a.type === 'flight' && b.type === 'hotel') {
+          return -1
+        }
+        if (a.type === 'hotel' && b.type === 'flight') {
+          return 1
+        }
+
+        return 0
+      })
     }
   }
 }
@@ -144,90 +225,19 @@ export default {
           <section v-if="currentBookings.length > 0" class="bookings-section">
             <h2>Current Bookings</h2>
 
-            <div class="booking-card" v-for="booking in currentBookings" :key="booking.id">
-              <!-- Flight Booking -->
-              <div v-if="booking.type === 'flight' && booking.flight" class="booking-content">
-                <div class="booking-header">
-                  <div class="booking-type-badge flight">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M12 2v20M2 12l10-10 10 10M4 12l8 8 8-8"/>
-                    </svg>
-                    Flight
-                  </div>
-                  <div class="booking-date">Booked {{ formatDate(booking.bookingDate) }}</div>
-                </div>
-
-                <div class="booking-details">
-                  <div class="flight-info">
-                    <h3>{{ booking.flight.departure.airport }} → {{ booking.flight.arrival.airport }}</h3>
-                    <div v-if="booking.searchData" class="reservation-date-emphasis">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                        <line x1="16" y1="2" x2="16" y2="6"/>
-                        <line x1="8" y1="2" x2="8" y2="6"/>
-                        <line x1="3" y1="10" x2="21" y2="10"/>
-                      </svg>
-                      Departure: {{ formatDate(booking.searchData.checkIn) }}
-                    </div>
-                    <div class="flight-meta">
-                      <span>{{ booking.flight.airline }} {{ booking.flight.flightNumber }}</span>
-                    </div>
-                    <div class="time-info">
-                      <span class="time">{{ booking.flight.departure.time }}</span>
-                      <span class="duration">{{ booking.flight.duration }}</span>
-                      <span class="time">{{ booking.flight.arrival.time }}</span>
-                    </div>
-                  </div>
-                  <div class="booking-price-actions">
-                    <div class="booking-price">
-                      {{ formatPrice(booking.flight.price) }}
-                    </div>
-                    <button @click="cancelBooking(booking.id)" class="btn-cancel">Cancel Booking</button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Hotel Booking -->
-              <div v-else-if="booking.type === 'hotel' && booking.hotel" class="booking-content">
-                <div class="booking-header">
-                  <div class="booking-type-badge hotel">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M3 21v-13h18v13M3 8v-2a2 2 0 012-2h14a2 2 0 012 2v2M6 21v-7M18 21v-7M9 8v2M15 8v2"/>
-                    </svg>
-                    Hotel
-                  </div>
-                  <div class="booking-date">Booked {{ formatDate(booking.bookingDate) }}</div>
-                </div>
-
-                <div class="booking-details hotel-details">
-                  <div class="hotel-image-container">
-                    <img :src="booking.hotel.image" :alt="booking.hotel.name" class="hotel-thumbnail" />
-                  </div>
-                  <div class="hotel-info">
-                    <h3>{{ booking.hotel.name }}</h3>
-                    <div class="hotel-location">{{ booking.hotel.location }}</div>
-                    <div class="hotel-stars">
-                      <span v-for="star in booking.hotel.stars" :key="star" class="star">★</span>
-                    </div>
-                    <div v-if="booking.searchData" class="reservation-date-emphasis">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                        <line x1="16" y1="2" x2="16" y2="6"/>
-                        <line x1="8" y1="2" x2="8" y2="6"/>
-                        <line x1="3" y1="10" x2="21" y2="10"/>
-                      </svg>
-                      {{ formatDate(booking.searchData.checkIn) }} - {{ formatDate(booking.searchData.checkOut) }}
-                      <span class="nights-badge">{{ calculateNights(booking.searchData.checkIn, booking.searchData.checkOut) }} night{{ calculateNights(booking.searchData.checkIn, booking.searchData.checkOut) > 1 ? 's' : '' }}</span>
-                    </div>
-                    <div v-if="booking.room" class="room-name">{{ booking.room.name }}</div>
-                  </div>
-                  <div class="booking-price-actions">
-                    <div class="booking-price">
-                      {{ formatPrice(getBookingPrice(booking)) }}
-                    </div>
-                    <button @click="cancelBooking(booking.id)" class="btn-cancel">Cancel Booking</button>
-                  </div>
-                </div>
+            <div v-for="group in groupedCurrentBookings" :key="group.date" class="date-group">
+              <h3 class="date-header">{{ formatDateHeader(group.date) }}</h3>
+              <div v-for="booking in group.bookings" :key="booking.id">
+                <FlightBooking
+                  v-if="booking.type === 'flight' && booking.flight"
+                  :booking="booking"
+                  @cancel="cancelBooking"
+                />
+                <HotelBooking
+                  v-else-if="booking.type === 'hotel' && booking.hotel"
+                  :booking="booking"
+                  @cancel="cancelBooking"
+                />
               </div>
             </div>
           </section>
@@ -242,81 +252,19 @@ export default {
             </button>
 
             <div v-if="showPastBookings" class="past-bookings-list">
-              <div class="booking-card past" v-for="booking in pastBookings" :key="booking.id">
-                <!-- Flight Booking -->
-                <div v-if="booking.type === 'flight' && booking.flight" class="booking-content">
-                  <div class="booking-header">
-                    <div class="booking-type-badge flight">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2v20M2 12l10-10 10 10M4 12l8 8 8-8"/>
-                      </svg>
-                      Flight
-                    </div>
-                    <div class="booking-date">Booked {{ formatDate(booking.bookingDate) }}</div>
-                  </div>
-
-                  <div class="booking-details">
-                    <div class="flight-info">
-                      <h3>{{ booking.flight.departure.airport }} → {{ booking.flight.arrival.airport }}</h3>
-                      <div v-if="booking.searchData" class="reservation-date-emphasis">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                          <line x1="16" y1="2" x2="16" y2="6"/>
-                          <line x1="8" y1="2" x2="8" y2="6"/>
-                          <line x1="3" y1="10" x2="21" y2="10"/>
-                        </svg>
-                        Departure: {{ formatDate(booking.searchData.checkIn) }}
-                      </div>
-                      <div class="flight-meta">
-                        <span>{{ booking.flight.airline }} {{ booking.flight.flightNumber }}</span>
-                      </div>
-                    </div>
-                    <div class="booking-price-actions">
-                      <div class="booking-price">
-                        {{ formatPrice(booking.flight.price) }}
-                      </div>
-                      <button @click="cancelBooking(booking.id)" class="btn-cancel">Cancel Booking</button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Hotel Booking -->
-                <div v-else-if="booking.type === 'hotel' && booking.hotel" class="booking-content">
-                  <div class="booking-header">
-                    <div class="booking-type-badge hotel">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 21v-13h18v13M3 8v-2a2 2 0 012-2h14a2 2 0 012 2v2M6 21v-7M18 21v-7M9 8v2M15 8v2"/>
-                      </svg>
-                      Hotel
-                    </div>
-                    <div class="booking-date">Booked {{ formatDate(booking.bookingDate) }}</div>
-                  </div>
-
-                  <div class="booking-details hotel-details">
-                    <div class="hotel-image-container">
-                      <img :src="booking.hotel.image" :alt="booking.hotel.name" class="hotel-thumbnail" />
-                    </div>
-                    <div class="hotel-info">
-                      <h3>{{ booking.hotel.name }}</h3>
-                      <div class="hotel-location">{{ booking.hotel.location }}</div>
-                      <div v-if="booking.searchData" class="reservation-date-emphasis">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                          <line x1="16" y1="2" x2="16" y2="6"/>
-                          <line x1="8" y1="2" x2="8" y2="6"/>
-                          <line x1="3" y1="10" x2="21" y2="10"/>
-                        </svg>
-                        {{ formatDate(booking.searchData.checkIn) }} - {{ formatDate(booking.searchData.checkOut) }}
-                        <span class="nights-badge">{{ calculateNights(booking.searchData.checkIn, booking.searchData.checkOut) }} night{{ calculateNights(booking.searchData.checkIn, booking.searchData.checkOut) > 1 ? 's' : '' }}</span>
-                      </div>
-                    </div>
-                    <div class="booking-price-actions">
-                      <div class="booking-price">
-                        {{ formatPrice(getBookingPrice(booking)) }}
-                      </div>
-                      <button @click="cancelBooking(booking.id)" class="btn-cancel">Cancel Booking</button>
-                    </div>
-                  </div>
+              <div v-for="group in groupedPastBookings" :key="group.date" class="date-group">
+                <h3 class="date-header">{{ formatDateHeader(group.date) }}</h3>
+                <div v-for="booking in group.bookings" :key="booking.id">
+                  <FlightBooking
+                    v-if="booking.type === 'flight' && booking.flight"
+                    :booking="booking"
+                    @cancel="cancelBooking"
+                  />
+                  <HotelBooking
+                    v-else-if="booking.type === 'hotel' && booking.hotel"
+                    :booking="booking"
+                    @cancel="cancelBooking"
+                  />
                 </div>
               </div>
             </div>
@@ -512,6 +460,24 @@ export default {
     margin: 0 0 1.5rem 0;
     color: $color-primary;
   }
+}
+
+// Date Group
+.date-group {
+  margin-bottom: 2rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.date-header {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: $color-primary;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #f0f0f0;
 }
 
 .booking-card {
