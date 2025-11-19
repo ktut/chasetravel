@@ -148,7 +148,8 @@ export default {
   align-items: center;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
+    grid-template-columns: 80px 1fr;
+    grid-template-rows: auto auto;
   }
 }
 
@@ -160,8 +161,8 @@ export default {
     border-radius: 4px;
 
     @media (max-width: 768px) {
-      width: 100%;
-      height: 120px;
+      width: 80px;
+      height: 80px;
     }
   }
 }
@@ -209,6 +210,7 @@ export default {
   gap: 0.75rem;
 
   @media (max-width: 768px) {
+    grid-column: 1 / -1;
     align-items: flex-start;
     width: 100%;
   }
