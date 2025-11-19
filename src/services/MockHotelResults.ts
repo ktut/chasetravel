@@ -12,7 +12,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
       amenities: ['Free Wifi', 'Spa', 'On-site Restaurant', 'Bar'],
-      coordinates: { lat: 40.7645, lng: -73.9744 }
+      coordinates: { lat: 40.7645, lng: -73.9744 },
+      description: "Premier Manhattan hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in New York. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The St. Regis New York',
@@ -23,7 +24,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
       amenities: ['Free Wifi', 'Spa', 'Fitness Center', 'On-site Restaurant', 'Bar'],
-      coordinates: { lat: 40.7614, lng: -73.9745 }
+      coordinates: { lat: 40.7614, lng: -73.9745 },
+      description: "Luxury Manhattan hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, fine dining, providing an unforgettable experience in the heart of New York. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'The Peninsula New York',
@@ -34,7 +36,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
       amenities: ['Bar', 'Spa', 'Pool', 'Free Wifi', 'Fitness Center', 'On-site Restaurant'],
-      coordinates: { lat: 40.7623, lng: -73.9754 }
+      coordinates: { lat: 40.7623, lng: -73.9754 },
+      description: "Luxury Manhattan hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, swimming pool, fine dining, providing an unforgettable experience in the heart of New York. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'Mandarin Oriental New York',
@@ -45,7 +48,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
       amenities: ['Spa', 'Pool', 'Free Wifi', 'Fitness Center', 'On-site Restaurant'],
-      coordinates: { lat: 40.7681, lng: -73.9819 }
+      coordinates: { lat: 40.7681, lng: -73.9819 },
+      description: "Luxury Manhattan hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, swimming pool, fine dining, providing an unforgettable experience in the heart of New York. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'The Carlyle, A Rosewood Hotel',
@@ -56,7 +60,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
       amenities: ['Bar', 'On-site Restaurant', 'Spa', 'Fitness Center', 'Free Wifi'],
-      coordinates: { lat: 40.7747, lng: -73.9632 }
+      coordinates: { lat: 40.7747, lng: -73.9632 },
+      description: "Luxury Manhattan hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, fine dining, providing an unforgettable experience in the heart of New York. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'The Ritz-Carlton New York, Central Park',
@@ -67,7 +72,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
       amenities: ['Spa', 'On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 40.7654, lng: -73.9768 }
+      coordinates: { lat: 40.7654, lng: -73.9768 },
+      description: "Luxury Manhattan hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, fine dining, providing an unforgettable experience in the heart of New York. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'Four Seasons Hotel New York',
@@ -78,7 +84,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
       amenities: ['Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center', 'Bar'],
-      coordinates: { lat: 40.7626, lng: -73.9722 }
+      coordinates: { lat: 40.7626, lng: -73.9722 },
+      description: "Luxury Manhattan hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, fine dining, providing an unforgettable experience in the heart of New York. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'Park Hyatt New York',
@@ -89,7 +96,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
       amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center', 'Bar'],
-      coordinates: { lat: 40.7651, lng: -73.9784 }
+      coordinates: { lat: 40.7651, lng: -73.9784 },
+      description: "Premier Manhattan hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in New York. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Lowell Hotel',
@@ -100,7 +108,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
       amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 40.7677, lng: -73.9684 }
+      coordinates: { lat: 40.7677, lng: -73.9684 },
+      description: "Premier Manhattan hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in New York. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Beekman, A Thompson Hotel',
@@ -111,7 +120,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 40.7112, lng: -74.0058 }
+      coordinates: { lat: 40.7112, lng: -74.0058 },
+      description: "Premier Manhattan hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in New York. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: '1 Hotel Brooklyn Bridge',
@@ -122,7 +132,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
       amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 40.7024, lng: -73.9931 }
+      coordinates: { lat: 40.7024, lng: -73.9931 },
+      description: "Premier Manhattan hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in New York. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Greenwich Hotel',
@@ -133,7 +144,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
       amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 40.7195, lng: -74.0097 }
+      coordinates: { lat: 40.7195, lng: -74.0097 },
+      description: "Premier Manhattan hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in New York. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Baccarat Hotel New York',
@@ -144,7 +156,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
       amenities: ['Spa', 'Bar', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 40.7610, lng: -73.9760 }
+      coordinates: { lat: 40.7610, lng: -73.9760 },
+      description: "Premier Manhattan hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in New York. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Mark Hotel',
@@ -155,7 +168,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Spa', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 40.7756, lng: -73.9632 }
+      coordinates: { lat: 40.7756, lng: -73.9632 },
+      description: "Premier Manhattan hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in New York. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Conrad New York Downtown',
@@ -166,7 +180,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 40.7156, lng: -74.0157 }
+      coordinates: { lat: 40.7156, lng: -74.0157 },
+      description: "Premier Manhattan hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in New York. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Crosby Street Hotel',
@@ -177,7 +192,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
       amenities: ['Free Wifi', 'Fitness Center', 'Bar'],
-      coordinates: { lat: 40.7217, lng: -73.9968 }
+      coordinates: { lat: 40.7217, lng: -73.9968 },
+      description: "Premier Manhattan hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in New York. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The NoMad Hotel',
@@ -188,7 +204,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
       amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center', 'Bar'],
-      coordinates: { lat: 40.7453, lng: -73.9881 }
+      coordinates: { lat: 40.7453, lng: -73.9881 },
+      description: "Premier Manhattan hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in New York. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Knickerbocker',
@@ -199,7 +216,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
       amenities: ['Bar', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 40.7572, lng: -73.9868 }
+      coordinates: { lat: 40.7572, lng: -73.9868 },
+      description: "Premier Manhattan hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in New York. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Ludlow Hotel',
@@ -210,7 +228,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 40.7213, lng: -73.9883 }
+      coordinates: { lat: 40.7213, lng: -73.9883 },
+      description: "Well-appointed hotel located in Manhattan, New York. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'The Bowery Hotel',
@@ -221,7 +240,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 40.7267, lng: -73.9919 }
+      coordinates: { lat: 40.7267, lng: -73.9919 },
+      description: "Premier Manhattan hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in New York. Ideal for both business and leisure travelers looking for a refined stay."
     }
   ],
   'Los Angeles': [
@@ -234,7 +254,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
       amenities: ['Bar', 'Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 34.0789, lng: -118.4152 }
+      coordinates: { lat: 34.0789, lng: -118.4152 },
+      description: "Premier Los Angeles hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Los Angeles. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Hotel Bel-Air',
@@ -245,7 +266,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
       amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 34.0970, lng: -118.4517 }
+      coordinates: { lat: 34.0970, lng: -118.4517 },
+      description: "Premier Los Angeles hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Los Angeles. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Four Seasons Hotel Los Angeles at Beverly Hills',
@@ -256,7 +278,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
       amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 34.0754, lng: -118.3842 }
+      coordinates: { lat: 34.0754, lng: -118.3842 },
+      description: "Luxury Los Angeles hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, swimming pool, fine dining, providing an unforgettable experience in the heart of Los Angeles. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'Montage Beverly Hills',
@@ -267,7 +290,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
       amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 34.0687, lng: -118.3996 }
+      coordinates: { lat: 34.0687, lng: -118.3996 },
+      description: "Premier Los Angeles hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Los Angeles. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Peninsula Beverly Hills',
@@ -278,7 +302,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
       amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 34.0667, lng: -118.4100 }
+      coordinates: { lat: 34.0667, lng: -118.4100 },
+      description: "Luxury Los Angeles hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, swimming pool, fine dining, providing an unforgettable experience in the heart of Los Angeles. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'Shutters on the Beach',
@@ -289,7 +314,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
       amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 34.0085, lng: -118.4987 }
+      coordinates: { lat: 34.0085, lng: -118.4987 },
+      description: "Premier Los Angeles hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Los Angeles. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Fairmont Miramar Hotel & Bungalows',
@@ -300,7 +326,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
       amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 34.0155, lng: -118.4995 }
+      coordinates: { lat: 34.0155, lng: -118.4995 },
+      description: "Premier Los Angeles hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Los Angeles. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Sunset Tower Hotel',
@@ -311,7 +338,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
       amenities: ['Bar', 'Pool', 'Fitness Center', 'Free Wifi'],
-      coordinates: { lat: 34.0965, lng: -118.3770 }
+      coordinates: { lat: 34.0965, lng: -118.3770 },
+      description: "Premier Los Angeles hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Los Angeles. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The London West Hollywood',
@@ -322,7 +350,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
       amenities: ['Pool', 'On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 34.0900, lng: -118.3844 }
+      coordinates: { lat: 34.0900, lng: -118.3844 },
+      description: "Premier Los Angeles hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Los Angeles. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Chateau Marmont',
@@ -333,7 +362,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
       amenities: ['Pool', 'On-site Restaurant', 'Bar', 'Free Wifi'],
-      coordinates: { lat: 34.0963, lng: -118.3689 }
+      coordinates: { lat: 34.0963, lng: -118.3689 },
+      description: "Premier Los Angeles hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Los Angeles. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Proper Hotel',
@@ -344,7 +374,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
       amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 34.0461, lng: -118.2567 }
+      coordinates: { lat: 34.0461, lng: -118.2567 },
+      description: "Premier Los Angeles hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Los Angeles. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Hotel Casa del Mar',
@@ -355,7 +386,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
       amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 34.0096, lng: -118.4989 }
+      coordinates: { lat: 34.0096, lng: -118.4989 },
+      description: "Premier Los Angeles hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Los Angeles. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Waldorf Astoria Beverly Hills',
@@ -366,7 +398,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
       amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 34.0644, lng: -118.4131 }
+      coordinates: { lat: 34.0644, lng: -118.4131 },
+      description: "Luxury Los Angeles hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, swimming pool, fine dining, providing an unforgettable experience in the heart of Los Angeles. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'The Ritz-Carlton, Los Angeles',
@@ -377,7 +410,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
       amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center', 'Bar'],
-      coordinates: { lat: 34.0449, lng: -118.2663 }
+      coordinates: { lat: 34.0449, lng: -118.2663 },
+      description: "Luxury Los Angeles hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, swimming pool, fine dining, providing an unforgettable experience in the heart of Los Angeles. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'InterContinental Los Angeles Downtown',
@@ -388,7 +422,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
       amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 34.0506, lng: -118.2598 }
+      coordinates: { lat: 34.0506, lng: -118.2598 },
+      description: "Premier Los Angeles hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Los Angeles. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The LINE LA',
@@ -399,7 +434,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
       amenities: ['On-site Restaurant', 'Pool', 'Free Wifi', 'Fitness Center', 'Spa'],
-      coordinates: { lat: 34.0614, lng: -118.3091 }
+      coordinates: { lat: 34.0614, lng: -118.3091 },
+      description: "Well-appointed hotel located in Los Angeles, Los Angeles. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'Ace Hotel Downtown Los Angeles',
@@ -410,7 +446,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
       amenities: ['Bar', 'On-site Restaurant', 'Free Wifi', 'Fitness Center', 'Pool'],
-      coordinates: { lat: 34.0456, lng: -118.2565 }
+      coordinates: { lat: 34.0456, lng: -118.2565 },
+      description: "Well-appointed hotel located in Los Angeles, Los Angeles. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'Hotel Figueroa',
@@ -421,7 +458,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
       amenities: ['Pool', 'On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center', 'Spa'],
-      coordinates: { lat: 34.0450, lng: -118.2622 }
+      coordinates: { lat: 34.0450, lng: -118.2622 },
+      description: "Well-appointed hotel located in Los Angeles, Los Angeles. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'Freehand Los Angeles',
@@ -432,7 +470,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
       amenities: ['Bar', 'On-site Restaurant', 'Pool', 'Free Wifi', 'Spa'],
-      coordinates: { lat: 34.0446, lng: -118.2605 }
+      coordinates: { lat: 34.0446, lng: -118.2605 },
+      description: "Well-appointed hotel located in Los Angeles, Los Angeles. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'SLS Hotel at Beverly Hills',
@@ -443,7 +482,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
       amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 34.0755, lng: -118.3759 }
+      coordinates: { lat: 34.0755, lng: -118.3759 },
+      description: "Premier Los Angeles hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Los Angeles. Ideal for both business and leisure travelers looking for a refined stay."
     }
   ],
   'Chicago': [
@@ -456,7 +496,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
       amenities: ['Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 41.8957, lng: -87.6251 }
+      coordinates: { lat: 41.8957, lng: -87.6251 },
+      description: "Luxury downtown Chicago hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, swimming pool, providing an unforgettable experience in the heart of Chicago. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'Four Seasons Hotel Chicago',
@@ -467,7 +508,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
       amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 41.8992, lng: -87.6262 }
+      coordinates: { lat: 41.8992, lng: -87.6262 },
+      description: "Luxury downtown Chicago hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, swimming pool, fine dining, providing an unforgettable experience in the heart of Chicago. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'The Langham, Chicago',
@@ -478,7 +520,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
       amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 41.8880, lng: -87.6263 }
+      coordinates: { lat: 41.8880, lng: -87.6263 },
+      description: "Luxury downtown Chicago hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, swimming pool, fine dining, providing an unforgettable experience in the heart of Chicago. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'The Ritz-Carlton, Chicago',
@@ -489,7 +532,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
       amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center', 'Bar'],
-      coordinates: { lat: 41.8979, lng: -87.6256 }
+      coordinates: { lat: 41.8979, lng: -87.6256 },
+      description: "Luxury downtown Chicago hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, swimming pool, fine dining, providing an unforgettable experience in the heart of Chicago. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'Park Hyatt Chicago',
@@ -500,7 +544,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
       amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 41.8978, lng: -87.6238 }
+      coordinates: { lat: 41.8978, lng: -87.6238 },
+      description: "Premier downtown Chicago hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Chicago. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Waldorf Astoria Chicago',
@@ -511,7 +556,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
       amenities: ['Spa', 'Pool', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 41.9006, lng: -87.6265 }
+      coordinates: { lat: 41.9006, lng: -87.6265 },
+      description: "Luxury downtown Chicago hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, swimming pool, providing an unforgettable experience in the heart of Chicago. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'The Gwen, a Luxury Collection Hotel',
@@ -522,7 +568,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 41.8920, lng: -87.6266 }
+      coordinates: { lat: 41.8920, lng: -87.6266 },
+      description: "Premier downtown Chicago hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Chicago. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Sofitel Chicago Magnificent Mile',
@@ -533,7 +580,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center', 'Spa'],
-      coordinates: { lat: 41.8981, lng: -87.6278 }
+      coordinates: { lat: 41.8981, lng: -87.6278 },
+      description: "Premier downtown Chicago hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Chicago. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Thompson Chicago',
@@ -544,7 +592,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
       amenities: ['Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 41.8996, lng: -87.6277 }
+      coordinates: { lat: 41.8996, lng: -87.6277 },
+      description: "Premier downtown Chicago hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Chicago. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Chicago Athletic Association',
@@ -555,7 +604,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
       amenities: ['Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 41.8814, lng: -87.6245 }
+      coordinates: { lat: 41.8814, lng: -87.6245 },
+      description: "Premier downtown Chicago hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Chicago. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Viceroy Chicago',
@@ -566,7 +616,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
       amenities: ['Bar', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 41.9034, lng: -87.6281 }
+      coordinates: { lat: 41.9034, lng: -87.6281 },
+      description: "Premier downtown Chicago hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Chicago. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Hoxton, Chicago',
@@ -577,7 +628,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi'],
-      coordinates: { lat: 41.8859, lng: -87.6488 }
+      coordinates: { lat: 41.8859, lng: -87.6488 },
+      description: "Well-appointed hotel located in downtown Chicago, Chicago. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'Kimpton Hotel Monaco Chicago',
@@ -588,7 +640,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
       amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 41.8866, lng: -87.6259 }
+      coordinates: { lat: 41.8866, lng: -87.6259 },
+      description: "Well-appointed hotel located in downtown Chicago, Chicago. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'Hotel EMC2',
@@ -599,7 +652,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 41.8933, lng: -87.6218 }
+      coordinates: { lat: 41.8933, lng: -87.6218 },
+      description: "Well-appointed hotel located in downtown Chicago, Chicago. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'Virgin Hotels Chicago',
@@ -610,7 +664,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
       amenities: ['Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 41.8863, lng: -87.6262 }
+      coordinates: { lat: 41.8863, lng: -87.6262 },
+      description: "Well-appointed hotel located in downtown Chicago, Chicago. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'The Robey',
@@ -621,7 +676,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi'],
-      coordinates: { lat: 41.9104, lng: -87.6777 }
+      coordinates: { lat: 41.9104, lng: -87.6777 },
+      description: "Well-appointed hotel located in downtown Chicago, Chicago. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'Ace Hotel Chicago',
@@ -632,7 +688,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 41.8878, lng: -87.6518 }
+      coordinates: { lat: 41.8878, lng: -87.6518 },
+      description: "Well-appointed hotel located in downtown Chicago, Chicago. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'Freehand Chicago',
@@ -643,7 +700,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
       amenities: ['Bar', 'On-site Restaurant', 'Free Wifi', 'Spa'],
-      coordinates: { lat: 41.8923, lng: -87.6279 }
+      coordinates: { lat: 41.8923, lng: -87.6279 },
+      description: "Comfortable hotel situated in downtown Chicago, Chicago. This property offers clean accommodations, essential amenities, and easy access to the city's main attractions. A great choice for budget-conscious travelers."
     },
     {
       name: 'Hotel Lincoln',
@@ -654,7 +712,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
       amenities: ['Free Wifi'],
-      coordinates: { lat: 41.9154, lng: -87.6352 }
+      coordinates: { lat: 41.9154, lng: -87.6352 },
+      description: "Well-appointed hotel located in downtown Chicago, Chicago. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'Pendry Chicago',
@@ -665,7 +724,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
       amenities: ['Bar', 'Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 41.8865, lng: -87.6243 }
+      coordinates: { lat: 41.8865, lng: -87.6243 },
+      description: "Premier downtown Chicago hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Chicago. Ideal for both business and leisure travelers looking for a refined stay."
     }
   ],
   'San Francisco': [
@@ -678,7 +738,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
       amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 37.7856, lng: -122.4053 }
+      coordinates: { lat: 37.7856, lng: -122.4053 },
+      description: "Luxury San Francisco hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, swimming pool, fine dining, providing an unforgettable experience in the heart of San Francisco. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'The Ritz-Carlton, San Francisco',
@@ -689,7 +750,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
       amenities: ['Spa', 'On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 37.7921, lng: -122.4106 }
+      coordinates: { lat: 37.7921, lng: -122.4106 },
+      description: "Luxury San Francisco hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, fine dining, providing an unforgettable experience in the heart of San Francisco. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'The St. Regis San Francisco',
@@ -700,7 +762,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
       amenities: ['Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 37.7856, lng: -122.4008 }
+      coordinates: { lat: 37.7856, lng: -122.4008 },
+      description: "Luxury San Francisco hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, fine dining, providing an unforgettable experience in the heart of San Francisco. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'Fairmont San Francisco',
@@ -711,7 +774,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
       amenities: ['Spa', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 37.7925, lng: -122.4106 }
+      coordinates: { lat: 37.7925, lng: -122.4106 },
+      description: "Premier San Francisco hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in San Francisco. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Palace Hotel, A Luxury Collection',
@@ -722,7 +786,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
       amenities: ['Bar', 'Pool', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 37.7883, lng: -122.4011 }
+      coordinates: { lat: 37.7883, lng: -122.4011 },
+      description: "Premier San Francisco hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in San Francisco. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Fairmont Heritage Place, Ghirardelli Square',
@@ -733,7 +798,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
       amenities: ['On-site Restaurant', 'Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 37.8058, lng: -122.4224 }
+      coordinates: { lat: 37.8058, lng: -122.4224 },
+      description: "Premier San Francisco hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in San Francisco. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Hotel Nikko San Francisco',
@@ -744,7 +810,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
       amenities: ['Pool', 'On-site Restaurant', 'Fitness Center', 'Free Wifi'],
-      coordinates: { lat: 37.7856, lng: -122.4094 }
+      coordinates: { lat: 37.7856, lng: -122.4094 },
+      description: "Premier San Francisco hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in San Francisco. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'InterContinental Mark Hopkins',
@@ -755,7 +822,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
       amenities: ['Fitness Center', 'Free Wifi'],
-      coordinates: { lat: 37.7923, lng: -122.4115 }
+      coordinates: { lat: 37.7923, lng: -122.4115 },
+      description: "Premier San Francisco hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in San Francisco. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Westin St. Francis',
@@ -766,7 +834,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 37.7877, lng: -122.4082 }
+      coordinates: { lat: 37.7877, lng: -122.4082 },
+      description: "Premier San Francisco hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in San Francisco. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Clift Royal Sonesta Hotel',
@@ -777,7 +846,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
       amenities: ['Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 37.7867, lng: -122.4109 }
+      coordinates: { lat: 37.7867, lng: -122.4109 },
+      description: "Premier San Francisco hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in San Francisco. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Hotel Zephyr',
@@ -788,7 +858,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
       amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 37.8082, lng: -122.4152 }
+      coordinates: { lat: 37.8082, lng: -122.4152 },
+      description: "Well-appointed hotel located in San Francisco, San Francisco. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'The Marker San Francisco',
@@ -799,7 +870,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 37.7867, lng: -122.4115 }
+      coordinates: { lat: 37.7867, lng: -122.4115 },
+      description: "Well-appointed hotel located in San Francisco, San Francisco. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'Hotel Zelos',
@@ -810,7 +882,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 37.7853, lng: -122.4043 }
+      coordinates: { lat: 37.7853, lng: -122.4043 },
+      description: "Well-appointed hotel located in San Francisco, San Francisco. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'Hotel Zetta',
@@ -821,7 +894,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
       amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 37.7839, lng: -122.4060 }
+      coordinates: { lat: 37.7839, lng: -122.4060 },
+      description: "Well-appointed hotel located in San Francisco, San Francisco. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'The Proper Hotel',
@@ -832,7 +906,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 37.7815, lng: -122.4115 }
+      coordinates: { lat: 37.7815, lng: -122.4115 },
+      description: "Premier San Francisco hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in San Francisco. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Hotel Vitale',
@@ -843,7 +918,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
       amenities: ['On-site Restaurant', 'Spa', 'Free Wifi', 'Fitness Center', 'Bar', 'Hot Tub'],
-      coordinates: { lat: 37.7937, lng: -122.3933 }
+      coordinates: { lat: 37.7937, lng: -122.3933 },
+      description: "Well-appointed hotel located in San Francisco, San Francisco. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'Omni San Francisco',
@@ -854,7 +930,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
       amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 37.7930, lng: -122.4034 }
+      coordinates: { lat: 37.7930, lng: -122.4034 },
+      description: "Well-appointed hotel located in San Francisco, San Francisco. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'Hotel Kabuki',
@@ -865,7 +942,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 37.7850, lng: -122.4309 }
+      coordinates: { lat: 37.7850, lng: -122.4309 },
+      description: "Well-appointed hotel located in San Francisco, San Francisco. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'The Phoenix Hotel',
@@ -876,7 +954,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
       amenities: ['Pool', 'On-site Restaurant', 'Free Wifi'],
-      coordinates: { lat: 37.7833, lng: -122.4188 }
+      coordinates: { lat: 37.7833, lng: -122.4188 },
+      description: "Comfortable hotel situated in San Francisco, San Francisco. This property offers clean accommodations, essential amenities, and easy access to the city's main attractions. A great choice for budget-conscious travelers."
     },
     {
       name: 'The Line San Francisco',
@@ -887,7 +966,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center', 'Spa'],
-      coordinates: { lat: 37.7814, lng: -122.4119 }
+      coordinates: { lat: 37.7814, lng: -122.4119 },
+      description: "Well-appointed hotel located in San Francisco, San Francisco. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     }
   ],
   'Miami': [
@@ -900,7 +980,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
       amenities: ['Bar', 'Spa', 'Pool', 'Free Wifi', 'On-site Restaurant', 'Fitness Center'],
-      coordinates: { lat: 25.8193, lng: -80.1240 }
+      coordinates: { lat: 25.8193, lng: -80.1240 },
+      description: "Premier Miami Beach hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Miami. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Faena Hotel Miami Beach',
@@ -911,7 +992,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
       amenities: ['Spa', 'Pool', 'On-site Restaurant', 'Free Wifi'],
-      coordinates: { lat: 25.8096, lng: -80.1229 }
+      coordinates: { lat: 25.8096, lng: -80.1229 },
+      description: "Premier Miami Beach hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Miami. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Setai, Miami Beach',
@@ -922,7 +1004,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
       amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 25.7913, lng: -80.1300 }
+      coordinates: { lat: 25.7913, lng: -80.1300 },
+      description: "Premier Miami Beach hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Miami. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Four Seasons Hotel Miami',
@@ -933,7 +1016,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
       amenities: ['Bar', 'Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 25.7617, lng: -80.1918 }
+      coordinates: { lat: 25.7617, lng: -80.1918 },
+      description: "Luxury Miami Beach hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, swimming pool, providing an unforgettable experience in the heart of Miami. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'Mandarin Oriental, Miami',
@@ -944,7 +1028,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
       amenities: ['On-site Restaurant', 'Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 25.7658, lng: -80.1867 }
+      coordinates: { lat: 25.7658, lng: -80.1867 },
+      description: "Luxury Miami Beach hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, swimming pool, fine dining, providing an unforgettable experience in the heart of Miami. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'The Ritz-Carlton, South Beach',
@@ -955,7 +1040,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
       amenities: ['Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 25.7809, lng: -80.1300 }
+      coordinates: { lat: 25.7809, lng: -80.1300 },
+      description: "Luxury Miami Beach hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, swimming pool, providing an unforgettable experience in the heart of Miami. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'W South Beach',
@@ -966,7 +1052,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
       amenities: ['Bar', 'Pool', 'Free Wifi', 'Fitness Center', 'Spa'],
-      coordinates: { lat: 25.7932, lng: -80.1299 }
+      coordinates: { lat: 25.7932, lng: -80.1299 },
+      description: "Premier Miami Beach hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Miami. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'SLS South Beach',
@@ -977,7 +1064,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
       amenities: ['On-site Restaurant', 'Pool', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 25.7900, lng: -80.1301 }
+      coordinates: { lat: 25.7900, lng: -80.1301 },
+      description: "Premier Miami Beach hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Miami. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: '1 Hotel South Beach',
@@ -988,7 +1076,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
       amenities: ['Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 25.7946, lng: -80.1298 }
+      coordinates: { lat: 25.7946, lng: -80.1298 },
+      description: "Premier Miami Beach hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Miami. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Betsy Hotel',
@@ -999,7 +1088,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
       amenities: ['On-site Restaurant', 'Pool', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 25.7810, lng: -80.1299 }
+      coordinates: { lat: 25.7810, lng: -80.1299 },
+      description: "Premier Miami Beach hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Miami. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Soho Beach House',
@@ -1010,7 +1100,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
       amenities: ['On-site Restaurant', 'Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 25.8182, lng: -80.1241 }
+      coordinates: { lat: 25.8182, lng: -80.1241 },
+      description: "Premier Miami Beach hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Miami. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Confidante Miami Beach',
@@ -1021,7 +1112,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
       amenities: ['Pool', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 25.8146, lng: -80.1234 }
+      coordinates: { lat: 25.8146, lng: -80.1234 },
+      description: "Well-appointed hotel located in Miami Beach, Miami. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'The Palms Hotel & Spa',
@@ -1032,7 +1124,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
       amenities: ['On-site Restaurant', 'Spa', 'Pool', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 25.8073, lng: -80.1227 }
+      coordinates: { lat: 25.8073, lng: -80.1227 },
+      description: "Well-appointed hotel located in Miami Beach, Miami. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'The Shore Club',
@@ -1043,7 +1136,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
       amenities: ['Bar', 'On-site Restaurant', 'Pool', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 25.7910, lng: -80.1300 }
+      coordinates: { lat: 25.7910, lng: -80.1300 },
+      description: "Premier Miami Beach hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Miami. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Kimpton EPIC Hotel',
@@ -1054,7 +1148,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
       amenities: ['On-site Restaurant', 'Pool', 'Spa', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 25.7705, lng: -80.1871 }
+      coordinates: { lat: 25.7705, lng: -80.1871 },
+      description: "Premier Miami Beach hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Miami. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Nautilus, A SIXTY Hotel',
@@ -1065,7 +1160,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
       amenities: ['Pool', 'Free Wifi', 'Fitness Center', 'On-site Restaurant'],
-      coordinates: { lat: 25.7896, lng: -80.1301 }
+      coordinates: { lat: 25.7896, lng: -80.1301 },
+      description: "Premier Miami Beach hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Miami. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Delano South Beach',
@@ -1076,7 +1172,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
       amenities: ['On-site Restaurant', 'Pool', 'Spa', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 25.7898, lng: -80.1301 }
+      coordinates: { lat: 25.7898, lng: -80.1301 },
+      description: "Premier Miami Beach hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Miami. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Miami Beach EDITION',
@@ -1087,7 +1184,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
       amenities: ['Bar', 'Pool', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 25.8066, lng: -80.1227 }
+      coordinates: { lat: 25.8066, lng: -80.1227 },
+      description: "Premier Miami Beach hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Miami. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Hotel Victor',
@@ -1098,7 +1196,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
       amenities: ['Pool', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 25.7806, lng: -80.1299 }
+      coordinates: { lat: 25.7806, lng: -80.1299 },
+      description: "Well-appointed hotel located in Miami Beach, Miami. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'Royal Palm South Beach',
@@ -1109,7 +1208,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
       amenities: ['Pool', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 25.7876, lng: -80.1302 }
+      coordinates: { lat: 25.7876, lng: -80.1302 },
+      description: "Premier Miami Beach hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Miami. Ideal for both business and leisure travelers looking for a refined stay."
     }
   ],
   'Boston': [
@@ -1122,7 +1222,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
       amenities: ['Spa', 'Pool', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 42.3519, lng: -71.0707 }
+      coordinates: { lat: 42.3519, lng: -71.0707 },
+      description: "Luxury downtown Boston hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, swimming pool, providing an unforgettable experience in the heart of Boston. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'The Langham, Boston',
@@ -1133,7 +1234,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
       amenities: ['Bar', 'Spa', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 42.3558, lng: -71.0539 }
+      coordinates: { lat: 42.3558, lng: -71.0539 },
+      description: "Luxury downtown Boston hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, providing an unforgettable experience in the heart of Boston. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'Boston Harbor Hotel',
@@ -1144,7 +1246,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
       amenities: ['Bar', 'Spa', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 42.3561, lng: -71.0502 }
+      coordinates: { lat: 42.3561, lng: -71.0502 },
+      description: "Premier downtown Boston hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Boston. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Mandarin Oriental, Boston',
@@ -1155,7 +1258,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
       amenities: ['Bar', 'Spa', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 42.3478, lng: -71.0827 }
+      coordinates: { lat: 42.3478, lng: -71.0827 },
+      description: "Luxury downtown Boston hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, providing an unforgettable experience in the heart of Boston. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'The Ritz-Carlton, Boston',
@@ -1166,7 +1270,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
       amenities: ['On-site Restaurant', 'Spa', 'Free Wifi', 'Fitness Center', 'Bar'],
-      coordinates: { lat: 42.3531, lng: -71.0623 }
+      coordinates: { lat: 42.3531, lng: -71.0623 },
+      description: "Luxury downtown Boston hotel offering world-class amenities and exceptional service. This prestigious 5-star property combines elegant accommodations with modern conveniences with full-service spa, fine dining, providing an unforgettable experience in the heart of Boston. Perfect for discerning travelers seeking the finest in hospitality."
     },
     {
       name: 'XV Beacon',
@@ -1177,7 +1282,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
       amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center', 'Bar'],
-      coordinates: { lat: 42.3586, lng: -71.0633 }
+      coordinates: { lat: 42.3586, lng: -71.0633 },
+      description: "Premier downtown Boston hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Boston. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Liberty, A Luxury Collection Hotel',
@@ -1188,7 +1294,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 42.3612, lng: -71.0683 }
+      coordinates: { lat: 42.3612, lng: -71.0683 },
+      description: "Premier downtown Boston hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Boston. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Fairmont Copley Plaza',
@@ -1199,7 +1306,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-4.jpg',
       images: ['/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg'],
       amenities: ['Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 42.3495, lng: -71.0771 }
+      coordinates: { lat: 42.3495, lng: -71.0771 },
+      description: "Premier downtown Boston hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Boston. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Newbury Boston',
@@ -1210,7 +1318,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-5.jpg',
       images: ['/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg'],
       amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center', 'Spa'],
-      coordinates: { lat: 42.3536, lng: -71.0708 }
+      coordinates: { lat: 42.3536, lng: -71.0708 },
+      description: "Premier downtown Boston hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Boston. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Eliot Hotel',
@@ -1221,7 +1330,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-6.jpg',
       images: ['/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg'],
       amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 42.3495, lng: -71.0884 }
+      coordinates: { lat: 42.3495, lng: -71.0884 },
+      description: "Premier downtown Boston hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Boston. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Omni Parker House',
@@ -1232,7 +1342,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-7.jpg',
       images: ['/images/hotels/generic-7.jpg', '/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg'],
       amenities: ['On-site Restaurant', 'Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 42.3579, lng: -71.0599 }
+      coordinates: { lat: 42.3579, lng: -71.0599 },
+      description: "Well-appointed hotel located in downtown Boston, Boston. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'The Lenox Hotel',
@@ -1243,7 +1354,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-8.jpg',
       images: ['/images/hotels/generic-8.jpg', '/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg'],
       amenities: ['Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 42.3493, lng: -71.0794 }
+      coordinates: { lat: 42.3493, lng: -71.0794 },
+      description: "Well-appointed hotel located in downtown Boston, Boston. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'Hotel Commonwealth',
@@ -1254,7 +1366,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-9.jpg',
       images: ['/images/hotels/generic-9.jpg', '/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg'],
       amenities: ['Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 42.3487, lng: -71.0969 }
+      coordinates: { lat: 42.3487, lng: -71.0969 },
+      description: "Premier downtown Boston hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Boston. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'Omni Boston Hotel at the Seaport',
@@ -1265,7 +1378,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-10.jpg',
       images: ['/images/hotels/generic-10.jpg', '/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg'],
       amenities: ['Pool', 'Spa', 'On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 42.3479, lng: -71.0421 }
+      coordinates: { lat: 42.3479, lng: -71.0421 },
+      description: "Premier downtown Boston hotel featuring sophisticated accommodations and outstanding service. This 5-star property offers well-appointed rooms, excellent amenities, and a prime location in Boston. Ideal for both business and leisure travelers looking for a refined stay."
     },
     {
       name: 'The Godfrey Hotel Boston',
@@ -1276,7 +1390,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-11.jpg',
       images: ['/images/hotels/generic-11.jpg', '/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg'],
       amenities: ['Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 42.3544, lng: -71.0631 }
+      coordinates: { lat: 42.3544, lng: -71.0631 },
+      description: "Well-appointed hotel located in downtown Boston, Boston. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'The Bostonian Boston',
@@ -1287,7 +1402,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-12.jpg',
       images: ['/images/hotels/generic-12.jpg', '/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg'],
       amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 42.3602, lng: -71.0556 }
+      coordinates: { lat: 42.3602, lng: -71.0556 },
+      description: "Well-appointed hotel located in downtown Boston, Boston. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'citizenM Boston North Station',
@@ -1298,7 +1414,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-13.jpg',
       images: ['/images/hotels/generic-13.jpg', '/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg'],
       amenities: ['Bar', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 42.3661, lng: -71.0621 }
+      coordinates: { lat: 42.3661, lng: -71.0621 },
+      description: "Well-appointed hotel located in downtown Boston, Boston. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'The Verb Hotel',
@@ -1309,7 +1426,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-1.jpg',
       images: ['/images/hotels/generic-1.jpg', '/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg'],
       amenities: ['On-site Restaurant', 'Pool', 'Free Wifi'],
-      coordinates: { lat: 42.3473, lng: -71.1007 }
+      coordinates: { lat: 42.3473, lng: -71.1007 },
+      description: "Well-appointed hotel located in downtown Boston, Boston. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     },
     {
       name: 'The Revolution Hotel',
@@ -1320,7 +1438,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-2.jpg',
       images: ['/images/hotels/generic-2.jpg', '/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg'],
       amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 42.3507, lng: -71.0721 }
+      coordinates: { lat: 42.3507, lng: -71.0721 },
+      description: "Comfortable hotel situated in downtown Boston, Boston. This property offers clean accommodations, essential amenities, and easy access to the city's main attractions. A great choice for budget-conscious travelers."
     },
     {
       name: 'The Boxer Boston',
@@ -1331,7 +1450,8 @@ const hotelDatabase: Record<string, Omit<Hotel, 'id' | 'pricePerNight' | 'review
       image: '/images/hotels/generic-3.jpg',
       images: ['/images/hotels/generic-3.jpg', '/images/hotels/generic-4.jpg', '/images/hotels/generic-5.jpg', '/images/hotels/generic-6.jpg', '/images/hotels/generic-7.jpg'],
       amenities: ['On-site Restaurant', 'Free Wifi', 'Fitness Center'],
-      coordinates: { lat: 42.3639, lng: -71.0625 }
+      coordinates: { lat: 42.3639, lng: -71.0625 },
+      description: "Well-appointed hotel located in downtown Boston, Boston. This 4-star property offers comfortable accommodations, modern amenities, and convenient access to local attractions, dining, and entertainment. Perfect for travelers seeking quality and value."
     }
   ]
 }

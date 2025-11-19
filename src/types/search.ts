@@ -48,6 +48,7 @@ export interface Hotel {
     lat: number
     lng: number
   }
+  description: string
 }
 
 export interface Room {

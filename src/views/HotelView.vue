@@ -429,7 +429,7 @@ export default {
 
             <div class="about-section">
               <h2>About this property</h2>
-              <p class="description">City-center hotel within walking distance of Merchandise Mart.</p>
+              <p class="description">{{ hotel.description }}</p>
               <AmenityPills :amenities="hotel.amenities" />
             </div>
           </div>
