@@ -56,6 +56,13 @@ export const useSearchStore = defineStore('search', {
         bookingDate: new Date()
       }
       this.bookings.push(newBooking)
+    },
+
+    removeBooking(bookingId: string) {
+      const index = this.bookings.findIndex(b => b.id === bookingId)
+      if (index !== -1) {
+        this.bookings.splice(index, 1)
+      }
     }
   },
 

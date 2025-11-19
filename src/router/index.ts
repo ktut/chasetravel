@@ -36,7 +36,7 @@ const router = createRouter({
       path: '/mybookings',
       name: 'mybookings',
       component: MyBookings,
-      meta: { depth: 1 }
+      meta: { depth: 4 }
     }
   ]
 })

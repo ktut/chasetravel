@@ -7,7 +7,6 @@ export default {
   data() {
     return {
       showPastBookings: false,
-      showContactForm: false,
       contactForm: {
         name: '',
         email: '',
@@ -35,7 +34,10 @@ export default {
         }
         return true
       }).sort((a, b) => {
-        return new Date(a.bookingDate).getTime() - new Date(b.bookingDate).getTime()
+        // Sort by actual reservation date (check-in for hotels, departure for flights)
+        const dateA = a.searchData?.checkIn ? new Date(a.searchData.checkIn) : new Date(a.bookingDate)
+        const dateB = b.searchData?.checkIn ? new Date(b.searchData.checkIn) : new Date(b.bookingDate)
+        return dateA.getTime() - dateB.getTime()
       })
     },
     pastBookings(): Booking[] {
@@ -50,7 +52,10 @@ export default {
         }
         return false
       }).sort((a, b) => {
-        return new Date(b.bookingDate).getTime() - new Date(a.bookingDate).getTime()
+        // Sort by actual reservation date (check-in for hotels, departure for flights), most recent first
+        const dateA = a.searchData?.checkIn ? new Date(a.searchData.checkIn) : new Date(a.bookingDate)
+        const dateB = b.searchData?.checkIn ? new Date(b.searchData.checkIn) : new Date(b.bookingDate)
+        return dateB.getTime() - dateA.getTime()
       })
     },
     hasBookings(): boolean {
@@ -105,8 +110,12 @@ export default {
     },
     submitContactForm() {
       alert('Contact form submitted! (This is a placeholder - not functional yet)')
-      this.showContactForm = false
       this.contactForm = { name: '', email: '', subject: '', message: '' }
+    },
+    cancelBooking(bookingId: string) {
+      if (confirm('Are you sure you want to cancel this booking? This action cannot be undone.')) {
+        this.searchStore.removeBooking(bookingId)
+      }
     }
   }
 }
@@ -151,10 +160,17 @@ export default {
                 <div class="booking-details">
                   <div class="flight-info">
                     <h3>{{ booking.flight.departure.airport }} → {{ booking.flight.arrival.airport }}</h3>
+                    <div v-if="booking.searchData" class="reservation-date-emphasis">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                      </svg>
+                      Departure: {{ formatDate(booking.searchData.checkIn) }}
+                    </div>
                     <div class="flight-meta">
                       <span>{{ booking.flight.airline }} {{ booking.flight.flightNumber }}</span>
-                      <span class="separator">•</span>
-                      <span v-if="booking.searchData">{{ formatShortDate(booking.searchData.checkIn) }}</span>
                     </div>
                     <div class="time-info">
                       <span class="time">{{ booking.flight.departure.time }}</span>
@@ -162,8 +178,11 @@ export default {
                       <span class="time">{{ booking.flight.arrival.time }}</span>
                     </div>
                   </div>
-                  <div class="booking-price">
-                    {{ formatPrice(booking.flight.price) }}
+                  <div class="booking-price-actions">
+                    <div class="booking-price">
+                      {{ formatPrice(booking.flight.price) }}
+                    </div>
+                    <button @click="cancelBooking(booking.id)" class="btn-cancel">Cancel Booking</button>
                   </div>
                 </div>
               </div>
@@ -190,15 +209,23 @@ export default {
                     <div class="hotel-stars">
                       <span v-for="star in booking.hotel.stars" :key="star" class="star">★</span>
                     </div>
-                    <div v-if="booking.searchData" class="hotel-dates">
-                      <span>{{ formatShortDate(booking.searchData.checkIn) }} - {{ formatShortDate(booking.searchData.checkOut) }}</span>
-                      <span class="separator">•</span>
-                      <span>{{ calculateNights(booking.searchData.checkIn, booking.searchData.checkOut) }} night{{ calculateNights(booking.searchData.checkIn, booking.searchData.checkOut) > 1 ? 's' : '' }}</span>
+                    <div v-if="booking.searchData" class="reservation-date-emphasis">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                      </svg>
+                      {{ formatDate(booking.searchData.checkIn) }} - {{ formatDate(booking.searchData.checkOut) }}
+                      <span class="nights-badge">{{ calculateNights(booking.searchData.checkIn, booking.searchData.checkOut) }} night{{ calculateNights(booking.searchData.checkIn, booking.searchData.checkOut) > 1 ? 's' : '' }}</span>
                     </div>
                     <div v-if="booking.room" class="room-name">{{ booking.room.name }}</div>
                   </div>
-                  <div class="booking-price">
-                    {{ formatPrice(getBookingPrice(booking)) }}
+                  <div class="booking-price-actions">
+                    <div class="booking-price">
+                      {{ formatPrice(getBookingPrice(booking)) }}
+                    </div>
+                    <button @click="cancelBooking(booking.id)" class="btn-cancel">Cancel Booking</button>
                   </div>
                 </div>
               </div>
@@ -231,14 +258,24 @@ export default {
                   <div class="booking-details">
                     <div class="flight-info">
                       <h3>{{ booking.flight.departure.airport }} → {{ booking.flight.arrival.airport }}</h3>
+                      <div v-if="booking.searchData" class="reservation-date-emphasis">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                          <line x1="16" y1="2" x2="16" y2="6"/>
+                          <line x1="8" y1="2" x2="8" y2="6"/>
+                          <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        Departure: {{ formatDate(booking.searchData.checkIn) }}
+                      </div>
                       <div class="flight-meta">
                         <span>{{ booking.flight.airline }} {{ booking.flight.flightNumber }}</span>
-                        <span class="separator">•</span>
-                        <span v-if="booking.searchData">{{ formatShortDate(booking.searchData.checkIn) }}</span>
                       </div>
                     </div>
-                    <div class="booking-price">
-                      {{ formatPrice(booking.flight.price) }}
+                    <div class="booking-price-actions">
+                      <div class="booking-price">
+                        {{ formatPrice(booking.flight.price) }}
+                      </div>
+                      <button @click="cancelBooking(booking.id)" class="btn-cancel">Cancel Booking</button>
                     </div>
                   </div>
                 </div>
@@ -262,12 +299,22 @@ export default {
                     <div class="hotel-info">
                       <h3>{{ booking.hotel.name }}</h3>
                       <div class="hotel-location">{{ booking.hotel.location }}</div>
-                      <div v-if="booking.searchData" class="hotel-dates">
-                        <span>{{ formatShortDate(booking.searchData.checkIn) }} - {{ formatShortDate(booking.searchData.checkOut) }}</span>
+                      <div v-if="booking.searchData" class="reservation-date-emphasis">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                          <line x1="16" y1="2" x2="16" y2="6"/>
+                          <line x1="8" y1="2" x2="8" y2="6"/>
+                          <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        {{ formatDate(booking.searchData.checkIn) }} - {{ formatDate(booking.searchData.checkOut) }}
+                        <span class="nights-badge">{{ calculateNights(booking.searchData.checkIn, booking.searchData.checkOut) }} night{{ calculateNights(booking.searchData.checkIn, booking.searchData.checkOut) > 1 ? 's' : '' }}</span>
                       </div>
                     </div>
-                    <div class="booking-price">
-                      {{ formatPrice(getBookingPrice(booking)) }}
+                    <div class="booking-price-actions">
+                      <div class="booking-price">
+                        {{ formatPrice(getBookingPrice(booking)) }}
+                      </div>
+                      <button @click="cancelBooking(booking.id)" class="btn-cancel">Cancel Booking</button>
                     </div>
                   </div>
                 </div>
@@ -295,12 +342,11 @@ export default {
               </div>
               <div class="support-item prominent">
                 <div class="support-label">Chase Sapphire Reserve Support</div>
+                <div class="support-sublabel reserve-label">For Chase Sapphire Reserve Cardholders</div>
                 <a href="tel:800-436-7970" class="support-link phone">800-436-7970</a>
                 <div class="support-sublabel">USA</div>
-              </div>
-              <div class="support-item">
-                <div class="support-label">International Support</div>
-                <a href="tel:614-776-7050" class="support-link phone">614-776-7050</a>
+                <a href="tel:614-776-7050" class="support-link phone secondary-phone">614-776-7050</a>
+                <div class="support-sublabel">International</div>
               </div>
             </div>
 
@@ -334,15 +380,15 @@ export default {
 
             <!-- Contact Form -->
             <div class="support-section">
-              <button @click="showContactForm = !showContactForm" class="contact-form-toggle">
+              <h3>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
                   <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
                 </svg>
-                {{ showContactForm ? 'Hide Contact Form' : 'Send Us a Message' }}
-              </button>
+                Send Us a Message
+              </h3>
 
-              <form v-if="showContactForm" @submit.prevent="submitContactForm" class="contact-form">
+              <form @submit.prevent="submitContactForm" class="contact-form">
                 <div class="form-group">
                   <label for="name">Name</label>
                   <input type="text" id="name" v-model="contactForm.name" required />
@@ -561,6 +607,35 @@ export default {
     color: $color-primary;
   }
 
+  .reservation-date-emphasis {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: #f0f7ff;
+    border: 1px solid #d0e7ff;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $color-accent;
+    margin-bottom: 0.75rem;
+
+    svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .nights-badge {
+      margin-left: 0.5rem;
+      padding: 0.25rem 0.75rem;
+      background: white;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      color: $color-primary;
+    }
+  }
+
   .flight-meta {
     display: flex;
     align-items: center;
@@ -639,6 +714,35 @@ export default {
     margin-bottom: 0.5rem;
   }
 
+  .reservation-date-emphasis {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: #f0f7ff;
+    border: 1px solid #d0e7ff;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $color-accent;
+    margin-bottom: 0.75rem;
+
+    svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .nights-badge {
+      padding: 0.25rem 0.75rem;
+      background: white;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      color: $color-primary;
+    }
+  }
+
   .hotel-dates {
     display: flex;
     align-items: center;
@@ -659,6 +763,18 @@ export default {
   }
 }
 
+.booking-price-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+
+  @media (max-width: 768px) {
+    align-items: flex-start;
+    width: 100%;
+  }
+}
+
 .booking-price {
   font-size: 1.5rem;
   font-weight: 700;
@@ -667,6 +783,29 @@ export default {
 
   @media (max-width: 768px) {
     font-size: 1.25rem;
+  }
+}
+
+.btn-cancel {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  background: white;
+  color: #666;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+
+  &:hover {
+    background: #fee;
+    border-color: #dc3545;
+    color: #dc3545;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
   }
 }
 
@@ -804,6 +943,14 @@ export default {
   font-size: 0.75rem;
   color: #999;
   margin-top: 0.25rem;
+
+  &.reserve-label {
+    font-size: 0.8rem;
+    color: $color-accent;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    margin-top: 0;
+  }
 }
 
 .support-link {
@@ -818,6 +965,12 @@ export default {
 
     &:hover {
       color: #004a94;
+    }
+
+    &.secondary-phone {
+      font-size: 1.125rem;
+      margin-top: 0.75rem;
+      display: block;
     }
   }
 
