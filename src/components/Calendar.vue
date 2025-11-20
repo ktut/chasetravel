@@ -943,6 +943,11 @@ export default {
     gap: 8px;
   }
 
+  // On larger containers, align date inputs with calendar width
+  @container calendar (min-width: 700px) {
+    max-width: 587px; 
+  }
+
   .date-input {
     border: 1px solid #d0d0d0;
     border-radius: 4px;
