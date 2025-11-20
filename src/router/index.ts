@@ -4,6 +4,7 @@ import ResultsView from '../views/ResultsView.vue'
 import Confirmation from '../views/Confirmation.vue'
 import HotelView from '../views/HotelView.vue'
 import MyBookings from '../views/MyBookings.vue'
+import ComponentsView from '../views/ComponentsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,12 @@ const router = createRouter({
       name: 'mybookings',
       component: MyBookings,
       meta: { depth: 4 }
+    },
+    {
+      path: '/components',
+      name: 'components',
+      component: ComponentsView,
+      meta: { depth: 1 }
     }
   ]
 })

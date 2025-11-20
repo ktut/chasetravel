@@ -183,6 +183,28 @@ button {
   }
 }
 
+.btn-tertiary {
+  @extend .btn;
+  background: transparent;
+  color: $color-text;
+  border: none;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  padding: 8px 16px;
+
+  &:hover:not(:disabled) {
+    text-decoration-color: $color-accent;
+    color: $color-accent;
+    background: transparent;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    text-decoration: none;
+  }
+}
+
 // Route Transitions - Slide effect (forward navigation)
 .slide-enter-active,
 .slide-leave-active {
