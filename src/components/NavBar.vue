@@ -130,6 +130,40 @@ export default {
           />
         </div>
 
+        <!-- My Bookings Button (shown after sign in) -->
+        <RouterLink
+          v-if="isSignedIn"
+          to="/mybookings"
+          class="navbar__bookings-btn"
+        >
+          <span class="navbar__bookings-text">My Bookings</span>
+          <svg class="navbar__bookings-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <circle
+              cx="12"
+              cy="12"
+              r="9"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <circle
+              cx="12"
+              cy="10"
+              r="3"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M6.5 18.5C7.5 16.5 9.5 15 12 15C14.5 15 16.5 16.5 17.5 18.5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </RouterLink>
+
         <!-- Sign Out Button (shown after sign in) -->
         <button
           v-if="isSignedIn"
@@ -326,6 +360,42 @@ export default {
     color: #0a8a4e;
   }
 
+  &__bookings-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #000;
+    background: white;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    animation: slideIn 0.3s ease-out;
+    white-space: nowrap;
+
+    &:hover {
+      border-color: #005eb8;
+      background: rgba(0, 94, 184, 0.05);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  &__bookings-text {
+    display: inline;
+  }
+
+  &__bookings-icon {
+    display: none;
+    width: 20px;
+    height: 20px;
+  }
+
   &__icon-btn {
     background: none;
     border: none;
@@ -373,6 +443,17 @@ export default {
   }
 }
 
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 @media (max-width: 768px) {
   .navbar {
     &__container {
@@ -406,8 +487,25 @@ export default {
       padding: 0.375rem 0.75rem;
     }
 
+    &__card-number {
+      display: none;
+    }
+
     &__points-text {
       font-size: 0.8125rem;
+    }
+
+    &__bookings-btn {
+      padding: 0.5rem;
+      min-width: auto;
+    }
+
+    &__bookings-text {
+      display: none;
+    }
+
+    &__bookings-icon {
+      display: block;
     }
 
     &__right {

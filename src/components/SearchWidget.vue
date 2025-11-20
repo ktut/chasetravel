@@ -542,10 +542,6 @@ export default {
           {{ submitButtonText }}
         </button>
       </div>
-
-      <router-link v-if="searchStore.isSignedIn" to="/mybookings" class="bookings-btn btn-outline">
-        My Bookings
-      </router-link>
     </div>
     </div>
   </div>
@@ -742,10 +738,6 @@ export default {
 }
 
 .submit-section {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
   .main-actions {
     display: flex;
     justify-content: flex-end;
@@ -755,31 +747,6 @@ export default {
     @media (max-width: 768px) {
       flex-direction: column;
       align-items: stretch;
-    }
-  }
-
-  .bookings-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 16px;
-    font-size: 16px;
-    white-space: nowrap;
-    text-decoration: none;
-    background: white;
-    color: $color-text;
-    border-color: $color-light-grey;
-    align-self: flex-end;
-
-    &:hover {
-      border-color: $color-accent;
-      background: white;
-      color: $color-text;
-    }
-
-    @media (max-width: 768px) {
-      align-self: stretch;
-      width: 100%;
     }
   }
 
