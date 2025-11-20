@@ -534,10 +534,10 @@ export default {
 .hotel-view {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 16rem 1.5rem 2rem;
+  padding: 7rem 1.5rem 2rem;
 
   @media (max-width: 768px) {
-    padding: 11rem 1rem 1rem;
+    padding: 7rem 1rem 1rem;
   }
 }
 

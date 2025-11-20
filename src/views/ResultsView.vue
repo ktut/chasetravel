@@ -104,7 +104,7 @@ export default {
 <style lang="scss" scoped>
 .search-view {
   background: white;
-  padding-top: 200px;
+  padding-top: 2rem;
 
   @media (max-width: $breakpoint-mobile) {
     padding-top: 170px;

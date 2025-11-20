@@ -916,6 +916,11 @@ export default {
 
 <style lang="scss" scoped>
 
+.calendar {
+  container-type: inline-size;
+  container-name: calendar;
+}
+
 .date-inputs {
   display: flex;
   gap: 16px;
@@ -1027,13 +1032,16 @@ export default {
 }
 
 .calendar-grid {
-  display: flex;
-  gap: 24px;
   margin-bottom: 16px;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
 }
 
 .month-view {
-  flex: 1;
+  flex: 0 0 auto;
+  width: 100%;
+  min-width: 280px;
+  max-width: 400px;
 }
 
 .month-header {
@@ -1106,6 +1114,7 @@ export default {
 
   .day {
     aspect-ratio: 1;
+    min-height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1252,10 +1261,59 @@ export default {
 // Desktop styles - show by default
 .desktop-calendar {
   display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: slideDown 0.25s ease-out;
+  transform-origin: top;
+  max-height: 400px;
+  transition: max-height 0.3s ease-out;
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+      max-height: 0;
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+      max-height: 400px;
+    }
+  }
+
+  // Container query for larger containers - show months side by side
+  @container calendar (min-width: 700px) {
+    flex-direction: row;
+    gap: 24px;
+    max-height: 400px;
+
+    .month-view {
+      width: auto;
+
+      &:last-child {
+        display: block;
+      }
+    }
+  }
+
+  // Default: hide second month on smaller containers
+  .month-view:last-child {
+    display: none;
+  }
 }
 
 .desktop-actions {
   display: flex;
+  animation: fadeIn 0.3s ease-out 0.1s both;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }
 
 @media (max-width: 768px) {

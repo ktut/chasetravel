@@ -771,11 +771,11 @@ export default {
 .confirmation-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 16rem 1.5rem;
+  padding: 7rem 1.5rem;
 
   @media (max-width: 768px) {
     max-width: 900px;
-    padding: 11rem 1rem 1rem;
+    padding: 12rem 1rem 1rem;
   }
 }
 
