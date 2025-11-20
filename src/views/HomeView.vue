@@ -184,8 +184,8 @@ export default {
 
 .search-section {
   position: fixed;
-  right: 2rem;
-  bottom: 20rem;
+  right: 3rem;
+  top: 15vh;
   .search-widget-align {
     max-width: 375px;
   }

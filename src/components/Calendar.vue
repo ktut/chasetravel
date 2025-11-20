@@ -558,9 +558,10 @@ export default {
       return date < this.today
     },
     formatDateShort(date: Date): string {
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-      return `${months[date.getMonth()]} ${String(date.getDate()).padStart(2, '0')}`
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const day = String(date.getDate()).padStart(2, '0')
+      const year = String(date.getFullYear()).slice(-2)
+      return `${month}/${day}/${year}`
     },
     previousMonth() {
       if (this.currentMonth === 0) {
@@ -624,6 +625,92 @@ export default {
 
       const date = new Date(dateInfo.year, dateInfo.month, dateInfo.date)
       return getDayValueCategory(date)
+    },
+    parseAndSetCheckInDate(event: Event) {
+      const input = event.target as HTMLInputElement
+      const value = input.value.trim()
+
+      // Try to parse MM/DD/YY or MM/DD/YYYY format
+      const parts = value.split('/')
+      if (parts.length === 3) {
+        const month = parseInt(parts[0]) - 1 // 0-indexed
+        const day = parseInt(parts[1])
+        let year = parseInt(parts[2])
+
+        // Handle 2-digit year
+        if (year < 100) {
+          year += 2000
+        }
+
+        // Validate the date
+        if (month >= 0 && month <= 11 && day >= 1 && day <= 31 && year >= 2000) {
+          const newDate = new Date(year, month, day)
+
+          // Don't allow past dates
+          if (newDate >= this.today) {
+            this.checkIn = newDate
+            this.currentMonth = newDate.getMonth()
+            this.currentYear = newDate.getFullYear()
+
+            // If check-out exists and is before new check-in, clear it
+            if (this.checkOut && this.checkOut < newDate) {
+              this.checkOut = null
+            }
+
+            // Validate flexibility options
+            this.validateFlexibilityOptions()
+          }
+        }
+      }
+
+      // Restore formatted value
+      if (this.checkIn) {
+        input.value = this.checkInFormatted
+      }
+    },
+    parseAndSetCheckOutDate(event: Event) {
+      const input = event.target as HTMLInputElement
+      const value = input.value.trim()
+
+      // Try to parse MM/DD/YY or MM/DD/YYYY format
+      const parts = value.split('/')
+      if (parts.length === 3) {
+        const month = parseInt(parts[0]) - 1 // 0-indexed
+        const day = parseInt(parts[1])
+        let year = parseInt(parts[2])
+
+        // Handle 2-digit year
+        if (year < 100) {
+          year += 2000
+        }
+
+        // Validate the date
+        if (month >= 0 && month <= 11 && day >= 1 && day <= 31 && year >= 2000) {
+          const newDate = new Date(year, month, day)
+
+          // Don't allow past dates or dates before check-in
+          if (newDate >= this.today && (!this.checkIn || newDate > this.checkIn)) {
+            this.checkOut = newDate
+
+            // Validate flexibility options
+            this.validateFlexibilityOptions()
+
+            // Emit the date range
+            this.$emit('date-range-selected', {
+              checkIn: this.checkIn,
+              checkOut: this.checkOut
+            })
+
+            // Close the calendar
+            this.closeCalendar()
+          }
+        }
+      }
+
+      // Restore formatted value
+      if (this.checkOut) {
+        input.value = this.checkOutFormatted
+      }
     }
   }
 }
@@ -633,10 +720,15 @@ export default {
   <div class="calendar">
     <div class="date-inputs">
       <div class="date-input-wrapper">
-        <div class="date-input" @click="openCalendar" tabindex="0">
-          <div v-if="!checkIn" class="placeholder">Start date</div>
-          <div v-if="checkIn" class="value">{{ checkInFormatted }}</div>
-        </div>
+        <input
+          type="text"
+          class="date-input"
+          :value="checkIn ? checkInFormatted : ''"
+          placeholder="Start date"
+          @focus="openCalendar"
+          @blur="parseAndSetCheckInDate"
+          @keydown.enter="parseAndSetCheckInDate"
+        />
         <div v-if="checkIn" class="flexibility-selector">
           <button
             class="flex-button"
@@ -659,10 +751,15 @@ export default {
         </div>
       </div>
       <div class="date-input-wrapper">
-        <div class="date-input" @click="openCalendar" tabindex="0">
-          <div v-if="!checkOut" class="placeholder">End date</div>
-          <div v-if="checkOut" class="value">{{ checkOutFormatted }}</div>
-        </div>
+        <input
+          type="text"
+          class="date-input"
+          :value="checkOut ? checkOutFormatted : ''"
+          placeholder="End date"
+          @focus="openCalendar"
+          @blur="parseAndSetCheckOutDate"
+          @keydown.enter="parseAndSetCheckOutDate"
+        />
         <div v-if="checkOut" class="flexibility-selector">
           <button
             class="flex-button"
@@ -949,14 +1046,21 @@ export default {
   }
 
   .date-input {
+    width: 100%;
     border: 1px solid #d0d0d0;
     border-radius: 4px;
     padding: 8px 12px;
-    display: flex;
-    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
     cursor: pointer;
     transition: border-color 0.2s;
     outline: none;
+
+    &::placeholder {
+      color: #999;
+      font-weight: 400;
+    }
 
     &:hover {
       border-color: #2563eb;
@@ -965,17 +1069,6 @@ export default {
     &:focus {
       border-color: #2563eb;
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-    }
-
-    .placeholder {
-      font-size: 16px;
-      color: #999;
-    }
-
-    .value {
-      font-size: 16px;
-      font-weight: 500;
-      color: #000;
     }
   }
 
