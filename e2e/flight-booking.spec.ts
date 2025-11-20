@@ -26,7 +26,7 @@ test.describe('Booking E2E Flow', () => {
     await page.locator('.location-option').filter({ hasText: 'New York' }).first().click()
 
     // Enter destination - Chicago
-    const toInput = page.locator('input[placeholder="To"]')
+    const toInput = page.locator('input[placeholder="To"]').first()
     await toInput.click()
     await toInput.fill('Chicago')
 
@@ -53,7 +53,8 @@ test.describe('Booking E2E Flow', () => {
     await page.waitForTimeout(500)
 
     // Step 4: Submit search
-    const searchButton = page.locator('button.submit-btn')
+    // Select the visible/enabled search button (there are 2 buttons - one for flights, one for hotels)
+    const searchButton = page.locator('button.submit-btn').filter({ hasText: 'Search Flights' }).first()
 
     // Wait a moment for form to be ready
     await page.waitForTimeout(500)

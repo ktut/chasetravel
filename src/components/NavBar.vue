@@ -215,7 +215,7 @@ export default {
   position: sticky;
   top: 0;
   z-index: 1000;
-  margin-bottom: -15rem;
+  margin-bottom: -5rem;
   @media (max-width: $breakpoint-mobile) {
     margin-bottom: -10rem;
   }

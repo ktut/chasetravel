@@ -57,21 +57,25 @@ export default {
         />
       </div>
     </div>
+    <!-- Search widget positioned outside parallax group for proper fixed positioning -->
+    <div class="search-section desktop">
+      <SearchWidget class="search-widget-align" />
+      <div class="bookings-button-container">
+        <router-link to="/mybookings" class="btn-primary bookings-btn">
+          View My Bookings
+        </router-link>
+      </div>
+    </div>
     <div class="parallax__group">
-      <div class="search">
-        <div class="search-section">
-          <SearchWidget />
-          <div class="bookings-button-container">
-            <router-link to="/mybookings" class="btn-primary bookings-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-              </svg>
-              View My Bookings
-            </router-link>
-          </div>
+      <div class="search-section mobile">
+        <SearchWidget class="search-widget-align" />
+        <div class="bookings-button-container">
+          <router-link to="/mybookings" class="btn-primary bookings-btn">
+            View My Bookings
+          </router-link>
         </div>
-        <br></br>
-
+      </div>
+      <div class="search">
         <!-- The Edit Section with Tab Navigation -->
         <div class="the-edit-section">
           <h2 class="section-title">The Edit by Chase Travel</h2>
@@ -175,39 +179,60 @@ export default {
 }
 
 .image-top-group {
-  height: 85vh;
   transition: height 1s cubic-bezier(0.8, -0.4, 0.5, 1);
+  height: 120vh;
   &.loaded {
-    height: 70vh;
+    height: 115vh;
   }
-  // margin-top: -15rem !important;;
-  // @media (max-width: $breakpoint-mobile) {
-  //   margin-top: -10rem !important;;
-  // }
+  @media (max-width: $breakpoint-mobile) {
+    height: 85vh;
+    &.loaded {
+      height: 70vh;
+    }
+  }
 }
 
 .search-section {
-  max-width: 900px;
-  margin: -3rem auto 0;
+  position: fixed;
+  right: 2rem;
+  bottom: 20rem;
+  .search-widget-align {
+    max-width: 375px;
+  }
+  &.desktop {
+    display: block;
+  }
+  &.mobile {
+    display: none;
+  }
   @media (max-width: $breakpoint-mobile) {
-    margin-top: -3rem;
+    &.desktop {
+      display: none;
+    }
+    &.mobile {
+      display: block;
+      position: relative;
+      bottom: unset;
+      right: unset;
+      width: 100%;
+      max-width: unset;
+  .search-widget-align {
+    max-width: unset;
+  }
+    }
   }
 }
 
 .bookings-button-container {
   display: flex;
   justify-content: center;
-  margin-top: $spacing-lg;
+  padding: $spacing-md;
+  background: rgba(255, 255, 255, 1);
 
   .bookings-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-
-    svg {
-      width: 20px;
-      height: 20px;
-    }
   }
 }
 
@@ -270,7 +295,8 @@ export default {
 .parallax__layer {
   position: absolute;
   top: 0;
-  left: 0;
+  left: -5px;
+  // corrects for perspective issues on left side, otherwise leaves white gap
   right: 0;
   bottom: 0;
 

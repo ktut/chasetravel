@@ -16,7 +16,8 @@ test.describe('Hotel Booking E2E Flow', () => {
     await expect(page).toHaveTitle(/Chase Travel/)
 
     // Step 2: Switch to Stays (Hotels) search
-    const staysButton = page.locator('.toggle-btn').filter({ hasText: 'Stays' })
+    // Use .first() to select the visible Stays button (handles both mobile and desktop)
+    const staysButton = page.locator('.toggle-btn').filter({ hasText: 'Stays' }).first()
     await staysButton.click()
 
     // Verify the Stays tab is active
@@ -52,7 +53,8 @@ test.describe('Hotel Booking E2E Flow', () => {
     await page.waitForTimeout(500)
 
     // Step 5: Submit search
-    const searchButton = page.locator('button.submit-btn')
+    // Select the visible/enabled search button (there are 2 buttons - one for flights, one for hotels)
+    const searchButton = page.locator('button.submit-btn').filter({ hasText: 'Search Hotels' }).first()
 
     // Wait a moment for form to be ready
     await page.waitForTimeout(500)
