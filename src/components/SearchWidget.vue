@@ -823,7 +823,7 @@ export default {
 .search-inputs {
   display: flex;
   gap: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 0.5rem;
   align-items: stretch;
 
   @media (max-width: 768px) {

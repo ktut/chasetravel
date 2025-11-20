@@ -61,7 +61,7 @@ export default {
     <div class="search-section desktop">
       <SearchWidget class="search-widget-align" />
     </div>
-    <div class="parallax__group">
+    <div class="parallax__group search-middle-group">
       <div class="search-section mobile">
         <SearchWidget class="search-widget-align" />
       </div>
@@ -180,6 +180,10 @@ export default {
       height: 70vh;
     }
   }
+}
+
+.search-middle-group {
+  margin-top: -5rem !important;
 }
 
 .search-section {
