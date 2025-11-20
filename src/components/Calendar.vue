@@ -46,6 +46,7 @@ export default {
       currentYear: new Date().getFullYear(),
       isOpen: false,
       focusedDate: null as Date | null,
+      justOpened: false,
       monthNames: [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
@@ -325,13 +326,22 @@ export default {
       }
     },
     handleOutsideClick(event: MouseEvent) {
+      // Ignore clicks immediately after opening to prevent close on open click
+      if (this.justOpened) {
+        this.justOpened = false
+        return
+      }
+
       const target = event.target as HTMLElement
 
       // Check if click is on a flex menu or flex option (these might be fixed-position in mobile)
       const isFlexMenuClick = target.closest('.flex-menu') || target.classList.contains('flex-option')
 
-      // Check if click is outside the entire calendar component
-      if (!target.closest('.calendar') && !isFlexMenuClick) {
+      // Check if click is inside the mobile modal
+      const isModalClick = target.closest('.calendar-modal')
+
+      // Check if click is outside the entire calendar component and not in modal
+      if (!target.closest('.calendar') && !isFlexMenuClick && !isModalClick) {
         // Close all dropdowns and the calendar modal
         this.showCheckInFlexMenu = false
         this.showCheckOutFlexMenu = false
@@ -352,6 +362,7 @@ export default {
     },
     openCalendar() {
       this.isOpen = true
+      this.justOpened = true
       // Set initial focused date
       if (!this.focusedDate) {
         const initialDate = this.checkIn || new Date()
@@ -879,10 +890,14 @@ export default {
           <button class="close-btn" @click="closeCalendar" aria-label="Close calendar">×</button>
           <div class="modal-date-input">
             <label>Start date</label>
-            <div class="date-display">
-              <span v-if="checkIn">{{ checkInFormatted }}</span>
-              <span v-else class="placeholder-text">Select start date</span>
-            </div>
+            <input
+              type="text"
+              class="date-display-input"
+              :value="checkIn ? checkInFormatted : ''"
+              placeholder="Select start date"
+              @blur="parseAndSetCheckInDate"
+              @keydown.enter="parseAndSetCheckInDate"
+            />
             <div v-if="checkIn" class="modal-flexibility">
               <button
                 class="flex-button"
@@ -906,10 +921,14 @@ export default {
           </div>
           <div class="modal-date-input">
             <label>End date</label>
-            <div class="date-display">
-              <span v-if="checkOut">{{ checkOutFormatted }}</span>
-              <span v-else class="placeholder-text">Select end date</span>
-            </div>
+            <input
+              type="text"
+              class="date-display-input"
+              :value="checkOut ? checkOutFormatted : ''"
+              placeholder="Select end date"
+              @blur="parseAndSetCheckOutDate"
+              @keydown.enter="parseAndSetCheckOutDate"
+            />
             <div v-if="checkOut" class="modal-flexibility">
               <button
                 class="flex-button"
@@ -1504,13 +1523,12 @@ export default {
   .calendar-modal {
     background: white;
     width: 100%;
-    max-height: 70vh;
+    max-height: 85vh;
     border-radius: 16px 16px 0 0;
-    overflow-y: auto;
+    overflow: hidden;
     animation: slideUp 0.3s ease-out;
     display: flex;
     flex-direction: column;
-    -webkit-overflow-scrolling: touch;
 
     @keyframes slideUp {
       from {
@@ -1570,6 +1588,8 @@ export default {
   }
 
   .modal-date-input {
+    display: flex;
+    flex-direction: column;
     gap: 4px;
     min-width: 0;
 
@@ -1579,23 +1599,19 @@ export default {
       color: #666;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      flex-basis: 100%;
     }
 
-    .date-display {
-      font-size: 13px;
+    .date-display-input {
+      width: 100%;
+      font-size: 18px;
       font-weight: 500;
       color: #000;
       padding: 4px 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      border: none;
+      background: transparent;
+      outline: none;
 
-      > span {
-        font-size: 18px;
-      }
-
-      .placeholder-text {
+      &::placeholder {
         color: #999;
         font-weight: 400;
         font-size: 12px;
@@ -1680,8 +1696,10 @@ export default {
   .calendar-modal .calendar-grid {
     display: block;
     padding: 0 1rem 1rem 1rem;
+    overflow-y: auto;
     overflow-x: hidden;
     flex: 1;
+    -webkit-overflow-scrolling: touch;
 
     .month-view {
       margin-bottom: 24px;
