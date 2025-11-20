@@ -188,13 +188,19 @@ export default {
 
 .search-section {
   position: fixed;
-  right: 3rem;
-  top: 15vh;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding-top: 8rem;
   .search-widget-align {
     max-width: 375px;
+    margin-top: -16rem;
   }
   &.desktop {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   &.mobile {
     display: none;
@@ -206,13 +212,15 @@ export default {
     &.mobile {
       display: block;
       position: relative;
+      top: unset;
       bottom: unset;
       right: unset;
       width: 100%;
       max-width: unset;
-  .search-widget-align {
-    max-width: unset;
-  }
+      .search-widget-align {
+        max-width: unset;
+        margin-top: unset;
+      }
     }
   }
 }

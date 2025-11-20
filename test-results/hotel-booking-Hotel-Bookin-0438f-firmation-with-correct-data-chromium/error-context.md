@@ -1,0 +1,65 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - link "Chase Travel home page" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - img "Chase Travel home page" [ref=e7]
+      - button "Sign in" [ref=e9] [cursor=pointer]:
+        - generic [ref=e10]: Sign in
+  - generic [ref=e12]:
+    - generic [ref=e13]:
+      - img "Background layer" [ref=e15]
+      - img "Middle layer" [ref=e17]
+      - img "Foreground layer" [ref=e19]
+    - generic [ref=e22]:
+      - generic [ref=e24]:
+        - button "Search flights" [ref=e25] [cursor=pointer]:
+          - img [ref=e26]
+          - generic [ref=e35]: Flights
+        - button "Search stays" [ref=e36] [cursor=pointer]:
+          - img [ref=e37]
+          - generic [ref=e58]: Stays
+      - generic [ref=e60]:
+        - textbox "From" [ref=e63]
+        - textbox "To" [ref=e66]
+      - generic [ref=e69]:
+        - textbox "Start date" [ref=e71] [cursor=pointer]
+        - textbox "End date" [ref=e73] [cursor=pointer]
+      - generic [ref=e75]:
+        - button "Passengers" [ref=e77] [cursor=pointer]:
+          - img [ref=e78]
+          - generic [ref=e81]: "1"
+        - button "Search Flights" [disabled] [ref=e82] [cursor=pointer]
+    - generic [ref=e85]:
+      - heading "The Edit by Chase Travel" [level=2] [ref=e86]
+      - navigation [ref=e87]:
+        - button "Overview" [ref=e88] [cursor=pointer]
+        - button "Curated collections" [ref=e89] [cursor=pointer]
+        - button "Featured properties" [ref=e90] [cursor=pointer]
+      - generic [ref=e91]:
+        - generic [ref=e92]:
+          - img "Four Seasons Resort Napa Valley" [ref=e94]
+          - generic [ref=e95]:
+            - heading "Complimentary benefits" [level=3] [ref=e96]
+            - paragraph [ref=e97]: Four Seasons Resort and Residences Napa Valley
+            - list [ref=e98]:
+              - listitem [ref=e99]: • Daily breakfast for 2
+              - listitem [ref=e100]: • $100 property credit
+              - listitem [ref=e101]: • Room upgrades
+              - listitem [ref=e102]: • Early check-in/late check-out availability
+        - generic [ref=e103]:
+          - img "InterContinental London Park Lane" [ref=e105]
+          - generic [ref=e106]:
+            - heading "Points redemption" [level=3] [ref=e107]
+            - paragraph [ref=e108]: InterContinental London Park Lane
+            - paragraph [ref=e109]: Use your Chase Ultimate Rewards points to pay for your stay at exclusive properties.
+        - generic [ref=e110]:
+          - img "The Hotel Maria Finland" [ref=e112]
+          - generic [ref=e113]:
+            - heading "Exploration" [level=3] [ref=e114]
+            - paragraph [ref=e115]: The Hotel Maria, Finland
+            - paragraph [ref=e116]: Discover diverse property types ranging from mountain retreats in Aspen to high-design boutique hotels in London.
+```

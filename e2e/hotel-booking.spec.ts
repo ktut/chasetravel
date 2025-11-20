@@ -17,7 +17,7 @@ test.describe('Hotel Booking E2E Flow', () => {
 
     // Step 2: Switch to Stays (Hotels) search
     // Use .first() to select the visible Stays button (handles both mobile and desktop)
-    const staysButton = page.locator('.toggle-btn').filter({ hasText: 'Stays' }).first()
+    const staysButton = page.locator('.toggle-option').filter({ hasText: 'Stays' }).first()
     await staysButton.click()
 
     // Verify the Stays tab is active
