@@ -60,20 +60,10 @@ export default {
     <!-- Search widget positioned outside parallax group for proper fixed positioning -->
     <div class="search-section desktop">
       <SearchWidget class="search-widget-align" />
-      <div class="bookings-button-container">
-        <router-link to="/mybookings" class="btn-primary bookings-btn">
-          View My Bookings
-        </router-link>
-      </div>
     </div>
     <div class="parallax__group">
       <div class="search-section mobile">
         <SearchWidget class="search-widget-align" />
-        <div class="bookings-button-container">
-          <router-link to="/mybookings" class="btn-primary bookings-btn">
-            View My Bookings
-          </router-link>
-        </div>
       </div>
       <div class="search">
         <!-- The Edit Section with Tab Navigation -->
@@ -220,19 +210,6 @@ export default {
     max-width: unset;
   }
     }
-  }
-}
-
-.bookings-button-container {
-  display: flex;
-  justify-content: center;
-  padding: $spacing-md;
-  background: rgba(255, 255, 255, 1);
-
-  .bookings-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
   }
 }
 

@@ -67,6 +67,9 @@ export default {
     // Initialize from props
     if (this.initialCheckIn) {
       this.checkIn = this.initialCheckIn
+      // Set the calendar view to the check-in date's month
+      this.currentMonth = this.initialCheckIn.getMonth()
+      this.currentYear = this.initialCheckIn.getFullYear()
     }
     if (this.initialCheckOut) {
       this.checkOut = this.initialCheckOut
@@ -82,6 +85,9 @@ export default {
     initialCheckIn(newVal) {
       if (newVal) {
         this.checkIn = newVal
+        // Update calendar view to show the check-in date's month
+        this.currentMonth = newVal.getMonth()
+        this.currentYear = newVal.getFullYear()
       }
     },
     initialCheckOut(newVal) {
@@ -681,6 +687,7 @@ export default {
     </div>
 
     <!-- Desktop calendar grid -->
+    <transition name="calendar-slide">
     <div v-if="isOpen" class="calendar-grid desktop-calendar">
       <div class="month-view">
         <div class="month-header">
@@ -692,7 +699,7 @@ export default {
             aria-label="Previous month"
           >&lt;</button>
           <div class="month-name">{{ leftMonthName }}</div>
-          <div class="spacer"></div>
+          <button class="nav-btn next-btn-single" @click="nextMonth" tabindex="0" aria-label="Next month">&gt;</button>
         </div>
         <div class="day-names">
           <div v-for="day in dayNames" :key="day" class="day-name">{{ day }}</div>
@@ -758,11 +765,14 @@ export default {
         </div>
       </div>
     </div>
+    </transition>
 
+    <transition name="calendar-fade">
     <div v-if="isOpen" class="actions desktop-actions">
       <button class="reset-btn btn-secondary" @click="reset" tabindex="0">Reset</button>
       <button class="done-btn btn-primary" @click="done" tabindex="0">Done</button>
     </div>
+    </transition>
 
     <!-- Modal overlay for mobile -->
     <Teleport to="#modal-container">
@@ -1034,7 +1044,6 @@ export default {
 .calendar-grid {
   margin-bottom: 16px;
   overflow: hidden;
-  transition: max-height 0.3s ease-out;
 }
 
 .month-view {
@@ -1258,26 +1267,71 @@ export default {
   display: none;
 }
 
+// Vue transition for calendar slide
+.calendar-slide-enter-active {
+  transition: all 0.25s ease-out;
+}
+
+.calendar-slide-leave-active {
+  transition: all 0.2s ease-in;
+}
+
+.calendar-slide-enter-from {
+  opacity: 0;
+  transform: translateY(-10px) scaleY(0.95);
+}
+
+.calendar-slide-enter-to {
+  opacity: 1;
+  transform: translateY(0) scaleY(1);
+}
+
+.calendar-slide-leave-from {
+  opacity: 1;
+  transform: translateY(0) scaleY(1);
+}
+
+.calendar-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px) scaleY(0.95);
+}
+
+// Vue transition for actions fade
+.calendar-fade-enter-active {
+  transition: opacity 0.3s ease-out 0.1s;
+}
+
+.calendar-fade-leave-active {
+  transition: opacity 0.15s ease-in;
+}
+
+.calendar-fade-enter-from,
+.calendar-fade-leave-to {
+  opacity: 0;
+}
+
+.calendar-fade-enter-to,
+.calendar-fade-leave-from {
+  opacity: 1;
+}
+
 // Desktop styles - show by default
 .desktop-calendar {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  animation: slideDown 0.25s ease-out;
   transform-origin: top;
-  max-height: 400px;
-  transition: max-height 0.3s ease-out;
+  overflow: hidden;
 
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-      max-height: 0;
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-      max-height: 400px;
+  // Default: hide second month on smaller containers
+  .month-view:last-child {
+    display: none;
+  }
+
+  // Show next button on first month when second month is hidden
+  .month-view:first-child {
+    .next-btn-single {
+      display: flex;
     }
   }
 
@@ -1285,35 +1339,25 @@ export default {
   @container calendar (min-width: 700px) {
     flex-direction: row;
     gap: 24px;
-    max-height: 400px;
 
     .month-view {
       width: auto;
 
+      &:first-child {
+        .next-btn-single {
+          display: none;
+        }
+      }
+
       &:last-child {
-        display: block;
+        display: block !important;
       }
     }
-  }
-
-  // Default: hide second month on smaller containers
-  .month-view:last-child {
-    display: none;
   }
 }
 
 .desktop-actions {
   display: flex;
-  animation: fadeIn 0.3s ease-out 0.1s both;
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
 }
 
 @media (max-width: 768px) {

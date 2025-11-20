@@ -367,10 +367,10 @@ export default {
 .mybookings-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 16rem 1.5rem 3rem;
+  padding: 10rem 1.5rem 3rem;
 
   @media (max-width: 768px) {
-    padding: 11rem 1rem 2rem;
+    padding: 12rem 1rem 2rem;
   }
 }
 

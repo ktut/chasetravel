@@ -88,7 +88,7 @@ export default {
           <div v-if="booking.room" class="room-name">{{ booking.room.name }}</div>
         </div>
         <div class="booking-actions">
-          <button @click="cancelBooking" class="btn-cancel">Cancel</button>
+          <button @click="cancelBooking" class="btn-cancel">Cancel Booking</button>
         </div>
       </div>
     </div>

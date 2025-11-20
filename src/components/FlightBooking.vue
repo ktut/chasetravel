@@ -67,7 +67,7 @@ export default {
           </div>
         </div>
         <div class="booking-actions">
-          <button @click="cancelBooking" class="btn-cancel">Cancel</button>
+          <button @click="cancelBooking" class="btn-cancel">Cancel Booking</button>
         </div>
       </div>
     </div>

@@ -24,6 +24,10 @@ export default {
       destination: '',
       showLocationDropdown: false,
       showDestinationDropdown: false,
+      selectedLocationIndex: -1,
+      selectedDestinationIndex: -1,
+      selectedLocation: null as Location | null,
+      selectedDestination: null as Location | null,
       passengerCounts: {
         adults: 1,
         children: 0
@@ -77,20 +81,30 @@ export default {
       return `Search ${this.searchType === 'flights' ? 'Flights' : 'Hotels'}`
     },
     filteredLocations(): Location[] {
-      if (!this.location) return this.allLocations
-      const search = this.location.toLowerCase()
-      return this.allLocations.filter(loc =>
-        loc.name.toLowerCase().includes(search) ||
-        loc.code.toLowerCase().includes(search)
-      )
+      const search = this.location ? this.location.toLowerCase() : ''
+      return this.allLocations.filter(loc => {
+        // Exclude if this location is already selected as destination
+        if (this.selectedDestination && loc.code === this.selectedDestination.code) {
+          return false
+        }
+        // If no search text, show all (except excluded)
+        if (!search) return true
+        // Otherwise filter by search text
+        return loc.name.toLowerCase().includes(search) || loc.code.toLowerCase().includes(search)
+      })
     },
     filteredDestinations(): Location[] {
-      if (!this.destination) return this.allLocations
-      const search = this.destination.toLowerCase()
-      return this.allLocations.filter(loc =>
-        loc.name.toLowerCase().includes(search) ||
-        loc.code.toLowerCase().includes(search)
-      )
+      const search = this.destination ? this.destination.toLowerCase() : ''
+      return this.allLocations.filter(loc => {
+        // Exclude if this location is already selected as origin
+        if (this.selectedLocation && loc.code === this.selectedLocation.code) {
+          return false
+        }
+        // If no search text, show all (except excluded)
+        if (!search) return true
+        // Otherwise filter by search text
+        return loc.name.toLowerCase().includes(search) || loc.code.toLowerCase().includes(search)
+      })
     },
     totalPassengers(): number {
       return this.passengerCounts.adults + this.passengerCounts.children
@@ -144,11 +158,11 @@ export default {
       }
     },
     isSubmitDisabled(): boolean {
-      // Check if departure airport is selected
-      if (!this.location) return true
+      // Check if a valid location is selected (not just typed text)
+      if (!this.location || !this.selectedLocation) return true
 
-      // Check if arrival airport is selected (only for flights)
-      if (this.searchType === 'flights' && !this.destination) return true
+      // Check if a valid destination is selected (only for flights)
+      if (this.searchType === 'flights' && (!this.destination || !this.selectedDestination)) return true
 
       // Check if dates are selected
       if (!this.checkInDate || !this.checkOutDate) return true
@@ -171,12 +185,14 @@ export default {
         this.searchType = query.type as 'flights' | 'hotels'
       }
 
-      // Set locations
+      // Set locations and find matching location objects
       if (query.from) {
         this.location = query.from as string
+        this.selectedLocation = this.allLocations.find(loc => loc.name === query.from) || null
       }
       if (query.to) {
         this.destination = query.to as string
+        this.selectedDestination = this.allLocations.find(loc => loc.name === query.to) || null
       }
 
       // Set dates
@@ -215,21 +231,105 @@ export default {
     },
     selectLocation(location: Location) {
       this.location = location.name
+      this.selectedLocation = location
       this.showLocationDropdown = false
+      this.selectedLocationIndex = -1
     },
     selectDestination(location: Location) {
       this.destination = location.name
+      this.selectedDestination = location
       this.showDestinationDropdown = false
+      this.selectedDestinationIndex = -1
     },
     onLocationInput() {
       this.showLocationDropdown = true
       this.showDestinationDropdown = false
       this.showPassengerDropdown = false
+      this.selectedLocationIndex = -1
+      // Clear selected location when user starts typing
+      this.selectedLocation = null
     },
     onDestinationInput() {
       this.showDestinationDropdown = true
       this.showLocationDropdown = false
       this.showPassengerDropdown = false
+      this.selectedDestinationIndex = -1
+      // Clear selected destination when user starts typing
+      this.selectedDestination = null
+    },
+    handleLocationKeydown(event: KeyboardEvent) {
+      if (!this.showLocationDropdown || this.filteredLocations.length === 0) return
+
+      switch (event.key) {
+        case 'ArrowDown':
+          event.preventDefault()
+          this.selectedLocationIndex = Math.min(
+            this.selectedLocationIndex + 1,
+            this.filteredLocations.length - 1
+          )
+          this.scrollDropdownIntoView('location')
+          break
+        case 'ArrowUp':
+          event.preventDefault()
+          this.selectedLocationIndex = Math.max(this.selectedLocationIndex - 1, 0)
+          this.scrollDropdownIntoView('location')
+          break
+        case 'Enter':
+          event.preventDefault()
+          if (this.selectedLocationIndex >= 0 && this.selectedLocationIndex < this.filteredLocations.length) {
+            this.selectLocation(this.filteredLocations[this.selectedLocationIndex])
+          }
+          break
+        case 'Escape':
+          event.preventDefault()
+          this.showLocationDropdown = false
+          this.selectedLocationIndex = -1
+          break
+      }
+    },
+    handleDestinationKeydown(event: KeyboardEvent) {
+      if (!this.showDestinationDropdown || this.filteredDestinations.length === 0) return
+
+      switch (event.key) {
+        case 'ArrowDown':
+          event.preventDefault()
+          this.selectedDestinationIndex = Math.min(
+            this.selectedDestinationIndex + 1,
+            this.filteredDestinations.length - 1
+          )
+          this.scrollDropdownIntoView('destination')
+          break
+        case 'ArrowUp':
+          event.preventDefault()
+          this.selectedDestinationIndex = Math.max(this.selectedDestinationIndex - 1, 0)
+          this.scrollDropdownIntoView('destination')
+          break
+        case 'Enter':
+          event.preventDefault()
+          if (this.selectedDestinationIndex >= 0 && this.selectedDestinationIndex < this.filteredDestinations.length) {
+            this.selectDestination(this.filteredDestinations[this.selectedDestinationIndex])
+          }
+          break
+        case 'Escape':
+          event.preventDefault()
+          this.showDestinationDropdown = false
+          this.selectedDestinationIndex = -1
+          break
+      }
+    },
+    scrollDropdownIntoView(type: 'location' | 'destination') {
+      // Wait for next tick to ensure DOM is updated
+      this.$nextTick(() => {
+        const dropdown = this.$el.querySelector(
+          type === 'location' ? '.location-dropdown' : '.destination-dropdown'
+        )
+        if (!dropdown) return
+
+        const selectedOption = dropdown.querySelector('.location-option.keyboard-selected')
+        if (selectedOption) {
+          selectedOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+        }
+      })
     },
     togglePassengerDropdown() {
       this.showPassengerDropdown = !this.showPassengerDropdown
@@ -467,20 +567,24 @@ export default {
             :aria-label="locationLabel"
             @input="onLocationInput"
             @focus="onLocationInput"
+            @keydown="handleLocationKeydown"
+            autocomplete="off"
           />
           <button
             v-if="location"
             class="clear-btn"
-            @click="location = ''"
+            @click="location = ''; selectedLocation = null"
             type="button"
           >×</button>
         </div>
         <div v-if="showLocationDropdown && filteredLocations.length > 0" class="location-dropdown">
           <div
-            v-for="loc in filteredLocations"
+            v-for="(loc, index) in filteredLocations"
             :key="loc.code"
             class="location-option"
+            :class="{ 'keyboard-selected': index === selectedLocationIndex }"
             @click="selectLocation(loc)"
+            @mouseenter="selectedLocationIndex = index"
           >
             <span class="location-name">{{ loc.name }}</span>
             <span class="location-code">{{ loc.code }}</span>
@@ -499,20 +603,24 @@ export default {
             aria-label="To"
             @input="onDestinationInput"
             @focus="onDestinationInput"
+            @keydown="handleDestinationKeydown"
+            autocomplete="off"
           />
           <button
             v-if="destination"
             class="clear-btn"
-            @click="destination = ''"
+            @click="destination = ''; selectedDestination = null"
             type="button"
           >×</button>
         </div>
-        <div v-if="showDestinationDropdown && filteredDestinations.length > 0" class="location-dropdown">
+        <div v-if="showDestinationDropdown && filteredDestinations.length > 0" class="location-dropdown destination-dropdown">
           <div
-            v-for="loc in filteredDestinations"
+            v-for="(loc, index) in filteredDestinations"
             :key="loc.code"
             class="location-option"
+            :class="{ 'keyboard-selected': index === selectedDestinationIndex }"
             @click="selectDestination(loc)"
+            @mouseenter="selectedDestinationIndex = index"
           >
             <span class="location-name">{{ loc.name }}</span>
             <span class="location-code">{{ loc.code }}</span>
@@ -534,43 +642,49 @@ export default {
 
     <!-- Submit button and passenger selector -->
     <div class="submit-section">
-      <!-- Passenger selector -->
-      <div class="passenger-selector">
-        <button
-          class="passenger-button btn-outline"
-          @click="togglePassengerDropdown"
-          :aria-label="passengerFieldLabel"
-        >
-          <svg class="person-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-          <span class="passenger-count-display">{{ passengerLabel }}</span>
-        </button>
-        <div v-if="showPassengerDropdown" class="passenger-dropdown">
-          <div class="passenger-dropdown-header">{{ passengerDropdownLabel }}</div>
-          <div class="passenger-row">
-            <span class="passenger-type">Adults</span>
-            <div class="passenger-controls">
-              <button class="control-btn" @click="decrementAdults" :disabled="passengerCounts.adults <= 1">-</button>
-              <span class="passenger-count">{{ passengerCounts.adults }}</span>
-              <button class="control-btn" @click="incrementAdults" :disabled="passengerCounts.adults >= 9">+</button>
+      <div class="main-actions">
+        <!-- Passenger selector -->
+        <div class="passenger-selector">
+          <button
+            class="passenger-button btn-outline"
+            @click="togglePassengerDropdown"
+            :aria-label="passengerFieldLabel"
+          >
+            <svg class="person-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span class="passenger-count-display">{{ passengerLabel }}</span>
+          </button>
+          <div v-if="showPassengerDropdown" class="passenger-dropdown">
+            <div class="passenger-dropdown-header">{{ passengerDropdownLabel }}</div>
+            <div class="passenger-row">
+              <span class="passenger-type">Adults</span>
+              <div class="passenger-controls">
+                <button class="control-btn" @click="decrementAdults" :disabled="passengerCounts.adults <= 1">-</button>
+                <span class="passenger-count">{{ passengerCounts.adults }}</span>
+                <button class="control-btn" @click="incrementAdults" :disabled="passengerCounts.adults >= 9">+</button>
+              </div>
             </div>
-          </div>
-          <div class="passenger-row">
-            <span class="passenger-type">Children</span>
-            <div class="passenger-controls">
-              <button class="control-btn" @click="decrementChildren" :disabled="passengerCounts.children <= 0">-</button>
-              <span class="passenger-count">{{ passengerCounts.children }}</span>
-              <button class="control-btn" @click="incrementChildren" :disabled="passengerCounts.children >= 9">+</button>
+            <div class="passenger-row">
+              <span class="passenger-type">Children</span>
+              <div class="passenger-controls">
+                <button class="control-btn" @click="decrementChildren" :disabled="passengerCounts.children <= 0">-</button>
+                <span class="passenger-count">{{ passengerCounts.children }}</span>
+                <button class="control-btn" @click="incrementChildren" :disabled="passengerCounts.children >= 9">+</button>
+              </div>
             </div>
           </div>
         </div>
+
+        <button class="submit-btn btn-primary" @click="handleSubmit" :disabled="isSubmitDisabled">
+          {{ submitButtonText }}
+        </button>
       </div>
 
-      <button class="submit-btn btn-primary" @click="handleSubmit" :disabled="isSubmitDisabled">
-        {{ submitButtonText }}
-      </button>
+      <router-link v-if="searchStore.isSignedIn" to="/mybookings" class="bookings-btn btn-outline">
+        My Bookings
+      </router-link>
     </div>
     </div>
   </div>
@@ -803,7 +917,8 @@ export default {
       cursor: pointer;
       transition: background 0.2s;
 
-      &:hover {
+      &:hover,
+      &.keyboard-selected {
         background: #f5f5f5;
       }
 
@@ -948,13 +1063,67 @@ export default {
 
 .submit-section {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  flex-direction: column;
   gap: 12px;
 
-  .submit-btn {
-    padding: 14px 16px;
+  .main-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  .bookings-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
     font-size: 16px;
+    white-space: nowrap;
+    text-decoration: none;
+    background: white;
+    color: $color-text;
+    border-color: $color-light-grey;
+    align-self: flex-end;
+
+    &:hover {
+      border-color: $color-accent;
+      background: white;
+      color: $color-text;
+    }
+
+    @media (max-width: 768px) {
+      align-self: stretch;
+      width: 100%;
+    }
+  }
+
+  .submit-btn {
+    padding: 12px 16px;
+    font-size: 16px;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
+
+  .passenger-selector {
+    @media (max-width: 768px) {
+      width: 100%;
+
+      .passenger-button {
+        width: 100%;
+      }
+    }
+
+    .passenger-button {
+      padding: 12px 16px;
+    }
   }
 }
 </style>
