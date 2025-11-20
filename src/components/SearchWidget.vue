@@ -551,7 +551,7 @@ export default {
 .search-widget {
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
   transition: all 0.3s ease-in-out;
 
   &.minimized {

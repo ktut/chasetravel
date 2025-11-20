@@ -201,9 +201,15 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    .search-widget {
+      background: rgba(255, 255, 255, 0.9);
+    }
   }
   &.mobile {
     display: none;
+    .search-widget {
+    background: rgba(255, 255, 255, 1);
+    }
   }
   @media (max-width: $breakpoint-mobile) {
     &.desktop {
@@ -217,10 +223,10 @@ export default {
       right: unset;
       width: 100%;
       max-width: unset;
-      .search-widget-align {
-        max-width: unset;
-        margin-top: unset;
-      }
+        .search-widget-align {
+          max-width: unset;
+          margin-top: unset;
+        }
     }
   }
 }
