@@ -32,6 +32,10 @@ export default {
     initialCheckOutFlexibility: {
       type: String,
       default: 'exact'
+    },
+    isOneWay: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -281,6 +285,15 @@ export default {
         // If the selected start date is today, set flexibility to exact
         if (this.isSameDate(selectedDate, this.today)) {
           this.checkInFlexibility = 'exact'
+        }
+
+        // For one-way trips, emit immediately after selecting check-in
+        if (this.isOneWay) {
+          this.$emit('date-range-selected', {
+            checkIn: this.checkIn,
+            checkOut: null
+          })
+          this.closeCalendar()
         }
       } else {
         // If check-in is set but not check-out
@@ -761,7 +774,7 @@ export default {
           </div>
         </div>
       </div>
-      <div class="date-input-wrapper">
+      <div v-if="!isOneWay" class="date-input-wrapper">
         <input
           type="text"
           class="date-input"
@@ -919,7 +932,7 @@ export default {
               </div>
             </div>
           </div>
-          <div class="modal-date-input">
+          <div v-if="!isOneWay" class="modal-date-input">
             <label>End date</label>
             <input
               type="text"

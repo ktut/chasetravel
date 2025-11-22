@@ -2,6 +2,7 @@
 import Calendar from './Calendar.vue'
 import PassengerSelector from './PassengerSelector.vue'
 import SearchTypeToggle from './SearchTypeToggle.vue'
+import TripTypeToggle from './TripTypeToggle.vue'
 import { useSearchStore } from '@/stores/searchStore'
 import { LOCATIONS, type Location } from '@/constants'
 
@@ -15,7 +16,8 @@ export default {
   components: {
     Calendar,
     PassengerSelector,
-    SearchTypeToggle
+    SearchTypeToggle,
+    TripTypeToggle
   },
   setup() {
     const searchStore = useSearchStore()
@@ -24,6 +26,7 @@ export default {
   data() {
     return {
       searchType: 'flights' as 'flights' | 'hotels' | 'cars' | 'activities' | 'cruises' | 'tours',
+      tripType: 'round-trip' as 'one-way' | 'round-trip',
       location: '',
       destination: '',
       showLocationDropdown: false,
@@ -151,8 +154,12 @@ export default {
       // Check if a valid destination is selected (only for flights)
       if (this.searchType === 'flights' && (!this.destination || !this.selectedDestination)) return true
 
-      // Check if dates are selected
-      if (!this.checkInDate || !this.checkOutDate) return true
+      // Check if check-in date is selected
+      if (!this.checkInDate) return true
+
+      // Check-out date is only required for round-trip flights or hotels
+      const requiresCheckOut = this.searchType === 'hotels' || (this.searchType === 'flights' && this.tripType === 'round-trip')
+      if (requiresCheckOut && !this.checkOutDate) return true
 
       // Check if there are passengers (total should be at least 1)
       if (this.totalPassengers < 1) return true
@@ -170,6 +177,11 @@ export default {
       // Set search type
       if (query.type) {
         this.searchType = query.type as 'flights' | 'hotels'
+      }
+
+      // Set trip type
+      if (query.tripType) {
+        this.tripType = query.tripType as 'one-way' | 'round-trip'
       }
 
       // Set locations and find matching location objects
@@ -358,10 +370,11 @@ export default {
 
       const searchData = {
         searchType: this.searchType,
+        tripType: this.searchType === 'flights' ? this.tripType : undefined,
         location: this.location,
         destination: this.searchType === 'flights' ? this.destination : undefined,
         checkIn: this.checkInDate!,
-        checkOut: this.checkOutDate!,
+        checkOut: this.checkOutDate || this.checkInDate!,
         checkInFlexibility: this.checkInFlexibility,
         checkOutFlexibility: this.checkOutFlexibility,
         passengers: {
@@ -387,11 +400,15 @@ export default {
         query.to = searchData.destination
       }
 
+      if (searchData.tripType) {
+        query.tripType = searchData.tripType
+      }
+
       if (searchData.checkIn) {
         query.checkIn = searchData.checkIn.toISOString()
       }
 
-      if (searchData.checkOut) {
+      if (searchData.checkOut && !(this.searchType === 'flights' && this.tripType === 'one-way')) {
         query.checkOut = searchData.checkOut.toISOString()
       }
 
@@ -439,6 +456,11 @@ export default {
     <!-- <h1 class="image-top-group-title">Your most rewarding trips start here.</h1> -->
     <!-- Search type toggle -->
     <SearchTypeToggle v-model="searchType" />
+
+    <!-- Trip type toggle (only for flights) -->
+    <div v-if="searchType === 'flights'" class="trip-type-section">
+      <TripTypeToggle v-model="tripType" />
+    </div>
 
     <!-- Location inputs -->
     <div class="search-inputs">
@@ -522,6 +544,7 @@ export default {
         :initial-check-out="checkOutDate"
         :initial-check-in-flexibility="checkInFlexibility"
         :initial-check-out-flexibility="checkOutFlexibility"
+        :is-one-way="searchType === 'flights' && tripType === 'one-way'"
         @date-range-selected="handleDateRangeSelected"
       />
     </div>
@@ -610,6 +633,12 @@ export default {
   @media (max-width: $breakpoint-mobile) {
     display: none;
   }
+}
+
+.trip-type-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
 }
 
 .search-inputs {

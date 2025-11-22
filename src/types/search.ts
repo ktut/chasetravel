@@ -2,6 +2,7 @@
 
 export interface SearchData {
   searchType: 'flights' | 'hotels'
+  tripType?: 'one-way' | 'round-trip'
   location: string
   destination?: string
   checkIn: Date
@@ -93,9 +94,12 @@ export function validateSearchParams(query: any): { valid: boolean; errors: stri
     }
   }
 
-  if (!query.checkOut) {
+  // For flights, check-out is optional if trip type is one-way
+  const isOneWayFlight = query.type === 'flights' && query.tripType === 'one-way'
+
+  if (!isOneWayFlight && !query.checkOut) {
     errors.push('Missing check-out date')
-  } else {
+  } else if (query.checkOut) {
     const checkOutDate = new Date(query.checkOut as string)
     if (isNaN(checkOutDate.getTime())) {
       errors.push('Invalid check-out date format')
@@ -139,13 +143,15 @@ export function parseSearchDataFromQuery(query: any): SearchData | null {
 
   const adults = parseInt(query.adults as string)
   const children = parseInt(query.children as string) || 0
+  const isOneWayFlight = query.type === 'flights' && query.tripType === 'one-way'
 
   return {
     searchType: query.type as 'flights' | 'hotels',
+    tripType: query.tripType as 'one-way' | 'round-trip' | undefined,
     location: query.from as string,
     destination: query.to as string | undefined,
     checkIn: new Date(query.checkIn as string),
-    checkOut: new Date(query.checkOut as string),
+    checkOut: isOneWayFlight && !query.checkOut ? new Date(query.checkIn as string) : new Date(query.checkOut as string),
     checkInFlexibility: (query.checkInFlex as string) || 'exact',
     checkOutFlexibility: (query.checkOutFlex as string) || 'exact',
     passengers: {
