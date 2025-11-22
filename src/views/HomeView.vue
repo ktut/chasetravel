@@ -177,7 +177,7 @@ export default {
   @media (max-width: $breakpoint-mobile) {
     height: 85vh;
     &.loaded {
-      height: 70vh;
+      height: 65vh;
     }
   }
 }
@@ -194,7 +194,7 @@ export default {
   left: 0;
   padding-top: 8rem;
   .search-widget-align {
-    max-width: 375px;
+    max-width: 1000px;
     margin-top: -16rem;
   }
   &.desktop {
@@ -202,7 +202,7 @@ export default {
     justify-content: center;
     align-items: center;
     .search-widget {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
     }
   }
   &.mobile {

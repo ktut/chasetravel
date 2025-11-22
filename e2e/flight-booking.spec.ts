@@ -53,8 +53,8 @@ test.describe('Booking E2E Flow', () => {
     await page.waitForTimeout(500)
 
     // Step 4: Submit search
-    // Select the visible/enabled search button (there are 2 buttons - one for flights, one for hotels)
-    const searchButton = page.locator('button.submit-btn').filter({ hasText: 'Search Flights' }).first()
+    // Select the visible/enabled search button
+    const searchButton = page.locator('button.submit-btn').filter({ hasText: 'Search' }).first()
 
     // Wait a moment for form to be ready
     await page.waitForTimeout(500)

@@ -155,8 +155,15 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: -3.5rem;
   margin-bottom: 24px;
+  
+  @media (min-width: 769px) {
+    margin-bottom: 0;
+  }
+  
+  @media (max-width: $breakpoint-mobile) {
+    margin-bottom: 0;
+  }
 
   .toggle-switch {
     position: relative;

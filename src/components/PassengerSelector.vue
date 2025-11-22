@@ -87,7 +87,7 @@ export default {
 <template>
   <div class="passenger-selector">
     <button
-      class="passenger-button btn-outline"
+      class="passenger-button"
       @click="togglePassengerDropdown"
       :aria-label="passengerFieldLabel"
     >
@@ -128,15 +128,35 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     white-space: nowrap;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    padding: 8px 20px;
+    border: 1px solid #d0d0d0;
+    background: white;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    color: $color-text;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0.2px;
+    height: 56px;
+    min-height: 56px;
 
-    &:hover:not(:disabled) {
-      .person-icon {
-        stroke: white;
-      }
+    &:hover {
+      border-color: $color-accent;
+    }
+
+    &:active {
+      border-color: $color-accent;
+    }
+
+    @media (max-width: $breakpoint-mobile) {
+      padding: 6px 16px;
+      font-size: 14px;
+      height: 40px;
+      min-height: 40px;
     }
   }
 
@@ -144,20 +164,30 @@ export default {
     width: 20px;
     height: 20px;
     flex-shrink: 0;
-    transition: stroke 0.2s;
+    transition: all 0.2s;
+    color: $color-accent;
+
+    @media (max-width: $breakpoint-mobile) {
+      width: 18px;
+      height: 18px;
+    }
   }
 
   .passenger-count-display {
     font-weight: 600;
-    font-size: 16px;
+    font-size: 15px;
+    color: $color-text;
+
+    @media (max-width: $breakpoint-mobile) {
+      font-size: 14px;
+    }
   }
 
   .passenger-dropdown {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 8px);
     right: 0;
     left: auto;
-    margin-top: 8px;
     background: white;
     border: 1px solid #d0d0d0;
     border-radius: 8px;
@@ -166,9 +196,9 @@ export default {
     padding: 12px;
     min-width: 250px;
 
-    @media (max-width: 768px) {
-      left: 0;
+    @media (max-width: $breakpoint-mobile) {
       right: 0;
+      left: auto;
     }
   }
 
@@ -233,15 +263,6 @@ export default {
         min-width: 24px;
         text-align: center;
       }
-    }
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
-
-    .passenger-button {
-      width: 100%;
-      padding: 12px 16px;
     }
   }
 }

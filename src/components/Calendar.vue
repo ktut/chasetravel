@@ -807,9 +807,10 @@ export default {
       </div>
     </div>
 
-    <!-- Desktop calendar grid -->
+    <!-- Desktop calendar dropdown -->
     <transition name="calendar-slide">
-    <div v-if="isOpen" class="calendar-grid desktop-calendar">
+    <div v-if="isOpen" class="calendar-dropdown desktop-calendar">
+      <div class="calendar-grid">
       <div class="month-view">
         <div class="month-header">
           <button
@@ -885,13 +886,12 @@ export default {
           </div>
         </div>
       </div>
-    </div>
-    </transition>
+      </div>
 
-    <transition name="calendar-fade">
-    <div v-if="isOpen" class="actions desktop-actions">
-      <button class="reset-btn btn-secondary" @click="reset" tabindex="0">Reset</button>
-      <button class="done-btn btn-primary" @click="done" tabindex="0">Done</button>
+      <div class="actions desktop-actions">
+        <button class="reset-btn btn-secondary" @click="reset" tabindex="0">Reset</button>
+        <button class="done-btn btn-primary" @click="done" tabindex="0">Done</button>
+      </div>
     </div>
     </transition>
 
@@ -1058,18 +1058,18 @@ export default {
 .calendar {
   container-type: inline-size;
   container-name: calendar;
+  position: relative;
 }
 
 .date-inputs {
   display: flex;
   gap: 16px;
-  margin-bottom: 16px;
 
   .date-input-wrapper {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 13px;
   }
 
   // On larger containers, align date inputs with calendar width
@@ -1171,8 +1171,21 @@ export default {
   }
 }
 
+.calendar-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: white;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  padding: 16px;
+  max-width: 95vw;
+}
+
 .calendar-grid {
-  margin-bottom: 16px;
   overflow: hidden;
 }
 
@@ -1181,6 +1194,10 @@ export default {
   width: 100%;
   min-width: 280px;
   max-width: 400px;
+
+  @media (min-width: 769px) {
+    width: auto;
+  }
 }
 
 .month-header {
@@ -1445,49 +1462,34 @@ export default {
   opacity: 1;
 }
 
-// Desktop styles - show by default
-.desktop-calendar {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  transform-origin: top;
-  overflow: hidden;
+// Desktop styles - dropdown positioned absolutely
+@media (min-width: 769px) {
+  .desktop-calendar {
+    .calendar-grid {
+      display: flex;
+      flex-direction: row;
+      gap: 24px;
+      margin-bottom: 16px;
+      align-items: flex-start;
 
-  // Default: hide second month on smaller containers
-  .month-view:last-child {
-    display: none;
-  }
+      .month-view {
+        flex: 0 0 auto;
+        width: auto;
+        min-width: 280px;
+        max-width: 320px;
 
-  // Show next button on first month when second month is hidden
-  .month-view:first-child {
-    .next-btn-single {
+        &:first-child {
+          .next-btn-single {
+            display: none;
+          }
+        }
+      }
+    }
+
+    .desktop-actions {
       display: flex;
     }
   }
-
-  // Container query for larger containers - show months side by side
-  @container calendar (min-width: 700px) {
-    flex-direction: row;
-    gap: 24px;
-
-    .month-view {
-      width: auto;
-
-      &:first-child {
-        .next-btn-single {
-          display: none;
-        }
-      }
-
-      &:last-child {
-        display: block !important;
-      }
-    }
-  }
-}
-
-.desktop-actions {
-  display: flex;
 }
 
 @media (max-width: 768px) {

@@ -425,7 +425,7 @@ export default {
     "filters results";
   gap: 2rem;
   max-width: 1400px;
-  padding: 0 2rem;
+  padding: 2rem;
   margin: 0 auto;
   position: relative;
 
@@ -442,7 +442,7 @@ export default {
     padding: 0.5rem 1rem 0;
     background: white;
     position: sticky;
-    top: 125px;
+    top: 139px;
     z-index: 10;
   }
 }

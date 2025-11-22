@@ -82,9 +82,9 @@ export default {
     },
     submitButtonText(): string {
       if (this.isOnSearchPage) {
-        return 'Update Search'
+        return 'Update'
       }
-      return `Search ${this.searchType === 'flights' ? 'Flights' : 'Hotels'}`
+      return 'Search'
     },
     filteredLocations(): Location[] {
       const search = this.location ? this.location.toLowerCase() : ''
@@ -453,119 +453,120 @@ export default {
 
     <!-- Full view -->
     <div v-if="!isMinimized" class="full-view">
-    <!-- <h1 class="image-top-group-title">Your most rewarding trips start here.</h1> -->
-    <!-- Search type toggle -->
-    <SearchTypeToggle v-model="searchType" />
+      <!-- Four-column desktop layout -->
+      <div class="search-grid">
+        <!-- Column 1: Controls -->
+        <div class="column-controls">
+          <div class="controls-top-row">
+            <SearchTypeToggle v-model="searchType" />
+            <PassengerSelector
+              :adults="passengerCounts.adults"
+              :children="passengerCounts.children"
+              :search-type="searchType"
+              @update:adults="passengerCounts.adults = $event"
+              @update:children="passengerCounts.children = $event"
+            />
+          </div>
 
-    <!-- Trip type toggle (only for flights) -->
-    <div v-if="searchType === 'flights'" class="trip-type-section">
-      <TripTypeToggle v-model="tripType" />
-    </div>
-
-    <!-- Location inputs -->
-    <div class="search-inputs">
-      <!-- From/Location field -->
-      <div class="location-input-wrapper location-primary">
-        <div class="input-with-clear">
-          <input
-            v-model="location"
-            type="text"
-            class="location-input"
-            :placeholder="searchType === 'flights' ? 'From' : 'Location'"
-            :aria-label="locationLabel"
-            @input="onLocationInput"
-            @focus="onLocationInput"
-            @keydown="handleLocationKeydown"
-            autocomplete="off"
-          />
-          <button
-            v-if="location"
-            class="clear-btn"
-            @click="location = ''; selectedLocation = null"
-            type="button"
-          >×</button>
-        </div>
-        <div v-if="showLocationDropdown && filteredLocations.length > 0" class="location-dropdown">
-          <div
-            v-for="(loc, index) in filteredLocations"
-            :key="loc.code"
-            class="location-option"
-            :class="{ 'keyboard-selected': index === selectedLocationIndex }"
-            @click="selectLocation(loc)"
-            @mouseenter="selectedLocationIndex = index"
-          >
-            <span class="location-name">{{ loc.name }}</span>
-            <span class="location-code">{{ loc.code }}</span>
+          <div v-if="searchType === 'flights'" class="trip-type-wrapper">
+            <TripTypeToggle v-model="tripType" />
           </div>
         </div>
-      </div>
 
-      <!-- To field (only for flights) -->
-      <div v-if="showDestinationField" class="location-input-wrapper location-primary">
-        <div class="input-with-clear">
-          <input
-            v-model="destination"
-            type="text"
-            class="location-input"
-            placeholder="To"
-            aria-label="To"
-            @input="onDestinationInput"
-            @focus="onDestinationInput"
-            @keydown="handleDestinationKeydown"
-            autocomplete="off"
-          />
-          <button
-            v-if="destination"
-            class="clear-btn"
-            @click="destination = ''; selectedDestination = null"
-            type="button"
-          >×</button>
-        </div>
-        <div v-if="showDestinationDropdown && filteredDestinations.length > 0" class="location-dropdown destination-dropdown">
-          <div
-            v-for="(loc, index) in filteredDestinations"
-            :key="loc.code"
-            class="location-option"
-            :class="{ 'keyboard-selected': index === selectedDestinationIndex }"
-            @click="selectDestination(loc)"
-            @mouseenter="selectedDestinationIndex = index"
-          >
-            <span class="location-name">{{ loc.name }}</span>
-            <span class="location-code">{{ loc.code }}</span>
+        <!-- Column 2: Location Inputs -->
+        <div class="column-locations">
+          <!-- From/Location field -->
+          <div class="location-input-wrapper">
+            <div class="input-with-clear">
+              <input
+                v-model="location"
+                type="text"
+                class="location-input"
+                :placeholder="searchType === 'flights' ? 'From' : 'Location'"
+                :aria-label="locationLabel"
+                @input="onLocationInput"
+                @focus="onLocationInput"
+                @keydown="handleLocationKeydown"
+                autocomplete="off"
+              />
+              <button
+                v-if="location"
+                class="clear-btn"
+                @click="location = ''; selectedLocation = null"
+                type="button"
+              >×</button>
+            </div>
+            <div v-if="showLocationDropdown && filteredLocations.length > 0" class="location-dropdown">
+              <div
+                v-for="(loc, index) in filteredLocations"
+                :key="loc.code"
+                class="location-option"
+                :class="{ 'keyboard-selected': index === selectedLocationIndex }"
+                @click="selectLocation(loc)"
+                @mouseenter="selectedLocationIndex = index"
+              >
+                <span class="location-name">{{ loc.name }}</span>
+                <span class="location-code">{{ loc.code }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- To field (only for flights) -->
+          <div v-if="showDestinationField" class="location-input-wrapper">
+            <div class="input-with-clear">
+              <input
+                v-model="destination"
+                type="text"
+                class="location-input"
+                placeholder="To"
+                aria-label="To"
+                @input="onDestinationInput"
+                @focus="onDestinationInput"
+                @keydown="handleDestinationKeydown"
+                autocomplete="off"
+              />
+              <button
+                v-if="destination"
+                class="clear-btn"
+                @click="destination = ''; selectedDestination = null"
+                type="button"
+              >×</button>
+            </div>
+            <div v-if="showDestinationDropdown && filteredDestinations.length > 0" class="location-dropdown destination-dropdown">
+              <div
+                v-for="(loc, index) in filteredDestinations"
+                :key="loc.code"
+                class="location-option"
+                :class="{ 'keyboard-selected': index === selectedDestinationIndex }"
+                @click="selectDestination(loc)"
+                @mouseenter="selectedDestinationIndex = index"
+              >
+                <span class="location-name">{{ loc.name }}</span>
+                <span class="location-code">{{ loc.code }}</span>
+              </div>
+            </div>
           </div>
         </div>
+
+        <!-- Column 3: Date Inputs -->
+        <div class="column-dates">
+          <Calendar
+            :initial-check-in="checkInDate"
+            :initial-check-out="checkOutDate"
+            :initial-check-in-flexibility="checkInFlexibility"
+            :initial-check-out-flexibility="checkOutFlexibility"
+            :is-one-way="searchType === 'flights' && tripType === 'one-way'"
+            @date-range-selected="handleDateRangeSelected"
+          />
+        </div>
+
+        <!-- Column 4: Submit Button -->
+        <div class="column-submit">
+          <button class="submit-btn btn-primary" @click="handleSubmit" :disabled="isSubmitDisabled">
+            {{ submitButtonText }}
+          </button>
+        </div>
       </div>
-    </div>
-
-    <!-- Calendar component -->
-    <div class="calendar-section">
-      <Calendar
-        :initial-check-in="checkInDate"
-        :initial-check-out="checkOutDate"
-        :initial-check-in-flexibility="checkInFlexibility"
-        :initial-check-out-flexibility="checkOutFlexibility"
-        :is-one-way="searchType === 'flights' && tripType === 'one-way'"
-        @date-range-selected="handleDateRangeSelected"
-      />
-    </div>
-
-    <!-- Submit button and passenger selector -->
-    <div class="submit-section">
-      <div class="main-actions">
-        <!-- Passenger selector -->
-        <PassengerSelector
-          :adults="passengerCounts.adults"
-          :children="passengerCounts.children"
-          :search-type="searchType"
-          @update:adults="passengerCounts.adults = $event"
-          @update:children="passengerCounts.children = $event"
-        />
-
-        <button class="submit-btn btn-primary" @click="handleSubmit" :disabled="isSubmitDisabled">
-          {{ submitButtonText }}
-        </button>
-      </div>
-    </div>
     </div>
   </div>
 </template>
@@ -626,29 +627,73 @@ export default {
   }
 }
 
-.image-top-group-title {
-  font-size: 2.3rem;
-  letter-spacing: -0.02em;
-  margin-bottom: 1.5rem;
-  @media (max-width: $breakpoint-mobile) {
-    display: none;
+.search-grid {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr auto;
+  gap: 20px;
+  align-items: start;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
 
-.trip-type-section {
+.column-controls {
   display: flex;
-  justify-content: center;
-  margin-bottom: 16px;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+  margin-top: 8px;
+
+  @media (min-width: 769px) {
+    margin-top: 0;
+  }
 }
 
-.search-inputs {
+.controls-top-row {
   display: flex;
+  align-items: flex-start;
   gap: 12px;
-  margin-bottom: 0.5rem;
+  justify-content: flex-start;
+
+  @media (max-width: $breakpoint-mobile) {
+    gap: 8px;
+    align-items: center;
+    margin-top: -3.5rem;
+    justify-content: center;
+  }
+}
+
+.trip-type-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: $breakpoint-mobile) {
+    justify-content: center;
+  }
+}
+
+.column-locations {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.column-dates {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.column-submit {
+  display: flex;
   align-items: stretch;
 
   @media (max-width: 768px) {
-    flex-wrap: wrap;
+    align-items: stretch;
   }
 }
 
@@ -656,14 +701,6 @@ export default {
   position: relative;
   flex: 1;
   min-width: 0;
-
-  &.location-primary {
-    flex: 2;
-
-    @media (max-width: 768px) {
-      flex: 1 1 100%;
-    }
-  }
 
   .input-with-clear {
     position: relative;
@@ -673,11 +710,12 @@ export default {
 
   .location-input {
     width: 100%;
-    padding: 10px 12px;
+    padding: 8px 12px;
     padding-right: 36px;
     border: 1px solid #d0d0d0;
     border-radius: 4px;
     font-size: 16px;
+    font-weight: 500;
     transition: border-color 0.2s;
 
     &:focus {
@@ -761,30 +799,17 @@ export default {
   }
 }
 
-.calendar-section {
-  margin-bottom: 24px;
-}
+.submit-btn {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  height: 100%;
+  min-height: 48px;
 
-.submit-section {
-  .main-actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 12px;
-
-    @media (max-width: 768px) {
-      flex-direction: column;
-      align-items: stretch;
-    }
-  }
-
-  .submit-btn {
-    padding: 12px 16px;
-    font-size: 16px;
-
-    @media (max-width: 768px) {
-      width: 100%;
-    }
+  @media (max-width: 768px) {
+    width: 100%;
+    height: auto;
   }
 }
 </style>
