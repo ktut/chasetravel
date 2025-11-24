@@ -869,7 +869,6 @@ export default {
   &.prominent {
     background: #f8f8f8;
     padding: 1rem;
-    border-radius: 6px;
     border-left: 3px solid $color-accent;
   }
 
@@ -934,7 +933,6 @@ export default {
     }
 
     &.secondary-phone {
-      font-size: 1.125rem;
       margin-top: 0.75rem;
       display: block;
     }
