@@ -106,7 +106,7 @@ export default {
 
   &__title {
     font-family: "ivyora-display", serif;
-    font-weight: 300;
+    font-weight: 400;
     font-style: normal;
     font-size: 1.3rem;
     text-wrap: balance;
