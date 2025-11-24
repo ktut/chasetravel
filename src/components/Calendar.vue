@@ -1065,13 +1065,13 @@ export default {
 
 .date-inputs {
   display: flex;
-  gap: 16px;
+  gap: 12px;
 
   .date-input-wrapper {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 13px;
+    gap: 12px;
   }
 
   // On larger containers, align date inputs with calendar width
@@ -1113,17 +1113,20 @@ export default {
   }
 
   .flex-button {
-    padding: 6px 12px;
+    padding: 8px 12px;
     background: white;
     border: 1px solid #d0d0d0;
     border-radius: 8px;
-    font-size: 13px;
+    font-size: 16px;
+    font-weight: 500;
     color: #666;
     cursor: pointer;
     white-space: nowrap;
     transition: all 0.2s;
     width: 100%;
     text-align: left;
+    height: 40px;
+    box-sizing: border-box;
 
     &:hover:not(:disabled) {
       background: #f5f5f5;
@@ -1132,8 +1135,9 @@ export default {
     }
 
     &:focus {
-      outline: 2px solid #2563eb;
-      outline-offset: 1px;
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
 
     &:disabled {
