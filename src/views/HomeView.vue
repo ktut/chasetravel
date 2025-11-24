@@ -324,9 +324,13 @@ export default {
 
 /* The Edit Section */
 .the-edit-section {
-  margin-top: $spacing-xl * 2;
-  padding-top: $spacing-xl * 2;
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: $spacing-xl;
+  padding-top: $spacing-xl;
   border-top: 1px solid #e0e0e0;
+  min-height: 100vh;
 
   .section-title {
     font-size: 2rem;
