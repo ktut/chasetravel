@@ -418,6 +418,8 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+@use '@/styles/global.scss' as *;
+
 .results-wrapper {
   display: grid;
   grid-template-columns: minmax(190px, 280px) 1fr;
@@ -605,7 +607,7 @@ export default {
 .results-main {
   grid-area: results;
   min-height: 500px;
-  padding: 2rem;
+  padding: 0 2rem 2rem;
   @media (max-width: 968px) {
     padding: 1rem;
   }
@@ -625,9 +627,7 @@ export default {
 
   .results-info {
     h2 {
-      font-family: $font-body;
-      font-size: 1.5rem;
-      font-weight: 600;
+      @include heading-font;
       margin: 0 0 0.25rem 0;
       color: $color-text;
     }

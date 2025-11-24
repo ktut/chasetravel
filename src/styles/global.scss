@@ -15,14 +15,20 @@ body {
   width: 100%;
 }
 
+@mixin heading-font{
+  font-family: $font-heading;
+  font-weight: 400;
+  font-style: normal;
+}
+
 h1,
 h2 {
   font-family: $font-heading;
-  font-weight: 400;
   line-height: 1.2;
 }
 
 h1 {
+  font-weight: 300;
   font-size: 3rem;
   margin-bottom: $spacing-lg;
 
@@ -32,6 +38,7 @@ h1 {
 }
 
 h2 {
+  font-weight: 400;
   font-size: 2.5rem;
   margin-bottom: $spacing-md;
 

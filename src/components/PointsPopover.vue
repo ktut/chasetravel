@@ -105,7 +105,9 @@ export default {
   }
 
   &__title {
-    font-family: "Queens", serif;
+    font-family: "ivyora-display", serif;
+    font-weight: 300;
+    font-style: normal;
     font-size: 1.3rem;
     text-wrap: balance;
     line-height: 1.12;
