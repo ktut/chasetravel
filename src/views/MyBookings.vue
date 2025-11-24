@@ -246,7 +246,7 @@ export default {
           <section v-if="pastBookings.length > 0" class="past-bookings-section">
             <button @click="togglePastBookings" class="past-bookings-toggle">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="toggle-icon" :class="{ rotated: showPastBookings }">
-                <path d="M19 9l-7 7-7-7"/>
+                <path d="M9 5l7 7-7 7"/>
               </svg>
               Past Bookings ({{ pastBookings.length }})
             </button>
@@ -367,7 +367,7 @@ export default {
 .mybookings-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 10rem 1.5rem 3rem;
+  padding: 8rem 1.5rem 3rem;
 
   @media (max-width: 768px) {
     padding: 12rem 1rem 2rem;
@@ -377,7 +377,7 @@ export default {
 .mybookings-container {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 4rem;
 }
 
 .page-title {
@@ -808,7 +808,7 @@ export default {
     transition: transform 0.3s;
 
     &.rotated {
-      transform: rotate(180deg);
+      transform: rotate(90deg);
     }
   }
 }
