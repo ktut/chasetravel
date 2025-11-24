@@ -81,7 +81,7 @@ export default {
           v-if="!isSignedIn"
           @click="handleSignIn"
           :disabled="isLoading"
-          class="navbar__signin-btn btn-primary"
+          class="btn-primary navbar__btn"
         >
           <svg
             v-if="isLoading"
@@ -134,7 +134,7 @@ export default {
         <RouterLink
           v-if="isSignedIn"
           to="/mybookings"
-          class="navbar__bookings-btn"
+          class="btn-secondary navbar__btn"
         >
           <span class="navbar__bookings-text">My Bookings</span>
           <svg class="navbar__bookings-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -169,7 +169,7 @@ export default {
           v-if="isSignedIn"
           @click="handleSignOut"
           :disabled="isSigningOut"
-          class="navbar__signin-btn btn-primary"
+          class="btn-primary navbar__btn"
         >
           <svg
             v-if="isSigningOut"
@@ -291,14 +291,20 @@ export default {
     gap: 1rem;
   }
 
-  &__signin-btn {
+  &__btn {
+    padding: 0.5rem 1.5rem !important;
+    border-radius: 4px !important;
+    border-width: 1px !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    min-width: 100px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.5rem 1.5rem;
-    font-size: 0.875rem;
-    min-width: 100px;
-    height: 36px;
+    text-decoration: none;
+    white-space: nowrap;
+    animation: slideIn 0.3s ease-out;
   }
 
   &__signout-text {
@@ -360,31 +366,6 @@ export default {
     color: #0a8a4e;
   }
 
-  &__bookings-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #000;
-    background: white;
-    border: 1px solid #d0d0d0;
-    border-radius: 4px;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    animation: slideIn 0.3s ease-out;
-    white-space: nowrap;
-
-    &:hover {
-      border-color: #005eb8;
-      background: rgba(0, 94, 184, 0.05);
-    }
-
-    &:active {
-      transform: scale(0.98);
-    }
-  }
 
   &__bookings-text {
     display: inline;
@@ -464,15 +445,10 @@ export default {
       font-size: 1.25rem;
     }
 
-    &__signin-btn {
-      padding: 0.375rem 1.25rem;
-      font-size: 0.8125rem;
-      min-width: 90px;
-
-      &:has(.navbar__signout-icon), &:has(.navbar__spinner):disabled {
-        min-width: auto;
-        padding: 0.5rem;
-      }
+    &__btn {
+      padding: 0.5rem !important;
+      font-size: 0.8125rem !important;
+      min-width: auto;
     }
 
     &__signout-text {
@@ -493,11 +469,6 @@ export default {
 
     &__points-text {
       font-size: 0.8125rem;
-    }
-
-    &__bookings-btn {
-      padding: 0.5rem;
-      min-width: auto;
     }
 
     &__bookings-text {
