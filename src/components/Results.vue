@@ -54,8 +54,15 @@ export default {
     },
     allAirlines(): string[] {
       if (!this.isFlights) return []
-      const flights = this.results as Flight[]
-      return [...new Set(flights.map(f => f.airline))].sort()
+      const isRoundTrip = this.searchData?.tripType === 'round-trip'
+
+      if (isRoundTrip) {
+        const pairs = this.results as any[]
+        return [...new Set(pairs.map(p => p.outbound.airline))].sort()
+      } else {
+        const flights = this.results as Flight[]
+        return [...new Set(flights.map(f => f.airline))].sort()
+      }
     },
     allAmenities(): string[] {
       if (!this.isHotels) return []
@@ -64,46 +71,92 @@ export default {
     },
     minPrice(): number {
       if (this.results.length === 0) return 0
+      const isRoundTrip = this.isFlights && this.searchData?.tripType === 'round-trip'
+      if (isRoundTrip) {
+        return Math.min(...this.results.map((r: any) => r.totalPrice))
+      }
       return Math.min(...this.results.map((r: any) => r.price || r.pricePerNight))
     },
     maxPrice(): number {
       if (this.results.length === 0) return 10000
+      const isRoundTrip = this.isFlights && this.searchData?.tripType === 'round-trip'
+      if (isRoundTrip) {
+        return Math.max(...this.results.map((r: any) => r.totalPrice))
+      }
       return Math.max(...this.results.map((r: any) => r.price || r.pricePerNight))
     },
     filteredResults(): (Flight | Hotel)[] {
       let filtered = [...this.results]
 
       if (this.isFlights) {
-        const flights = filtered as Flight[]
+        const isRoundTrip = this.searchData?.tripType === 'round-trip'
 
-        // Filter by stops
-        filtered = flights.filter(f => f.stops <= this.maxStops)
+        if (isRoundTrip) {
+          // Handle FlightPair filtering
+          const pairs = filtered as any[]
 
-        // Filter by airlines
-        if (this.selectedAirlines.length > 0) {
-          filtered = filtered.filter((f: any) =>
-            this.selectedAirlines.includes(f.airline)
+          // Filter by stops (check outbound flight)
+          filtered = pairs.filter(p => p.outbound.stops <= this.maxStops)
+
+          // Filter by airlines (check outbound flight)
+          if (this.selectedAirlines.length > 0) {
+            filtered = filtered.filter((p: any) =>
+              this.selectedAirlines.includes(p.outbound.airline)
+            )
+          }
+
+          // Filter by price (use totalPrice)
+          filtered = filtered.filter((p: any) =>
+            p.totalPrice >= this.priceRange[0] && p.totalPrice <= this.priceRange[1]
           )
-        }
 
-        // Filter by price
-        filtered = filtered.filter((f: any) =>
-          f.price >= this.priceRange[0] && f.price <= this.priceRange[1]
-        )
+          // Sort
+          if (this.sortBy === 'price') {
+            filtered.sort((a: any, b: any) => a.totalPrice - b.totalPrice)
+          } else if (this.sortBy === 'duration') {
+            filtered.sort((a: any, b: any) => {
+              const aDur = this.parseDuration(a.outbound.duration)
+              const bDur = this.parseDuration(b.outbound.duration)
+              return aDur - bDur
+            })
+          } else if (this.sortBy === 'departure') {
+            filtered.sort((a: any, b: any) => {
+              return a.outbound.departure.time.localeCompare(b.outbound.departure.time)
+            })
+          }
+        } else {
+          // Handle Flight filtering (one-way)
+          const flights = filtered as Flight[]
 
-        // Sort
-        if (this.sortBy === 'price') {
-          filtered.sort((a: any, b: any) => a.price - b.price)
-        } else if (this.sortBy === 'duration') {
-          filtered.sort((a: any, b: any) => {
-            const aDur = this.parseDuration(a.duration)
-            const bDur = this.parseDuration(b.duration)
-            return aDur - bDur
-          })
-        } else if (this.sortBy === 'departure') {
-          filtered.sort((a: any, b: any) => {
-            return a.departure.time.localeCompare(b.departure.time)
-          })
+          // Filter by stops
+          filtered = flights.filter(f => f.stops <= this.maxStops)
+
+          // Filter by airlines
+          if (this.selectedAirlines.length > 0) {
+            filtered = filtered.filter((f: any) =>
+              this.selectedAirlines.includes(f.airline)
+            )
+          }
+
+          // Filter by price
+          filtered = filtered.filter((f: any) =>
+            f.price >= this.priceRange[0] && f.price <= this.priceRange[1]
+          )
+
+          // Sort
+          if (this.sortBy === 'price') {
+            filtered.sort((a: any, b: any) => a.price - b.price)
+          } else if (this.sortBy === 'duration') {
+            filtered.sort((a: any, b: any) => {
+              const aDur = this.parseDuration(a.duration)
+              const bDur = this.parseDuration(b.duration)
+              return aDur - bDur
+            })
+          } else if (this.sortBy === 'departure') {
+            filtered.sort((a: any, b: any) => {
+              return a.departure.time.localeCompare(b.departure.time)
+            })
+          }
         }
       } else if (this.isHotels) {
         const hotels = filtered as Hotel[]
@@ -388,7 +441,13 @@ export default {
         <NoResults v-if="filteredResults.length === 0 && !isLoading" :searchType="searchType" />
 
         <TransitionGroup name="flight-list">
-          <FlightCard v-for="flight in displayedResults as Flight[]" :key="flight.id" :flight="flight" :searchData="searchData" />
+          <FlightCard
+            v-for="result in displayedResults"
+            :key="result.id"
+            :flight="searchData?.tripType !== 'round-trip' ? result as any : null"
+            :flightPair="searchData?.tripType === 'round-trip' ? result as any : null"
+            :searchData="searchData"
+          />
         </TransitionGroup>
 
         <!-- Loading indicator -->
@@ -666,7 +725,7 @@ export default {
 .flight-results {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2rem;
   position: relative;
 }
 

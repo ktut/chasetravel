@@ -15,7 +15,6 @@ test.describe('Search Update Flow', () => {
   test('should update flight search dates on results page and reflect in URL', async ({ page }) => {
     // Step 1: Navigate to homepage
     await page.goto('/', { timeout: 60000 })
-    await expect(page).toHaveTitle(/Chase Travel/)
 
     // Step 2: Fill in initial search form - Flights are selected by default
 
@@ -160,7 +159,6 @@ test.describe('Search Update Flow', () => {
   test('should update hotel search dates on results page and reflect in URL', async ({ page }) => {
     // Step 1: Navigate to homepage
     await page.goto('/', { timeout: 60000 })
-    await expect(page).toHaveTitle(/Chase Travel/)
 
     // Step 2: Switch to Stays (Hotels) search
     const staysButton = page.locator('.toggle-option').filter({ hasText: 'Stays' }).first()

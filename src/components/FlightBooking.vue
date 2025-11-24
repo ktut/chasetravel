@@ -12,8 +12,24 @@ export default {
   },
   computed: {
     airlineLogo() {
-      if (!this.booking.flight) return null
-      return getAirlineLogo(this.booking.flight.airline)
+      if (this.flightsToDisplay.length === 0) return null
+      return getAirlineLogo(this.flightsToDisplay[0].airline)
+    },
+    returnAirlineLogo() {
+      if (!this.isRoundTrip || this.flightsToDisplay.length < 2) return null
+      return getAirlineLogo(this.flightsToDisplay[1].airline)
+    },
+    flightsToDisplay() {
+      if (this.booking.flights && this.booking.flights.length > 0) {
+        return this.booking.flights
+      }
+      return []
+    },
+    isRoundTrip() {
+      return this.flightsToDisplay.length === 2 || this.booking.tripType === 'round-trip'
+    },
+    totalPrice() {
+      return this.flightsToDisplay.reduce((sum, flight) => sum + flight.price, 0)
     }
   },
   methods: {
@@ -41,34 +57,59 @@ export default {
 </script>
 
 <template>
-  <div v-if="booking.flight" class="booking-card">
+  <div v-if="flightsToDisplay.length > 0" class="booking-card" :class="{ 'round-trip': isRoundTrip }">
     <div class="booking-content">
       <div class="booking-type-badge flight">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"></path>
         </svg>
-        Flight
+        {{ isRoundTrip ? 'Round-trip Flight' : 'Flight' }}
       </div>
 
+      <!-- Outbound Flight (or single flight) -->
       <div class="booking-details">
         <div class="flight-info-wrapper">
-          <img v-if="airlineLogo" :src="airlineLogo" :alt="booking.flight.airline" class="airline-logo" />
+          <img v-if="airlineLogo" :src="airlineLogo" :alt="flightsToDisplay[0].airline" class="airline-logo" />
           <div class="flight-info">
-            <h3>{{ booking.flight.departure.airport }} → {{ booking.flight.arrival.airport }}</h3>
+            <div v-if="isRoundTrip" class="leg-label">Outbound</div>
+            <h3>{{ flightsToDisplay[0].departure.airport }} → {{ flightsToDisplay[0].arrival.airport }}</h3>
             <div class="flight-meta">
-              <span>{{ booking.flight.airline }} {{ booking.flight.flightNumber }}</span>
+              <span>{{ flightsToDisplay[0].airline }} {{ flightsToDisplay[0].flightNumber }}</span>
               <span class="separator">•</span>
-              <span class="time">{{ booking.flight.departure.time }}</span>
+              <span class="time">{{ flightsToDisplay[0].departure.time }}</span>
               <span class="separator">→</span>
-              <span class="time">{{ booking.flight.arrival.time }}</span>
+              <span class="time">{{ flightsToDisplay[0].arrival.time }}</span>
               <span class="separator">•</span>
-              <span class="duration">{{ booking.flight.duration }}</span>
+              <span class="duration">{{ flightsToDisplay[0].duration }}</span>
             </div>
           </div>
         </div>
-        <div class="booking-actions">
-          <button @click="cancelBooking" class="btn-cancel">Cancel Booking</button>
+      </div>
+
+      <!-- Return Flight (if round-trip) -->
+      <div v-if="isRoundTrip && flightsToDisplay.length === 2" class="flight-separator"></div>
+      <div v-if="isRoundTrip && flightsToDisplay.length === 2" class="booking-details">
+        <div class="flight-info-wrapper">
+          <img v-if="returnAirlineLogo" :src="returnAirlineLogo" :alt="flightsToDisplay[1].airline" class="airline-logo" />
+          <div class="flight-info">
+            <div class="leg-label">Return</div>
+            <h3>{{ flightsToDisplay[1].departure.airport }} → {{ flightsToDisplay[1].arrival.airport }}</h3>
+            <div class="flight-meta">
+              <span>{{ flightsToDisplay[1].airline }} {{ flightsToDisplay[1].flightNumber }}</span>
+              <span class="separator">•</span>
+              <span class="time">{{ flightsToDisplay[1].departure.time }}</span>
+              <span class="separator">→</span>
+              <span class="time">{{ flightsToDisplay[1].arrival.time }}</span>
+              <span class="separator">•</span>
+              <span class="duration">{{ flightsToDisplay[1].duration }}</span>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="booking-footer">
+        <button @click="cancelBooking" class="btn-cancel">Cancel Booking</button>
       </div>
     </div>
   </div>
@@ -182,6 +223,48 @@ export default {
     .duration {
       color: #999;
     }
+  }
+}
+
+.leg-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: $color-accent;
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.5px;
+}
+
+.flight-separator {
+  height: 1px;
+  background: linear-gradient(to right, #e5e5e5 0%, #ccc 50%, #e5e5e5 100%);
+  margin: 0.75rem 0;
+  position: relative;
+
+  &::after {
+    content: '↓';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 0 0.5rem;
+    color: #999;
+    font-size: 1rem;
+  }
+}
+
+.booking-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f0f0f0;
+
+  @media (max-width: 768px) {
+    justify-content: stretch;
   }
 }
 

@@ -140,8 +140,8 @@ export default {
       })
     },
     getBookingPrice(booking: Booking): number {
-      if (booking.type === 'flight' && booking.flight) {
-        return booking.flight.price
+      if (booking.type === 'flight' && booking.flights && booking.flights.length > 0) {
+        return booking.flights.reduce((sum, flight) => sum + flight.price, 0)
       } else if (booking.type === 'hotel' && booking.hotel && booking.searchData) {
         const nights = this.calculateNights(booking.searchData.checkIn, booking.searchData.checkOut)
         if (booking.room) {
@@ -176,8 +176,8 @@ export default {
         // Both are flights
         if (a.type === 'flight' && b.type === 'flight') {
           // Sort by departure time if available
-          if (a.flight?.departure?.time && b.flight?.departure?.time) {
-            return a.flight.departure.time.localeCompare(b.flight.departure.time)
+          if (a.flights?.[0]?.departure?.time && b.flights?.[0]?.departure?.time) {
+            return a.flights[0].departure.time.localeCompare(b.flights[0].departure.time)
           }
           return 0
         }
@@ -234,7 +234,7 @@ export default {
               <h3 class="date-header">{{ formatDateHeader(group.date) }}</h3>
               <div v-for="booking in group.bookings" :key="booking.id">
                 <FlightBooking
-                  v-if="booking.type === 'flight' && booking.flight"
+                  v-if="booking.type === 'flight' && booking.flights"
                   :booking="booking"
                   @cancel="cancelBooking"
                 />
@@ -261,7 +261,7 @@ export default {
                 <h3 class="date-header">{{ formatDateHeader(group.date) }}</h3>
                 <div v-for="booking in group.bookings" :key="booking.id">
                   <FlightBooking
-                    v-if="booking.type === 'flight' && booking.flight"
+                    v-if="booking.type === 'flight' && booking.flights"
                     :booking="booking"
                     @cancel="cancelBooking"
                   />
@@ -475,7 +475,6 @@ export default {
     font-size: 1.5rem;
     font-weight: 600;
     margin: 0;
-    color: $color-primary;
   }
 
   p {
@@ -487,6 +486,9 @@ export default {
 
   .btn-primary {
     margin-top: 1rem;
+    &:hover {
+      color: white;
+    }
   }
 }
 

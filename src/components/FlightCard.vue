@@ -1,14 +1,18 @@
 <script lang="ts">
 import { useSearchStore } from '@/stores/searchStore'
-import type { Flight } from '@/types/search'
+import type { Flight, FlightPair } from '@/types/search'
 import { getAirlineLogo } from '@/utils/airlineLogos'
 
 export default {
   name: 'FlightCard',
   props: {
     flight: {
-      type: Object as () => Flight,
-      required: true
+      type: Object as () => Flight | null,
+      default: null
+    },
+    flightPair: {
+      type: Object as () => FlightPair | null,
+      default: null
     },
     searchData: {
       type: Object,
@@ -19,8 +23,27 @@ export default {
     searchStore() {
       return useSearchStore()
     },
+    isRoundTrip(): boolean {
+      return this.flightPair !== null &&this.flightPair !== undefined
+    },
+    displayFlight(): Flight | null {
+      if (this.isRoundTrip && this.flightPair) {
+        return this.flightPair.outbound
+      }
+      return this.flight
+    },
+    displayPrice(): number {
+      if (this.isRoundTrip && this.flightPair) {
+        return this.flightPair.totalPrice
+      }
+      return this.flight ? this.flight.price : 0
+    },
     airlineLogo() {
-      return getAirlineLogo(this.flight.airline)
+      return this.displayFlight ? getAirlineLogo(this.displayFlight.airline) : null
+    },
+    returnAirlineLogo() {
+      if (!this.isRoundTrip || !this.flightPair) return null
+      return getAirlineLogo(this.flightPair.return.airline)
     }
   },
   methods: {
@@ -33,16 +56,26 @@ export default {
     },
     selectFlight() {
       console.log('=== FlightCard.selectFlight CALLED ===')
-      console.log('Flight selected:', this.flight)
+      console.log('Is round-trip:', this.isRoundTrip)
+      console.log('Flight/Pair selected:', this.isRoundTrip ? this.flightPair : this.flight)
       console.log('Search data:', this.searchData)
 
-      // Store flight and search data in sessionStorage for navigation
+      // Store flight(s) and search data in sessionStorage for navigation
       try {
-        const flightJson = JSON.stringify(this.flight)
         const searchDataJson = JSON.stringify(this.searchData)
 
+        if (this.isRoundTrip && this.flightPair) {
+          // Store both outbound and return flights for round-trip
+          console.log('Storing round-trip flights...')
+          sessionStorage.setItem('outboundFlight', JSON.stringify(this.flightPair.outbound))
+          sessionStorage.setItem('returnFlight', JSON.stringify(this.flightPair.return))
+        } else {
+          // Store single flight for one-way
+          console.log('Storing one-way flight...')
+          sessionStorage.setItem('selectedFlight', JSON.stringify(this.flight))
+        }
+
         console.log('Storing in sessionStorage...')
-        sessionStorage.setItem('selectedFlight', flightJson)
         sessionStorage.setItem('confirmationSearchData', searchDataJson)
 
         // Verify it was stored
@@ -65,40 +98,82 @@ export default {
 </script>
 
 <template>
-  <div class="flight-card">
+  <div v-if="displayFlight" class="flight-card" :class="{ 'round-trip-card': isRoundTrip }">
+    <!-- Outbound Flight (or single flight for one-way) -->
     <div class="flight-main">
       <div class="flight-info-wrapper">
-        <img v-if="airlineLogo" :src="airlineLogo" :alt="flight.airline" class="airline-logo" />
+        <img v-if="airlineLogo" :src="airlineLogo" :alt="displayFlight.airline" class="airline-logo" />
         <div class="flight-info">
-          <div class="airline">{{ flight.airline }}</div>
-          <div class="flight-number">{{ flight.flightNumber }}</div>
+          <div v-if="isRoundTrip" class="flight-label">Departure</div>
+          <div class="airline">{{ displayFlight.airline }}</div>
+          <div class="flight-number">{{ displayFlight.flightNumber }}</div>
         </div>
       </div>
 
       <div class="flight-route">
         <div class="route-point">
-          <div class="time">{{ flight.departure.time }}</div>
-          <div class="airport">{{ flight.departure.airport }}</div>
+          <div class="time">{{ displayFlight.departure.time }}</div>
+          <div class="airport">{{ displayFlight.departure.airport }}</div>
         </div>
 
         <div class="route-visual">
           <div class="route-line">
             <div class="line"></div>
           </div>
-          <div class="duration">{{ flight.duration }}</div>
-          <div class="stops" v-if="flight.stops > 0">{{ flight.stops }} stop{{ flight.stops > 1 ? 's' : '' }}</div>
+          <div class="duration">{{ displayFlight.duration }}</div>
+          <div class="stops" v-if="displayFlight.stops > 0">{{ displayFlight.stops }} stop{{ displayFlight.stops > 1 ? 's' : '' }}</div>
           <div class="nonstop" v-else>Nonstop</div>
         </div>
 
         <div class="route-point">
-          <div class="time">{{ flight.arrival.time }}</div>
-          <div class="airport">{{ flight.arrival.airport }}</div>
+          <div class="time">{{ displayFlight.arrival.time }}</div>
+          <div class="airport">{{ displayFlight.arrival.airport }}</div>
+        </div>
+      </div>
+
+      <div v-if="!isRoundTrip" class="flight-price">
+        <button @click="selectFlight" class="btn-primary select-btn">
+          {{ formatPrice(displayPrice) }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Return Flight (only for round-trip) -->
+    <div v-if="isRoundTrip && flightPair" class="flight-separator"></div>
+    <div v-if="isRoundTrip && flightPair" class="flight-main">
+      <div class="flight-info-wrapper">
+        <img v-if="returnAirlineLogo" :src="returnAirlineLogo" :alt="flightPair.return.airline" class="airline-logo" />
+        <div class="flight-info">
+          <div class="flight-label">Return</div>
+          <div class="airline">{{ flightPair.return.airline }}</div>
+          <div class="flight-number">{{ flightPair.return.flightNumber }}</div>
+        </div>
+      </div>
+
+      <div class="flight-route">
+        <div class="route-point">
+          <div class="time">{{ flightPair.return.departure.time }}</div>
+          <div class="airport">{{ flightPair.return.departure.airport }}</div>
+        </div>
+
+        <div class="route-visual">
+          <div class="route-line">
+            <div class="line"></div>
+          </div>
+          <div class="duration">{{ flightPair.return.duration }}</div>
+          <div class="stops" v-if="flightPair.return.stops > 0">{{ flightPair.return.stops }} stop{{ flightPair.return.stops > 1 ? 's' : '' }}</div>
+          <div class="nonstop" v-else>Nonstop</div>
+        </div>
+
+        <div class="route-point">
+          <div class="time">{{ flightPair.return.arrival.time }}</div>
+          <div class="airport">{{ flightPair.return.arrival.airport }}</div>
         </div>
       </div>
 
       <div class="flight-price">
         <button @click="selectFlight" class="btn-primary select-btn">
-          {{ formatPrice(flight.price) }}
+          {{ formatPrice(displayPrice) }}
         </button>
       </div>
     </div>
@@ -122,6 +197,25 @@ export default {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border-color: $color-accent;
   }
+
+  &.round-trip-card {
+    padding: 1rem 1rem 0.75rem;
+  }
+}
+
+.flight-separator {
+  height: 1px;
+  background: linear-gradient(to right, #e5e5e5 0%, #ccc 50%, #e5e5e5 100%);
+  margin: 0.75rem 0;
+}
+
+.flight-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: $color-accent;
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.5px;
 }
 
 .flight-main {

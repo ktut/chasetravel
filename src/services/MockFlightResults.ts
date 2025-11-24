@@ -1,6 +1,7 @@
-import type { SearchData, Flight } from '@/types/search'
+import type { SearchData, Flight, FlightPair } from '@/types/search'
+import { LOCATIONS } from '@/constants'
 
-export function getMockFlightResults(searchData: SearchData): Flight[] {
+export function getMockFlightResults(searchData: SearchData): Flight[] | FlightPair[] {
   // Extract search parameters
   const location = searchData.location
   const destination = searchData.destination
@@ -8,7 +9,7 @@ export function getMockFlightResults(searchData: SearchData): Flight[] {
   // Future enhancement: use searchData.checkIn for filtering by date
 
   // Generate mock flight results based on the search
-  const airlines = ['United Airlines', 'Delta Air Lines', 'American Airlines', 'Southwest Airlines', 'JetBlue Airways']
+  const airlines = ['United Airlines', 'Delta Airlines', 'American Airlines', 'Southwest Airlines', 'JetBlue Airways']
   const results: Flight[] = []
 
   // Generate 5-8 mock flights
@@ -37,11 +38,11 @@ export function getMockFlightResults(searchData: SearchData): Flight[] {
     const arrivalMin = arrivalTotalMins % 60
     const arrivalTime = `${arrivalHour.toString().padStart(2, '0')}:${arrivalMin.toString().padStart(2, '0')}`
 
-    // Extract airport codes (last 3 chars in parentheses if they exist)
-    const fromMatch = location?.match(/\(([A-Z]{3})\)/)
-    const toMatch = destination?.match(/\(([A-Z]{3})\)/)
-    const fromCode = fromMatch ? fromMatch[1] : 'NYC'
-    const toCode = toMatch ? toMatch[1] : 'LAX'
+    // Extract airport codes by looking up location names in LOCATIONS
+    const fromLocation = LOCATIONS.find(loc => loc.name === location)
+    const toLocation = LOCATIONS.find(loc => loc.name === destination)
+    const fromCode = fromLocation ? fromLocation.code : 'NYC'
+    const toCode = toLocation ? toLocation.code : 'LAX'
 
     results.push({
       id: i + 1,
@@ -63,6 +64,37 @@ export function getMockFlightResults(searchData: SearchData): Flight[] {
 
   // Sort by price
   results.sort((a, b) => a.price - b.price)
+
+  // If round-trip, pair outbound and return flights
+  if (searchData.tripType === 'round-trip') {
+    const pairs: FlightPair[] = []
+
+    // For each outbound flight, create a return flight
+    results.forEach((outboundFlight, index) => {
+      // Generate return flight (swap departure and arrival airports)
+      const returnFlight: Flight = {
+        ...outboundFlight,
+        id: outboundFlight.id + 1000, // Different ID for return flight
+        departure: {
+          airport: outboundFlight.arrival.airport,
+          time: outboundFlight.departure.time // Similar time for return
+        },
+        arrival: {
+          airport: outboundFlight.departure.airport,
+          time: outboundFlight.arrival.time
+        }
+      }
+
+      pairs.push({
+        id: index + 1,
+        outbound: outboundFlight,
+        return: returnFlight,
+        totalPrice: outboundFlight.price + returnFlight.price
+      })
+    })
+
+    return pairs
+  }
 
   return results
 }

@@ -5,7 +5,8 @@ export interface Booking {
   id: string
   type: 'flight' | 'hotel'
   bookingDate: Date
-  flight?: Flight
+  tripType?: 'one-way' | 'round-trip'
+  flights?: Flight[]  // Array of flights (1 for one-way, 2 for round-trip)
   hotel?: Hotel
   room?: Room
   searchData?: SearchData

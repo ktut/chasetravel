@@ -33,6 +33,13 @@ export interface Flight {
   stops: number
 }
 
+export interface FlightPair {
+  id: number
+  outbound: Flight
+  return: Flight
+  totalPrice: number
+}
+
 export interface Hotel {
   id: number
   name: string

@@ -11,6 +11,7 @@ export default {
       pointsValue: 0.0125, // Each point is worth $0.0125
       localSearchData: null as any,
       localFlight: null as any,
+      localReturnFlight: null as any,
       localHotel: null as any,
       localRoom: null as any,
       bookingType: null as 'flight' | 'hotel' | null,
@@ -92,19 +93,37 @@ export default {
       return `${this.searchData.location} to ${this.searchData.destination}`
     },
     tripType(): string {
-      return 'Round-trip'
+      // Check if it's a round-trip based on return flight or search data
+      if (this.localReturnFlight || this.searchData?.tripType === 'round-trip') {
+        return 'Round-trip'
+      }
+      return 'One-way'
+    },
+    baseFlightPrice(): number {
+      if (!this.flight) return 0
+      // Calculate base price (outbound + return if exists)
+      let basePrice = this.flight.price
+      if (this.localReturnFlight) {
+        basePrice += this.localReturnFlight.price
+      }
+      return basePrice
     },
     currentFarePrice(): number {
       if (!this.flight) return 0
+
+      // Calculate base price (outbound + return if exists)
+      let basePrice = this.baseFlightPrice
+
+      // Apply fare multiplier
       switch (this.selectedFareType) {
         case 'basic':
-          return this.flight.price
+          return basePrice
         case 'economy':
-          return this.flight.price + 75
+          return basePrice + (this.localReturnFlight ? 150 : 75) // Double upgrade fee for round-trip
         case 'business':
-          return this.flight.price + 450
+          return basePrice + (this.localReturnFlight ? 900 : 450) // Double upgrade fee for round-trip
         default:
-          return this.flight.price
+          return basePrice
       }
     },
     currentPrice(): number {
@@ -133,6 +152,10 @@ export default {
     airlineLogo(): string | null {
       if (!this.flight) return null
       return getAirlineLogo(this.flight.airline)
+    },
+    returnAirlineLogo(): string | null {
+      if (!this.localReturnFlight) return null
+      return getAirlineLogo(this.localReturnFlight.airline)
     }
   },
   watch: {
@@ -171,8 +194,26 @@ export default {
     console.log('HotelData in sessionStorage:', hotelData ? 'EXISTS' : 'NULL')
     console.log('SearchData in sessionStorage:', searchData ? 'EXISTS' : 'NULL')
 
-    // Load flight data if available
-    if (flightData) {
+    // Load flight data if available (check for both one-way and round-trip)
+    const outboundFlightData = sessionStorage.getItem('outboundFlight')
+    const returnFlightData = sessionStorage.getItem('returnFlight')
+
+    if (outboundFlightData) {
+      // Round-trip flight
+      try {
+        this.localFlight = JSON.parse(outboundFlightData)
+        this.bookingType = 'flight'
+        console.log('Outbound flight loaded from sessionStorage:', this.localFlight)
+
+        if (returnFlightData) {
+          this.localReturnFlight = JSON.parse(returnFlightData)
+          console.log('Return flight loaded from sessionStorage:', this.localReturnFlight)
+        }
+      } catch (e) {
+        console.error('Error parsing round-trip flight data:', e)
+      }
+    } else if (flightData) {
+      // One-way flight
       try {
         this.localFlight = JSON.parse(flightData)
         this.bookingType = 'flight'
@@ -224,6 +265,8 @@ export default {
       // Clear sessionStorage after successfully loading the data
       setTimeout(() => {
         sessionStorage.removeItem('selectedFlight')
+        sessionStorage.removeItem('outboundFlight')
+        sessionStorage.removeItem('returnFlight')
         sessionStorage.removeItem('selectedHotel')
         sessionStorage.removeItem('selectedRoom')
         sessionStorage.removeItem('confirmationSearchData')
@@ -292,11 +335,23 @@ export default {
     proceedToBook() {
       // Save booking to store
       if (this.isFlightBooking && this.localFlight) {
-        this.searchStore.addBooking({
+        // Create booking with flights array for round-trip, or single flight for one-way
+        const bookingData: any = {
           type: 'flight',
-          flight: this.localFlight,
           searchData: this.localSearchData
-        })
+        }
+
+        if (this.localReturnFlight) {
+          // Round-trip: use flights array
+          bookingData.flights = [this.localFlight, this.localReturnFlight]
+          bookingData.tripType = 'round-trip'
+        } else {
+          // One-way: use flights array with single flight
+          bookingData.flights = [this.localFlight]
+          bookingData.tripType = 'one-way'
+        }
+
+        this.searchStore.addBooking(bookingData)
       } else if (this.isHotelBooking && this.localHotel) {
         this.searchStore.addBooking({
           type: 'hotel',
@@ -378,7 +433,7 @@ export default {
           >
             <div class="fare-header">
               <h3>Basic Economy</h3>
-              <div class="fare-price">{{ formatPrice(flight.price) }}</div>
+              <div class="fare-price">{{ formatPrice(baseFlightPrice) }}</div>
             </div>
             <ul class="fare-features" v-if="expandedFare === 'basic'">
               <li class="feature-negative">
@@ -417,7 +472,7 @@ export default {
           >
             <div class="fare-header">
               <h3>Economy</h3>
-              <div class="fare-price">{{ formatPrice(flight.price + 75) }}</div>
+              <div class="fare-price">{{ formatPrice(baseFlightPrice + (localReturnFlight ? 150 : 75)) }}</div>
             </div>
             <ul class="fare-features" v-if="expandedFare === 'economy'">
               <li class="feature-positive">
@@ -463,7 +518,7 @@ export default {
           >
             <div class="fare-header">
               <h3>Business</h3>
-              <div class="fare-price">{{ formatPrice(flight.price + 450) }}</div>
+              <div class="fare-price">{{ formatPrice(baseFlightPrice + (localReturnFlight ? 900 : 450)) }}</div>
             </div>
             <ul class="fare-features" v-if="expandedFare === 'business'">
               <li class="feature-positive">
@@ -625,6 +680,66 @@ export default {
             </div>
             <div class="flight-meta">
               <span>{{ flight.airline }} {{ flight.flightNumber }}</span>
+              <span class="separator">•</span>
+              <span>Narrow-body jet</span>
+              <span class="separator">•</span>
+              <span>Airbus A320-100/200</span>
+            </div>
+            <div class="amenities">
+              <span class="amenity">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="4"/>
+                  <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+                </svg>
+                Wi-Fi
+              </span>
+              <span class="amenity">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="7" width="20" height="14" rx="2"/>
+                  <path d="M16 3v4M8 3v4"/>
+                </svg>
+                In-seat power
+              </span>
+              <span class="amenity">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 18V5l12-2v13M6 15v6M9 9l12-2"/>
+                </svg>
+                Live TV
+              </span>
+              <span class="amenity">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2v20M2 12h20"/>
+                </svg>
+                On-demand video
+              </span>
+            </div>
+          </div>
+
+          <!-- Return Flight (if round-trip) -->
+          <div v-if="localReturnFlight" class="flight-leg-separator"></div>
+          <div v-if="localReturnFlight" class="flight-leg">
+            <div class="leg-header">
+              <strong>{{ localReturnFlight.departure.airport }} → {{ localReturnFlight.arrival.airport }}</strong>
+              <span class="leg-date">{{ returnDate }}</span>
+            </div>
+            <div class="leg-details">
+              <div class="time-point">
+                <div class="time">{{ localReturnFlight.departure.time }}</div>
+                <div class="airport">{{ localReturnFlight.departure.airport }}</div>
+              </div>
+              <div class="journey-info">
+                <div class="journey-line"></div>
+                <div class="journey-duration">{{ localReturnFlight.duration }}</div>
+                <div v-if="localReturnFlight.stops === 0" class="journey-stops nonstop">Nonstop</div>
+                <div v-else class="journey-stops">{{ localReturnFlight.stops }} stop{{ localReturnFlight.stops > 1 ? 's' : '' }}</div>
+              </div>
+              <div class="time-point">
+                <div class="time">{{ localReturnFlight.arrival.time }}</div>
+                <div class="airport">{{ localReturnFlight.arrival.airport }}</div>
+              </div>
+            </div>
+            <div class="flight-meta">
+              <span>{{ localReturnFlight.airline }} {{ localReturnFlight.flightNumber }}</span>
               <span class="separator">•</span>
               <span>Narrow-body jet</span>
               <span class="separator">•</span>
@@ -1289,6 +1404,25 @@ export default {
       color: #0a8a4e;
       font-weight: 500;
     }
+  }
+}
+
+.flight-leg-separator {
+  height: 1px;
+  background: linear-gradient(to right, #e5e5e5 0%, #ccc 50%, #e5e5e5 100%);
+  margin: 1.5rem 0;
+  position: relative;
+
+  &::after {
+    content: '↓';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 0 0.5rem;
+    color: #999;
+    font-size: 1rem;
   }
 }
 
