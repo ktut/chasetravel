@@ -633,6 +633,10 @@ export default {
   gap: 20px;
   align-items: start;
 
+  @media (min-width: 769px) {
+    align-items: center;
+  }
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -644,24 +648,26 @@ export default {
   flex-direction: column;
   gap: 12px;
   align-items: stretch;
-  margin-top: 8px;
 
   @media (min-width: 769px) {
-    margin-top: 0;
+    justify-content: flex-start;
+    gap: 12px;
   }
 }
 
 .controls-top-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
   justify-content: flex-start;
+  height: 40px;
 
   @media (max-width: $breakpoint-mobile) {
     gap: 8px;
     align-items: center;
     margin-top: -3.5rem;
     justify-content: center;
+    height: auto;
   }
 }
 
@@ -713,10 +719,12 @@ export default {
     padding: 8px 12px;
     padding-right: 36px;
     border: 1px solid #d0d0d0;
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 16px;
     font-weight: 500;
     transition: border-color 0.2s;
+    height: 40px;
+    box-sizing: border-box;
 
     &:focus {
       outline: none;
@@ -762,7 +770,7 @@ export default {
     margin-top: 4px;
     background: white;
     border: 1px solid #d0d0d0;
-    border-radius: 4px;
+    border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     max-height: 300px;
     overflow-y: auto;
@@ -800,16 +808,21 @@ export default {
 }
 
 .submit-btn {
-  padding: 12px 24px;
+  padding: 8px 24px;
   font-size: 16px;
   font-weight: 600;
   white-space: nowrap;
-  height: 100%;
-  min-height: 48px;
+  height: 40px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   @media (max-width: 768px) {
     width: 100%;
     height: auto;
+    min-height: 48px;
+    padding: 12px 24px;
   }
 }
 </style>

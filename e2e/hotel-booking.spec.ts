@@ -40,12 +40,13 @@ test.describe('Hotel Booking E2E Flow', () => {
     // Wait for the desktop calendar to be visible
     await page.locator('.desktop-calendar').waitFor({ state: 'visible', timeout: 5000 })
 
-    // Select a check-in date - find the first available future date (not past-date, not other-month)
-    const checkInDay = page.locator('.desktop-calendar .month-view').first().locator('.day:not(.past-date):not(.other-month)').first()
+    // Select a check-in date - Select the 5th available future date across both month views
+    const availableDays = page.locator('.desktop-calendar .day:not(.past-date):not(.other-month)')
+    const checkInDay = availableDays.nth(4) // 5th day (0-indexed)
     await checkInDay.click()
 
-    // Select a check-out date - find the 5th available future date (to ensure a few days difference)
-    const checkOutDay = page.locator('.desktop-calendar .month-view').first().locator('.day:not(.past-date):not(.other-month)').nth(4)
+    // Select a check-out date - 3 days after check-in
+    const checkOutDay = availableDays.nth(7) // 8th day (3 days after 5th)
     await checkOutDay.click()
 
     // Calendar should auto-close after selecting end date, but let's verify

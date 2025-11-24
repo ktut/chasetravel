@@ -133,7 +133,7 @@ export default {
     padding: 8px 20px;
     border: 1px solid #d0d0d0;
     background: white;
-    border-radius: 2rem;
+    border-radius: 8px;
     cursor: pointer;
     transition: border-color 0.2s;
     box-sizing: border-box;
@@ -141,8 +141,8 @@ export default {
     font-weight: 500;
     font-size: 15px;
     letter-spacing: 0.2px;
-    height: 56px;
-    min-height: 56px;
+    height: 40px;
+    min-height: 40px;
 
     &:hover {
       border-color: $color-accent;

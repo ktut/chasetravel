@@ -169,12 +169,14 @@ export default {
     position: relative;
     display: inline-flex;
     background: linear-gradient(145deg, #f5f5f5, #e8e8e8);
-    border-radius: 2.5rem;
+    border-radius: 8px;
     padding: 4px;
     box-shadow:
       inset 0 2px 4px rgba(0, 0, 0, 0.06),
       0 1px 2px rgba(0, 0, 0, 0.05);
     min-width: 260px;
+    height: 40px;
+    box-sizing: border-box;
   }
 
   .toggle-option {
@@ -183,10 +185,10 @@ export default {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 8px 20px;
+    padding: 4px 20px;
     border: none;
     background: transparent;
-    border-radius: 2rem;
+    border-radius: 6px;
     cursor: pointer;
     transition: color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1;
@@ -197,6 +199,7 @@ export default {
     letter-spacing: 0.2px;
     flex: 1;
     min-width: 0;
+    height: 100%;
 
     &:hover:not(.active) {
       color: #555;
@@ -295,7 +298,7 @@ export default {
     height: calc(100% - 8px);
     width: calc(50% - 4px);
     background: linear-gradient(145deg, #ffffff, #fafafa);
-    border-radius: 2rem;
+    border-radius: 6px;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow:
       0 3px 12px rgba(0, 0, 0, 0.12),
@@ -311,7 +314,7 @@ export default {
       content: '';
       position: absolute;
       inset: 0;
-      border-radius: 2rem;
+      border-radius: 6px;
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%);
       pointer-events: none;
     }

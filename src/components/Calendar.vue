@@ -753,11 +753,12 @@ export default {
           @blur="parseAndSetCheckInDate"
           @keydown.enter="parseAndSetCheckInDate"
         />
-        <div v-if="checkIn" class="flexibility-selector">
+        <div class="flexibility-selector">
           <button
             class="flex-button"
             @click.stop="toggleCheckInFlexMenu"
             tabindex="0"
+            :disabled="!checkIn"
           >
             {{ checkInFlexibilityLabel }} ▾
           </button>
@@ -784,11 +785,12 @@ export default {
           @blur="parseAndSetCheckOutDate"
           @keydown.enter="parseAndSetCheckOutDate"
         />
-        <div v-if="checkOut" class="flexibility-selector">
+        <div class="flexibility-selector">
           <button
             class="flex-button"
             @click.stop="toggleCheckOutFlexMenu"
             tabindex="0"
+            :disabled="!checkOut"
           >
             {{ checkOutFlexibilityLabel }} ▾
           </button>
@@ -1080,7 +1082,7 @@ export default {
   .date-input {
     width: 100%;
     border: 1px solid #d0d0d0;
-    border-radius: 4px;
+    border-radius: 8px;
     padding: 8px 12px;
     font-size: 16px;
     font-weight: 500;
@@ -1088,6 +1090,8 @@ export default {
     cursor: pointer;
     transition: border-color 0.2s;
     outline: none;
+    height: 40px;
+    box-sizing: border-box;
 
     &::placeholder {
       color: #999;
@@ -1112,7 +1116,7 @@ export default {
     padding: 6px 12px;
     background: white;
     border: 1px solid #d0d0d0;
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 13px;
     color: #666;
     cursor: pointer;
@@ -1121,7 +1125,7 @@ export default {
     width: 100%;
     text-align: left;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: #f5f5f5;
       border-color: #2563eb;
       color: #2563eb;
@@ -1130,6 +1134,11 @@ export default {
     &:focus {
       outline: 2px solid #2563eb;
       outline-offset: 1px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
   }
 
@@ -1140,7 +1149,7 @@ export default {
     margin-top: 4px;
     background: white;
     border: 1px solid #d0d0d0;
-    border-radius: 4px;
+    border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     z-index: 100;
     overflow: hidden;
@@ -1654,10 +1663,15 @@ export default {
       width: 100%;
       text-align: left;
 
-      &:hover {
+      &:hover:not(:disabled) {
         background: #f5f5f5;
         border-color: #2563eb;
         color: #2563eb;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
       }
 
       &:active {

@@ -40,13 +40,14 @@ test.describe('Booking E2E Flow', () => {
     // Wait for the desktop calendar to be visible
     await page.locator('.desktop-calendar').waitFor({ state: 'visible', timeout: 5000 })
 
-    // Select a start date - find a future date that's not disabled (not past-date)
-    // Look for day 25 in the first month view
-    const startDay = page.locator('.desktop-calendar .month-view').first().locator('.day:not(.past-date):not(.other-month)').filter({ hasText: /^25$/ }).first()
+    // Select a start date - find available future dates across both month views
+    // Use all available days from both calendar views to ensure enough dates
+    const availableDays = page.locator('.desktop-calendar .day:not(.past-date):not(.other-month)')
+    const startDay = availableDays.nth(9) // 10th day (0-indexed)
     await startDay.click()
 
-    // Select an end date a few days later (28th)
-    const endDay = page.locator('.desktop-calendar .month-view').first().locator('.day:not(.past-date):not(.other-month)').filter({ hasText: /^28$/ }).first()
+    // Select an end date - 3 days after start date
+    const endDay = availableDays.nth(12) // 13th day (3 days after 10th)
     await endDay.click()
 
     // Calendar should auto-close after selecting end date, but let's verify
