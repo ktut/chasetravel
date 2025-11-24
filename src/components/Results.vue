@@ -427,7 +427,7 @@ export default {
     "filters results";
   gap: 2rem;
   max-width: 1400px;
-  padding: 2rem;
+  padding: 3rem 2rem 2rem;
   margin: 0 auto;
   position: relative;
 
@@ -617,7 +617,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 
   @media (max-width: 768px) {
     flex-direction: column;

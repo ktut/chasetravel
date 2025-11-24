@@ -204,6 +204,11 @@ export default {
 
 <template>
   <div class="mybookings-page">
+    <!-- Hero Background with Curved Mask -->
+    <div class="hero-background">
+      <div class="hero-image"></div>
+    </div>
+
     <div class="mybookings-container">
       <h1 class="page-title">My Bookings</h1>
 
@@ -365,19 +370,50 @@ export default {
 
 <style lang="scss" scoped>
 .mybookings-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 8rem 1.5rem 3rem;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.hero-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background-image: url('@/assets/maldives.jpg');
+  background-size: cover;
+  background-position: 50% 40%;
+  background-repeat: no-repeat;
+}
+
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 500px;
+  overflow: visible;
+  z-index: 0;
 
   @media (max-width: 768px) {
-    padding: 12rem 1rem 2rem;
+    height: 500px;
   }
 }
 
 .mybookings-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10rem 1.5rem 3rem;
   display: flex;
   flex-direction: column;
-  gap: 4rem;
+  gap: 3rem;
+
+  @media (max-width: 768px) {
+    padding: 18rem 1rem 2rem;
+  }
 }
 
 .page-title {
@@ -385,6 +421,8 @@ export default {
   font-weight: 700;
   margin: 0;
   color: $color-primary;
+  position: relative;
+  z-index: 3;
 
   @media (max-width: 768px) {
     font-size: 2rem;
