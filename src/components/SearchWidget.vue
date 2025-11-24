@@ -459,6 +459,9 @@ export default {
         <div class="column-controls">
           <div class="controls-top-row">
             <SearchTypeToggle v-model="searchType" />
+          </div>
+
+          <div v-if="searchType === 'flights'" class="trip-type-wrapper">
             <PassengerSelector
               :adults="passengerCounts.adults"
               :children="passengerCounts.children"
@@ -466,9 +469,6 @@ export default {
               @update:adults="passengerCounts.adults = $event"
               @update:children="passengerCounts.children = $event"
             />
-          </div>
-
-          <div v-if="searchType === 'flights'" class="trip-type-wrapper">
             <TripTypeToggle v-model="tripType" />
           </div>
         </div>
@@ -674,7 +674,8 @@ export default {
 .trip-type-wrapper {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 12px;
+  justify-content: flex-start;
 
   @media (max-width: $breakpoint-mobile) {
     justify-content: center;
