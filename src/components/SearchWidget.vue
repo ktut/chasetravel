@@ -629,8 +629,8 @@ export default {
 
 .search-grid {
   display: grid;
-  grid-template-columns: auto 1fr 1fr auto;
-  gap: 20px;
+  grid-template-columns: auto minmax(100px, 1fr) minmax(280px, 1fr) auto;
+  gap: 16px;
   align-items: start;
 
   @media (min-width: 769px) {

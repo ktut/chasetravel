@@ -193,7 +193,6 @@ export default {
   bottom: 0;
   left: 0;
   .search-widget-align {
-    max-width: 1000px;
     margin-top: -16rem;
   }
   &.desktop {
