@@ -1243,8 +1243,8 @@ export default {
 
   .option-header {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
     margin-bottom: 0.5rem;
 
     @media (max-width: 768px) {
