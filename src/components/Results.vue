@@ -725,7 +725,7 @@ export default {
 .flight-results {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   position: relative;
 }
 

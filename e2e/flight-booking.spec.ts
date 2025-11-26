@@ -78,9 +78,10 @@ test.describe('Booking E2E Flow', () => {
 
     // Capture flight details for verification (handle both one-way and round-trip)
     // For round-trip, get the first airline (outbound flight)
-    const airline = await firstFlightCard.locator('.airline').first().textContent()
-    const departureAirport = await firstFlightCard.locator('.route-point').first().locator('.airport').textContent()
-    const arrivalAirport = await firstFlightCard.locator('.route-point').nth(1).locator('.airport').textContent()
+    const airline = await firstFlightCard.locator('.airline-name').first().textContent()
+    const route = await firstFlightCard.locator('.route').first().textContent()
+    // Parse departure and arrival airports from route (e.g., "NYC-ORD")
+    const [departureAirport, arrivalAirport] = (route || '').split('-')
 
     console.log('Selected flight:', { airline, departureAirport, arrivalAirport })
 
@@ -95,7 +96,8 @@ test.describe('Booking E2E Flow', () => {
     await page.waitForSelector('.confirmation-page', { timeout: 10000 })
 
     // Step 10: Verify flight details on confirmation page match selected flight
-    await expect(page.locator('.airline-name')).toContainText(airline || '')
+    const confirmationPage = page.locator('.confirmation-page')
+    await expect(confirmationPage.locator('.airline-name').first()).toContainText(airline || '')
 
     // Verify departure and arrival airports (check first flight leg for outbound flight)
     const firstFlightLeg = page.locator('.flight-leg').first()

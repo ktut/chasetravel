@@ -54,6 +54,14 @@ export default {
         minimumFractionDigits: 0
       }).format(price)
     },
+    formatTime(time: string): string {
+      // Convert 24hr time to 12hr format (e.g., "14:30" -> "2:30 pm")
+      const [hours, minutes] = time.split(':')
+      const hour = parseInt(hours)
+      const period = hour >= 12 ? 'pm' : 'am'
+      const hour12 = hour % 12 || 12
+      return `${hour12}:${minutes} ${period}`
+    },
     selectFlight() {
       console.log('=== FlightCard.selectFlight CALLED ===')
       console.log('Is round-trip:', this.isRoundTrip)
@@ -99,83 +107,61 @@ export default {
 
 <template>
   <div v-if="displayFlight" class="flight-card" :class="{ 'round-trip-card': isRoundTrip }">
-    <!-- Outbound Flight (or single flight for one-way) -->
-    <div class="flight-main">
-      <div class="flight-info-wrapper">
-        <img v-if="airlineLogo" :src="airlineLogo" :alt="displayFlight.airline" class="airline-logo" />
-        <div class="flight-info">
-          <div v-if="isRoundTrip" class="flight-label">Departure</div>
-          <div class="airline">{{ displayFlight.airline }}</div>
-          <div class="flight-number">{{ displayFlight.flightNumber }}</div>
-        </div>
-      </div>
-
-      <div class="flight-route">
-        <div class="route-point">
-          <div class="time">{{ displayFlight.departure.time }}</div>
-          <div class="airport">{{ displayFlight.departure.airport }}</div>
-        </div>
-
-        <div class="route-visual">
-          <div class="route-line">
-            <div class="line"></div>
+    <div class="flights-container">
+      <!-- Outbound Flight (or single flight for one-way) -->
+      <div class="flight-segment">
+        <div class="flight-info-wrapper">
+          <img v-if="airlineLogo" :src="airlineLogo" :alt="displayFlight.airline" class="airline-logo" />
+          <div class="flight-info">
+            <div class="flight-times">
+              {{ formatTime(displayFlight.departure.time) }} - {{ formatTime(displayFlight.arrival.time) }}
+            </div>
+            <div class="airline-name">{{ displayFlight.airline }}</div>
           </div>
-          <div class="duration">{{ displayFlight.duration }}</div>
-          <div class="stops" v-if="displayFlight.stops > 0">{{ displayFlight.stops }} stop{{ displayFlight.stops > 1 ? 's' : '' }}</div>
-          <div class="nonstop" v-else>Nonstop</div>
         </div>
 
-        <div class="route-point">
-          <div class="time">{{ displayFlight.arrival.time }}</div>
-          <div class="airport">{{ displayFlight.arrival.airport }}</div>
+        <div class="flight-stops">
+          <span v-if="displayFlight.stops === 0">nonstop</span>
+          <span v-else>{{ displayFlight.stops }} stop{{ displayFlight.stops > 1 ? 's' : '' }}</span>
+        </div>
+
+        <div class="flight-details" :class="{ 'mobile-compact': !isRoundTrip }">
+          <div class="duration">{{ displayFlight.duration }}</div>
+          <div class="route">{{ displayFlight.departure.airport }}-{{ displayFlight.arrival.airport }}</div>
         </div>
       </div>
 
-      <div v-if="!isRoundTrip" class="flight-price">
-        <button @click="selectFlight" class="btn-primary select-btn">
-          {{ formatPrice(displayPrice) }}
-        </button>
+      <!-- Return Flight (only for round-trip) -->
+      <div v-if="isRoundTrip && flightPair" class="flight-segment">
+        <div class="flight-info-wrapper">
+          <img v-if="returnAirlineLogo" :src="returnAirlineLogo" :alt="flightPair.return.airline" class="airline-logo" />
+          <div class="flight-info">
+            <div class="flight-times">
+              {{ formatTime(flightPair.return.departure.time) }} - {{ formatTime(flightPair.return.arrival.time) }}
+            </div>
+            <div class="airline-name">{{ flightPair.return.airline }}</div>
+          </div>
+        </div>
+
+        <div class="flight-stops">
+          <span v-if="flightPair.return.stops === 0">nonstop</span>
+          <span v-else>{{ flightPair.return.stops }} stop{{ flightPair.return.stops > 1 ? 's' : '' }}</span>
+        </div>
+
+        <div class="flight-details">
+          <div class="duration">{{ flightPair.return.duration }}</div>
+          <div class="route">{{ flightPair.return.departure.airport }}-{{ flightPair.return.arrival.airport }}</div>
+        </div>
       </div>
     </div>
 
-    <!-- Return Flight (only for round-trip) -->
-    <div v-if="isRoundTrip && flightPair" class="flight-separator"></div>
-    <div v-if="isRoundTrip && flightPair" class="flight-main">
-      <div class="flight-info-wrapper">
-        <img v-if="returnAirlineLogo" :src="returnAirlineLogo" :alt="flightPair.return.airline" class="airline-logo" />
-        <div class="flight-info">
-          <div class="flight-label">Return</div>
-          <div class="airline">{{ flightPair.return.airline }}</div>
-          <div class="flight-number">{{ flightPair.return.flightNumber }}</div>
-        </div>
+    <!-- Price section spans full height -->
+    <div class="flight-actions">
+      <div class="price-info">
+        <div class="price">{{ formatPrice(displayPrice) }}</div>
+        <div class="fare-class">Basic Economy</div>
       </div>
-
-      <div class="flight-route">
-        <div class="route-point">
-          <div class="time">{{ flightPair.return.departure.time }}</div>
-          <div class="airport">{{ flightPair.return.departure.airport }}</div>
-        </div>
-
-        <div class="route-visual">
-          <div class="route-line">
-            <div class="line"></div>
-          </div>
-          <div class="duration">{{ flightPair.return.duration }}</div>
-          <div class="stops" v-if="flightPair.return.stops > 0">{{ flightPair.return.stops }} stop{{ flightPair.return.stops > 1 ? 's' : '' }}</div>
-          <div class="nonstop" v-else>Nonstop</div>
-        </div>
-
-        <div class="route-point">
-          <div class="time">{{ flightPair.return.arrival.time }}</div>
-          <div class="airport">{{ flightPair.return.arrival.airport }}</div>
-        </div>
-      </div>
-
-      <div class="flight-price">
-        <button @click="selectFlight" class="btn-primary select-btn">
-          {{ formatPrice(displayPrice) }}
-        </button>
-      </div>
+      <button @click="selectFlight" class="select-btn">Select</button>
     </div>
   </div>
 </template>
@@ -184,50 +170,50 @@ export default {
 .flight-card {
   background: white;
   border: 1px solid $color-light-grey;
-  border-radius: 8px;
-  padding: 0.75rem 1rem 0.65rem;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
   transition: all 0.2s;
-  cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.5rem;
 
   @media (max-width: 768px) {
-    padding: 0.75rem;
+    padding: 1rem;
+    grid-template-columns: 1fr;
+    gap: 0;
   }
 
   &:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border-color: $color-accent;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: darken($color-light-grey, 10%);
   }
 
   &.round-trip-card {
-    padding: 1rem 1rem 0.75rem;
+    padding: 1.5rem;
   }
 }
 
-.flight-separator {
-  height: 1px;
-  background: linear-gradient(to right, #e5e5e5 0%, #ccc 50%, #e5e5e5 100%);
-  margin: 0.75rem 0;
+.flights-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  justify-content: center;
 }
 
-.flight-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: $color-accent;
-  margin-bottom: 0.25rem;
-  letter-spacing: 0.5px;
-}
-
-.flight-main {
+.flight-segment {
   display: grid;
-  grid-template-columns: 140px 1fr 180px;
-  gap: 2rem;
+  grid-template-columns: 220px 140px 140px;
+  gap: 1.5rem;
   align-items: center;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 180px 120px 120px;
+    gap: 1rem;
+  }
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr auto;
-    gap: 0.75rem;
-    position: relative;
+    gap: 1rem;
   }
 }
 
@@ -235,166 +221,160 @@ export default {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-
-  @media (max-width: 768px) {
-    order: 1;
-  }
 }
 
 .airline-logo {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
   flex-shrink: 0;
 
   @media (max-width: 768px) {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
   }
 }
 
 .flight-info {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-
-  .airline {
-    font-weight: 600;
-    font-size: 1rem;
-    color: $color-text;
-
-    @media (max-width: 768px) {
-      font-size: 0.9rem;
-    }
-  }
-
-  .flight-number {
-    color: $color-text-light;
-    font-size: 0.85rem;
-
-    @media (max-width: 768px) {
-      font-size: 0.75rem;
-    }
-  }
+  gap: 0.35rem;
 }
 
-.flight-route {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 1.5rem;
-  align-items: center;
+.flight-times {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: $color-text;
+  white-space: nowrap;
+  line-height: 1.2;
 
   @media (max-width: 768px) {
-    grid-column: 1 / -1;
-    order: 3;
-    gap: 0.75rem;
+    font-size: 1rem;
   }
 }
 
-.route-point {
+.airline-name {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #6b7280;
+  line-height: 1.2;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+}
+
+.flight-stops {
   text-align: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: $color-text;
 
-  .time {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.25rem;
-    color: $color-text;
-
-    @media (max-width: 768px) {
-      font-size: 1.1rem;
-    }
-  }
-
-  .airport {
-    color: $color-text-light;
-    font-size: 0.85rem;
-    font-weight: 500;
-
-    @media (max-width: 768px) {
-      font-size: 0.75rem;
-    }
+  @media (max-width: 1024px) {
+    display: none;
   }
 }
 
-.route-visual {
+.flight-details {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.35rem;
-  min-width: 140px;
+  text-align: left;
 
-  .route-line {
-    width: 100%;
-    position: relative;
+  @media (max-width: 768px) {
+    text-align: right;
 
-    .line {
-      height: 1px;
-      background: $color-light-grey;
-      position: relative;
-
-      &::before, &::after {
-        content: '';
-        position: absolute;
-        width: 5px;
-        height: 5px;
-        background: $color-text-light;
-        border-radius: 50%;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-
-      &::before {
-        left: 0;
-      }
-
-      &::after {
-        right: 0;
-      }
+    &.mobile-compact {
+      // For one-way flights, show on the right
+      order: 2;
     }
   }
 
   .duration {
-    color: $color-text-light;
-    font-size: 0.75rem;
-    font-weight: 500;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: $color-text;
   }
 
-  .stops {
-    font-size: 0.75rem;
-    color: $color-text-light;
-    white-space: nowrap;
-  }
-
-  .nonstop {
-    font-size: 0.75rem;
-    color: #16a34a;
-    font-weight: 600;
-    white-space: nowrap;
+  .route {
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: #6b7280;
   }
 }
 
-.flight-price {
+.flight-actions {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding-left: 1.5rem;
+  border-left: 1px solid $color-light-grey;
+  min-width: 240px;
 
   @media (max-width: 768px) {
-    position: absolute;
-    top: 0;
-    right: 0;
-    order: 2;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    gap: 0.75rem;
+    border-left: none;
+    padding-left: 0;
+    padding-top: 1rem;
+    border-top: 1px solid $color-light-grey;
+    min-width: unset;
+  }
+
+  .price-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+
+    @media (max-width: 768px) {
+      align-items: flex-end;
+    }
+
+    .price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $color-text;
+      line-height: 1;
+
+      @media (max-width: 768px) {
+        font-size: 1.25rem;
+      }
+    }
+
+    .fare-class {
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: #6b7280;
+
+      @media (max-width: 768px) {
+        font-size: 0.75rem;
+      }
+    }
   }
 
   .select-btn {
-    padding: 0.75rem 1.5rem;
+    background: #ff5722;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
     white-space: nowrap;
-    font-size: 1.5rem;
-    font-weight: 700;
+    transition: all 0.2s;
+
+    &:hover {
+      background: darken(#ff5722, 8%);
+    }
 
     @media (max-width: 768px) {
-      padding: 0.5rem 0.75rem;
-      font-size: 1.1rem;
+      padding: 0.65rem 1.5rem;
+      font-size: 0.95rem;
     }
   }
 }
