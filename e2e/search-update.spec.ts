@@ -49,7 +49,7 @@ test.describe('Search Update Flow', () => {
     await page.waitForTimeout(500)
 
     // Step 4: Submit initial search
-    const searchButton = page.locator('button.submit-btn').filter({ hasText: 'Search' }).first()
+    const searchButton = page.locator('button.submit-btn').first()
     await page.waitForTimeout(500)
     await searchButton.click()
 
@@ -73,7 +73,7 @@ test.describe('Search Update Flow', () => {
     }
 
     // Step 8: Verify the Update button is initially disabled (no changes made yet)
-    const updateButton = page.locator('button.submit-btn').filter({ hasText: 'Update' }).first()
+    const updateButton = page.locator('button.submit-btn').first()
     await expect(updateButton).toBeVisible({ timeout: 5000 })
 
     // Get initial disabled state
@@ -192,7 +192,7 @@ test.describe('Search Update Flow', () => {
     await page.waitForTimeout(500)
 
     // Step 5: Submit initial search
-    const searchButton = page.locator('button.submit-btn').filter({ hasText: 'Search' }).first()
+    const searchButton = page.locator('button.submit-btn').first()
     await page.waitForTimeout(500)
     await searchButton.click()
 
@@ -216,7 +216,7 @@ test.describe('Search Update Flow', () => {
     }
 
     // Step 9: Verify the Update button is initially disabled
-    const updateButton = page.locator('button.submit-btn').filter({ hasText: 'Update' }).first()
+    const updateButton = page.locator('button.submit-btn').first()
     await expect(updateButton).toBeVisible({ timeout: 5000 })
     const initiallyDisabled = await updateButton.isDisabled()
     console.log('Update button initially disabled:', initiallyDisabled)

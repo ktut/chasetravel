@@ -3,6 +3,7 @@ import Calendar from './Calendar.vue'
 import PassengerSelector from './PassengerSelector.vue'
 import SearchTypeToggle from './SearchTypeToggle.vue'
 import TripTypeToggle from './TripTypeToggle.vue'
+import SearchSubmitButton from './SearchSubmitButton.vue'
 import { useSearchStore } from '@/stores/searchStore'
 import { LOCATIONS, type Location } from '@/constants'
 
@@ -17,7 +18,8 @@ export default {
     Calendar,
     PassengerSelector,
     SearchTypeToggle,
-    TripTypeToggle
+    TripTypeToggle,
+    SearchSubmitButton
   },
   setup() {
     const searchStore = useSearchStore()
@@ -237,19 +239,35 @@ export default {
       this.showDestinationDropdown = false
       this.selectedDestinationIndex = -1
     },
-    onLocationInput() {
+    onLocationFocus() {
       this.showLocationDropdown = true
       this.showDestinationDropdown = false
       this.selectedLocationIndex = -1
-      // Clear selected location when user starts typing
-      this.selectedLocation = null
     },
-    onDestinationInput() {
+    onLocationInput(event: Event) {
+      const target = event.target as HTMLInputElement
+      this.showLocationDropdown = true
+      this.showDestinationDropdown = false
+      this.selectedLocationIndex = -1
+      // Only clear selected location if the input value doesn't match the selected location
+      if (this.selectedLocation && target.value !== this.selectedLocation.name) {
+        this.selectedLocation = null
+      }
+    },
+    onDestinationFocus() {
       this.showDestinationDropdown = true
       this.showLocationDropdown = false
       this.selectedDestinationIndex = -1
-      // Clear selected destination when user starts typing
-      this.selectedDestination = null
+    },
+    onDestinationInput(event: Event) {
+      const target = event.target as HTMLInputElement
+      this.showDestinationDropdown = true
+      this.showLocationDropdown = false
+      this.selectedDestinationIndex = -1
+      // Only clear selected destination if the input value doesn't match the selected destination
+      if (this.selectedDestination && target.value !== this.selectedDestination.name) {
+        this.selectedDestination = null
+      }
     },
     handleLocationKeydown(event: KeyboardEvent) {
       if (!this.showLocationDropdown || this.filteredLocations.length === 0) return
@@ -485,7 +503,7 @@ export default {
                 :placeholder="searchType === 'flights' ? 'From' : 'Location'"
                 :aria-label="locationLabel"
                 @input="onLocationInput"
-                @focus="onLocationInput"
+                @focus="onLocationFocus"
                 @keydown="handleLocationKeydown"
                 autocomplete="off"
               />
@@ -521,7 +539,7 @@ export default {
                 placeholder="To"
                 aria-label="To"
                 @input="onDestinationInput"
-                @focus="onDestinationInput"
+                @focus="onDestinationFocus"
                 @keydown="handleDestinationKeydown"
                 autocomplete="off"
               />
@@ -562,9 +580,11 @@ export default {
 
         <!-- Column 4: Submit Button -->
         <div class="column-submit">
-          <button class="submit-btn btn-primary" @click="handleSubmit" :disabled="isSubmitDisabled">
-            {{ submitButtonText }}
-          </button>
+          <SearchSubmitButton
+            :disabled="isSubmitDisabled"
+            :is-on-search-page="isOnSearchPage"
+            @click="handleSubmit"
+          />
         </div>
       </div>
     </div>
@@ -808,22 +828,4 @@ export default {
   }
 }
 
-.submit-btn {
-  padding: 8px 24px;
-  font-size: 16px;
-  font-weight: 600;
-  white-space: nowrap;
-  height: 40px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  @media (max-width: 768px) {
-    width: 100%;
-    height: auto;
-    min-height: 48px;
-    padding: 12px 24px;
-  }
-}
 </style>
