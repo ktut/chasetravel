@@ -1,5 +1,6 @@
 <script lang="ts">
 import type { Booking } from '@/stores/searchStore'
+import { formatPrice, formatDate } from '@/utils/formatters'
 
 export default {
   name: 'HotelBooking',
@@ -10,29 +11,8 @@ export default {
     }
   },
   methods: {
-    formatPrice(price: number): string {
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0
-      }).format(price)
-    },
-    formatDate(date: Date | string): string {
-      const d = typeof date === 'string' ? new Date(date) : date
-      return d.toLocaleDateString('en-US', {
-        weekday: 'short',
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-      })
-    },
-    formatShortDate(date: Date | string): string {
-      const d = typeof date === 'string' ? new Date(date) : date
-      return d.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric'
-      })
-    },
+    formatPrice,
+    formatDate,
     calculateNights(checkIn: Date | string, checkOut: Date | string): number {
       const checkInDate = typeof checkIn === 'string' ? new Date(checkIn) : checkIn
       const checkOutDate = typeof checkOut === 'string' ? new Date(checkOut) : checkOut

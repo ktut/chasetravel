@@ -6,6 +6,7 @@ import TripTypeToggle from './TripTypeToggle.vue'
 import SearchSubmitButton from './SearchSubmitButton.vue'
 import { useSearchStore } from '@/stores/searchStore'
 import { LOCATIONS, type Location } from '@/constants'
+import { formatShortDate } from '@/utils/formatters'
 
 interface PassengerCounts {
   adults: number
@@ -136,7 +137,7 @@ export default {
       // Format dates
       const formatDate = (date: Date | null) => {
         if (!date) return '—'
-        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        return formatShortDate(date)
       }
 
       const checkInFormatted = formatDate(this.checkInDate)

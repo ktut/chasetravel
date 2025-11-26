@@ -2,6 +2,7 @@
 import { getHotelById, getMockRoomsForHotel } from '@/services/MockHotelResults'
 import { parseSearchDataFromQuery } from '@/types/search'
 import type { Hotel, Room, SearchData } from '@/types/search'
+import { formatPrice } from '@/utils/formatters'
 import AmenityPills from '@/components/AmenityPills.vue'
 
 export default {
@@ -176,13 +177,7 @@ export default {
         this.currentRoomImageIndex[room.id] = 0
       })
     },
-    formatPrice(price: number): string {
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0
-      }).format(price)
-    },
+    formatPrice,
     getStarsArray(count: number): number[] {
       return Array.from({ length: count }, (_, i) => i)
     },
@@ -490,7 +485,7 @@ export default {
                   </div>
 
                   <div class="room-availability">We have {{ room.availability }} left.</div>
-                  
+
                   <button @click="reserveRoom(room)" class="btn-primary reserve-btn">
                     Reserve
                   </button>

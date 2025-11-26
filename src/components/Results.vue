@@ -4,6 +4,7 @@ import FlightCard from './FlightCard.vue'
 import SortOptions from './SortOptions.vue'
 import HotelCard from './HotelCard.vue'
 import type { Flight, Hotel } from '@/types/search'
+import { formatPrice } from '@/utils/formatters'
 
 export default {
   name: 'Results',
@@ -240,13 +241,7 @@ export default {
     document.body.style.overflow = ''
   },
   methods: {
-    formatPrice(price: number): string {
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0
-      }).format(price)
-    },
+    formatPrice,
     parseDuration(duration: string): number {
       const match = duration.match(/(\d+)h\s*(\d+)m/)
       if (!match) return 0

@@ -1,11 +1,13 @@
 <script lang="ts">
 import PointsPopover from './PointsPopover.vue'
+import LoadingSpinner from './LoadingSpinner.vue'
 import { useSearchStore } from '@/stores/searchStore'
 
 export default {
   name: 'NavBar',
   components: {
-    PointsPopover
+    PointsPopover,
+    LoadingSpinner
   },
   data() {
     return {
@@ -83,29 +85,7 @@ export default {
           :disabled="isLoading"
           class="btn-primary navbar__btn"
         >
-          <svg
-            v-if="isLoading"
-            class="navbar__spinner"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="white"
-              stroke-width="3"
-              fill="none"
-              opacity="0.25"
-            />
-            <path
-              d="M12 2C6.47715 2 2 6.47715 2 12"
-              stroke="white"
-              stroke-width="3"
-              fill="none"
-              stroke-linecap="round"
-            />
-          </svg>
+          <LoadingSpinner v-if="isLoading" />
           <span v-else>Sign in</span>
         </button>
 
@@ -171,29 +151,7 @@ export default {
           :disabled="isSigningOut"
           class="btn-primary navbar__btn"
         >
-          <svg
-            v-if="isSigningOut"
-            class="navbar__spinner"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="white"
-              stroke-width="3"
-              fill="none"
-              opacity="0.25"
-            />
-            <path
-              d="M12 2C6.47715 2 2 6.47715 2 12"
-              stroke="white"
-              stroke-width="3"
-              fill="none"
-              stroke-linecap="round"
-            />
-          </svg>
+          <LoadingSpinner v-if="isSigningOut" />
           <template v-else>
             <span class="navbar__signout-text">Sign out</span>
             <svg class="navbar__signout-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -315,12 +273,6 @@ export default {
     display: none;
     width: 20px;
     height: 20px;
-  }
-
-  &__spinner {
-    width: 20px;
-    height: 20px;
-    animation: spin 0.8s linear infinite;
   }
 
   &__points {

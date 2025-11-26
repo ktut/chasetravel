@@ -1,9 +1,14 @@
 <script lang="ts">
 import { useSearchStore } from '@/stores/searchStore'
 import { getAirlineLogo } from '@/utils/airlineLogos'
+import { formatPrice } from '@/utils/formatters'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
 export default {
   name: 'Confirmation',
+  components: {
+    LoadingSpinner
+  },
   data() {
     return {
       usePoints: false,
@@ -16,7 +21,8 @@ export default {
       localRoom: null as any,
       bookingType: null as 'flight' | 'hotel' | null,
       selectedFareType: 'basic', // 'basic', 'economy', or 'business'
-      expandedFare: 'basic' // which fare is currently expanded
+      expandedFare: 'basic', // which fare is currently expanded
+      isBooking: false
     }
   },
   computed: {
@@ -275,13 +281,7 @@ export default {
     }
   },
   methods: {
-    formatPrice(price: number): string {
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0
-      }).format(price)
-    },
+    formatPrice,
     goBack() {
       // Always go back to search results page
       if (!this.searchData) {
@@ -333,41 +333,47 @@ export default {
       this.$router.push({ path: '/search', query })
     },
     proceedToBook() {
-      // Save booking to store
-      if (this.isFlightBooking && this.localFlight) {
-        // Create booking with flights array for round-trip, or single flight for one-way
-        const bookingData: any = {
-          type: 'flight',
-          searchData: this.localSearchData
+      if (this.isBooking) return
+
+      this.isBooking = true
+
+      setTimeout(() => {
+        // Save booking to store
+        if (this.isFlightBooking && this.localFlight) {
+          // Create booking with flights array for round-trip, or single flight for one-way
+          const bookingData: any = {
+            type: 'flight',
+            searchData: this.localSearchData
+          }
+
+          if (this.localReturnFlight) {
+            // Round-trip: use flights array
+            bookingData.flights = [this.localFlight, this.localReturnFlight]
+            bookingData.tripType = 'round-trip'
+          } else {
+            // One-way: use flights array with single flight
+            bookingData.flights = [this.localFlight]
+            bookingData.tripType = 'one-way'
+          }
+
+          this.searchStore.addBooking(bookingData)
+        } else if (this.isHotelBooking && this.localHotel) {
+          this.searchStore.addBooking({
+            type: 'hotel',
+            hotel: this.localHotel,
+            room: this.localRoom,
+            searchData: this.localSearchData
+          })
         }
 
-        if (this.localReturnFlight) {
-          // Round-trip: use flights array
-          bookingData.flights = [this.localFlight, this.localReturnFlight]
-          bookingData.tripType = 'round-trip'
-        } else {
-          // One-way: use flights array with single flight
-          bookingData.flights = [this.localFlight]
-          bookingData.tripType = 'one-way'
+        // Redeem points if selected
+        if (this.usePoints && this.pointsToRedeem > 0) {
+          this.searchStore.redeemPoints(this.pointsToRedeem)
         }
 
-        this.searchStore.addBooking(bookingData)
-      } else if (this.isHotelBooking && this.localHotel) {
-        this.searchStore.addBooking({
-          type: 'hotel',
-          hotel: this.localHotel,
-          room: this.localRoom,
-          searchData: this.localSearchData
-        })
-      }
-
-      // Redeem points if selected
-      if (this.usePoints && this.pointsToRedeem > 0) {
-        this.searchStore.redeemPoints(this.pointsToRedeem)
-      }
-
-      // Redirect to My Bookings
-      this.$router.push('/mybookings')
+        // Redirect to My Bookings
+        this.$router.push('/mybookings')
+      }, 2000)
     },
     selectFare(fareType: string) {
       if (this.expandedFare === fareType) {
@@ -872,8 +878,9 @@ export default {
 
           <!-- Book Button -->
           <div class="book-section">
-            <button @click="proceedToBook" class="btn-primary book-button">
-              Book for {{ formatPrice(balanceDue) }}
+            <button @click="proceedToBook" :disabled="isBooking" class="btn-primary book-button">
+              <LoadingSpinner v-if="isBooking" />
+              <span v-else>Book for {{ formatPrice(balanceDue) }}</span>
             </button>
           </div>
         </aside>

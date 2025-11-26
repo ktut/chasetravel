@@ -1,11 +1,14 @@
 <script lang="ts">
 import type { Hotel } from '@/types/search'
+import { formatPrice } from '@/utils/formatters'
 import AmenityPills from './AmenityPills.vue'
+import LoadingSpinner from './LoadingSpinner.vue'
 
 export default {
   name: 'HotelCard',
   components: {
-    AmenityPills
+    AmenityPills,
+    LoadingSpinner
   },
   props: {
     hotel: {
@@ -17,41 +20,47 @@ export default {
       default: null
     }
   },
+  data() {
+    return {
+      isSelecting: false
+    }
+  },
   methods: {
-    formatPrice(price: number): string {
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0
-      }).format(price)
-    },
+    formatPrice,
     getStarsArray(count: number): number[] {
       return Array.from({ length: count }, (_, i) => i)
     },
     selectHotel() {
-      console.log('=== HotelCard.selectHotel CALLED ===')
-      console.log('Hotel selected:', this.hotel)
-      console.log('Search data:', this.searchData)
+      if (this.isSelecting) return
 
-      // Store search data in sessionStorage for navigation
-      try {
-        const searchDataJson = JSON.stringify(this.searchData)
+      this.isSelecting = true
 
-        console.log('Storing search data in sessionStorage...')
-        sessionStorage.setItem('confirmationSearchData', searchDataJson)
+      setTimeout(() => {
+        console.log('=== HotelCard.selectHotel CALLED ===')
+        console.log('Hotel selected:', this.hotel)
+        console.log('Search data:', this.searchData)
 
-        // Verify it was stored
-        const storedSearch = sessionStorage.getItem('confirmationSearchData')
-        console.log('Verification - Search in storage:', storedSearch ? 'YES' : 'NO')
+        // Store search data in sessionStorage for navigation
+        try {
+          const searchDataJson = JSON.stringify(this.searchData)
 
-        console.log('Navigating to /hotel/' + this.hotel.id + '...')
-        // Use nextTick to ensure sessionStorage is written before navigation
-        this.$nextTick(() => {
-          this.$router.push(`/hotel/${this.hotel.id}`)
-        })
-      } catch (e) {
-        console.error('Error in selectHotel:', e)
-      }
+          console.log('Storing search data in sessionStorage...')
+          sessionStorage.setItem('confirmationSearchData', searchDataJson)
+
+          // Verify it was stored
+          const storedSearch = sessionStorage.getItem('confirmationSearchData')
+          console.log('Verification - Search in storage:', storedSearch ? 'YES' : 'NO')
+
+          console.log('Navigating to /hotel/' + this.hotel.id + '...')
+          // Use nextTick to ensure sessionStorage is written before navigation
+          this.$nextTick(() => {
+            this.$router.push(`/hotel/${this.hotel.id}`)
+          })
+        } catch (e) {
+          console.error('Error in selectHotel:', e)
+          this.isSelecting = false
+        }
+      }, 2000)
     }
   }
 }
@@ -83,13 +92,19 @@ export default {
     <div class="hotel-price desktop-only">
       <div class="price-label">Per night</div>
       <div class="price">{{ formatPrice(hotel.pricePerNight) }}</div>
-      <button @click="selectHotel" class="btn-primary select-btn">Select</button>
+      <button @click="selectHotel" :disabled="isSelecting" class="btn-primary select-btn">
+        <LoadingSpinner v-if="isSelecting" />
+        <span v-else>Select</span>
+      </button>
     </div>
 
     <div class="hotel-price-mobile">
-      <button @click="selectHotel" class="btn-primary select-btn">
-        <span class="price-text">{{ formatPrice(hotel.pricePerNight) }}</span>
-        <span class="per-night">/night</span>
+      <button @click="selectHotel" :disabled="isSelecting" class="btn-primary select-btn">
+        <LoadingSpinner v-if="isSelecting" />
+        <template v-else>
+          <span class="price-text">{{ formatPrice(hotel.pricePerNight) }}</span>
+          <span class="per-night">/night</span>
+        </template>
       </button>
     </div>
   </div>

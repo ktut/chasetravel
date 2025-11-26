@@ -1,6 +1,7 @@
 <script lang="ts">
 import type { Booking } from '@/stores/searchStore'
 import { getAirlineLogo } from '@/utils/airlineLogos'
+import { formatPrice, formatDate } from '@/utils/formatters'
 
 export default {
   name: 'FlightBooking',
@@ -33,22 +34,8 @@ export default {
     }
   },
   methods: {
-    formatPrice(price: number): string {
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0
-      }).format(price)
-    },
-    formatDate(date: Date | string): string {
-      const d = typeof date === 'string' ? new Date(date) : date
-      return d.toLocaleDateString('en-US', {
-        weekday: 'short',
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-      })
-    },
+    formatPrice,
+    formatDate,
     cancelBooking() {
       this.$emit('cancel', this.booking.id)
     }

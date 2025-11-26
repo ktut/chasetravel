@@ -1,6 +1,7 @@
 <script lang="ts">
 import { useSearchStore } from '@/stores/searchStore'
 import type { Booking } from '@/stores/searchStore'
+import { formatPrice, formatDate, formatShortDate, formatDateHeader } from '@/utils/formatters'
 import FlightBooking from '@/components/FlightBooking.vue'
 import HotelBooking from '@/components/HotelBooking.vue'
 
@@ -107,38 +108,10 @@ export default {
     }
   },
   methods: {
-    formatPrice(price: number): string {
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0
-      }).format(price)
-    },
-    formatDate(date: Date | string): string {
-      const d = typeof date === 'string' ? new Date(date) : date
-      return d.toLocaleDateString('en-US', {
-        weekday: 'short',
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-      })
-    },
-    formatShortDate(date: Date | string): string {
-      const d = typeof date === 'string' ? new Date(date) : date
-      return d.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric'
-      })
-    },
-    formatDateHeader(dateString: string): string {
-      const date = new Date(dateString)
-      return date.toLocaleDateString('en-US', {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric'
-      })
-    },
+    formatPrice,
+    formatDate,
+    formatShortDate,
+    formatDateHeader,
     getBookingPrice(booking: Booking): number {
       if (booking.type === 'flight' && booking.flights && booking.flights.length > 0) {
         return booking.flights.reduce((sum, flight) => sum + flight.price, 0)

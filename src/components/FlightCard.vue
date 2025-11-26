@@ -2,9 +2,14 @@
 import { useSearchStore } from '@/stores/searchStore'
 import type { Flight, FlightPair } from '@/types/search'
 import { getAirlineLogo } from '@/utils/airlineLogos'
+import { formatPrice, formatTime } from '@/utils/formatters'
+import LoadingSpinner from './LoadingSpinner.vue'
 
 export default {
   name: 'FlightCard',
+  components: {
+    LoadingSpinner
+  },
   props: {
     flight: {
       type: Object as () => Flight | null,
@@ -17,6 +22,11 @@ export default {
     searchData: {
       type: Object,
       default: null
+    }
+  },
+  data() {
+    return {
+      isSelecting: false
     }
   },
   computed: {
@@ -47,59 +57,53 @@ export default {
     }
   },
   methods: {
-    formatPrice(price: number): string {
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0
-      }).format(price)
-    },
-    formatTime(time: string): string {
-      // Convert 24hr time to 12hr format (e.g., "14:30" -> "2:30 pm")
-      const [hours, minutes] = time.split(':')
-      const hour = parseInt(hours)
-      const period = hour >= 12 ? 'pm' : 'am'
-      const hour12 = hour % 12 || 12
-      return `${hour12}:${minutes} ${period}`
-    },
+    formatPrice,
+    formatTime,
     selectFlight() {
-      console.log('=== FlightCard.selectFlight CALLED ===')
-      console.log('Is round-trip:', this.isRoundTrip)
-      console.log('Flight/Pair selected:', this.isRoundTrip ? this.flightPair : this.flight)
-      console.log('Search data:', this.searchData)
+      if (this.isSelecting) return
 
-      // Store flight(s) and search data in sessionStorage for navigation
-      try {
-        const searchDataJson = JSON.stringify(this.searchData)
+      this.isSelecting = true
 
-        if (this.isRoundTrip && this.flightPair) {
-          // Store both outbound and return flights for round-trip
-          console.log('Storing round-trip flights...')
-          sessionStorage.setItem('outboundFlight', JSON.stringify(this.flightPair.outbound))
-          sessionStorage.setItem('returnFlight', JSON.stringify(this.flightPair.return))
-        } else {
-          // Store single flight for one-way
-          console.log('Storing one-way flight...')
-          sessionStorage.setItem('selectedFlight', JSON.stringify(this.flight))
+      setTimeout(() => {
+        console.log('=== FlightCard.selectFlight CALLED ===')
+        console.log('Is round-trip:', this.isRoundTrip)
+        console.log('Flight/Pair selected:', this.isRoundTrip ? this.flightPair : this.flight)
+        console.log('Search data:', this.searchData)
+
+        // Store flight(s) and search data in sessionStorage for navigation
+        try {
+          const searchDataJson = JSON.stringify(this.searchData)
+
+          if (this.isRoundTrip && this.flightPair) {
+            // Store both outbound and return flights for round-trip
+            console.log('Storing round-trip flights...')
+            sessionStorage.setItem('outboundFlight', JSON.stringify(this.flightPair.outbound))
+            sessionStorage.setItem('returnFlight', JSON.stringify(this.flightPair.return))
+          } else {
+            // Store single flight for one-way
+            console.log('Storing one-way flight...')
+            sessionStorage.setItem('selectedFlight', JSON.stringify(this.flight))
+          }
+
+          console.log('Storing in sessionStorage...')
+          sessionStorage.setItem('confirmationSearchData', searchDataJson)
+
+          // Verify it was stored
+          const storedFlight = sessionStorage.getItem('selectedFlight')
+          const storedSearch = sessionStorage.getItem('confirmationSearchData')
+          console.log('Verification - Flight in storage:', storedFlight ? 'YES' : 'NO')
+          console.log('Verification - Search in storage:', storedSearch ? 'YES' : 'NO')
+
+          console.log('Navigating to /confirmation...')
+          // Use nextTick to ensure sessionStorage is written before navigation
+          this.$nextTick(() => {
+            this.$router.push('/confirmation')
+          })
+        } catch (e) {
+          console.error('Error in selectFlight:', e)
+          this.isSelecting = false
         }
-
-        console.log('Storing in sessionStorage...')
-        sessionStorage.setItem('confirmationSearchData', searchDataJson)
-
-        // Verify it was stored
-        const storedFlight = sessionStorage.getItem('selectedFlight')
-        const storedSearch = sessionStorage.getItem('confirmationSearchData')
-        console.log('Verification - Flight in storage:', storedFlight ? 'YES' : 'NO')
-        console.log('Verification - Search in storage:', storedSearch ? 'YES' : 'NO')
-
-        console.log('Navigating to /confirmation...')
-        // Use nextTick to ensure sessionStorage is written before navigation
-        this.$nextTick(() => {
-          this.$router.push('/confirmation')
-        })
-      } catch (e) {
-        console.error('Error in selectFlight:', e)
-      }
+      }, 2000)
     }
   }
 }
@@ -161,7 +165,10 @@ export default {
         <div class="price">{{ formatPrice(displayPrice) }}</div>
         <div class="fare-class">Basic Economy</div>
       </div>
-      <button @click="selectFlight" class="select-btn">Select</button>
+      <button @click="selectFlight" :disabled="isSelecting" class="select-btn">
+        <LoadingSpinner v-if="isSelecting" />
+        <span v-else>Select</span>
+      </button>
     </div>
   </div>
 </template>
