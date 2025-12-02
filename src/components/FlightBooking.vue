@@ -1,10 +1,13 @@
 <script lang="ts">
 import type { Booking } from '@/stores/searchStore'
-import { getAirlineLogo } from '@/utils/airlineLogos'
 import { formatPrice, formatDate } from '@/utils/formatters'
+import FlightSegment from './FlightSegment.vue'
 
 export default {
   name: 'FlightBooking',
+  components: {
+    FlightSegment
+  },
   props: {
     booking: {
       type: Object as () => Booking,
@@ -12,14 +15,6 @@ export default {
     }
   },
   computed: {
-    airlineLogo() {
-      if (this.flightsToDisplay.length === 0) return null
-      return getAirlineLogo(this.flightsToDisplay[0].airline)
-    },
-    returnAirlineLogo() {
-      if (!this.isRoundTrip || this.flightsToDisplay.length < 2) return null
-      return getAirlineLogo(this.flightsToDisplay[1].airline)
-    },
     flightsToDisplay() {
       if (this.booking.flights && this.booking.flights.length > 0) {
         return this.booking.flights
@@ -55,43 +50,21 @@ export default {
 
       <!-- Outbound Flight (or single flight) -->
       <div class="booking-details">
-        <div class="flight-info-wrapper">
-          <img v-if="airlineLogo" :src="airlineLogo" :alt="flightsToDisplay[0].airline" class="airline-logo" />
-          <div class="flight-info">
-            <div v-if="isRoundTrip" class="leg-label">Outbound</div>
-            <h3>{{ flightsToDisplay[0].departure.airport }} → {{ flightsToDisplay[0].arrival.airport }}</h3>
-            <div class="flight-meta">
-              <span>{{ flightsToDisplay[0].airline }} {{ flightsToDisplay[0].flightNumber }}</span>
-              <span class="separator">•</span>
-              <span class="time">{{ flightsToDisplay[0].departure.time }}</span>
-              <span class="separator">→</span>
-              <span class="time">{{ flightsToDisplay[0].arrival.time }}</span>
-              <span class="separator">•</span>
-              <span class="duration">{{ flightsToDisplay[0].duration }}</span>
-            </div>
-          </div>
-        </div>
+        <FlightSegment
+          :flight="flightsToDisplay[0]"
+          variant="booking"
+          :label="isRoundTrip ? 'Outbound' : ''"
+        />
       </div>
 
       <!-- Return Flight (if round-trip) -->
       <div v-if="isRoundTrip && flightsToDisplay.length === 2" class="flight-separator"></div>
       <div v-if="isRoundTrip && flightsToDisplay.length === 2" class="booking-details">
-        <div class="flight-info-wrapper">
-          <img v-if="returnAirlineLogo" :src="returnAirlineLogo" :alt="flightsToDisplay[1].airline" class="airline-logo" />
-          <div class="flight-info">
-            <div class="leg-label">Return</div>
-            <h3>{{ flightsToDisplay[1].departure.airport }} → {{ flightsToDisplay[1].arrival.airport }}</h3>
-            <div class="flight-meta">
-              <span>{{ flightsToDisplay[1].airline }} {{ flightsToDisplay[1].flightNumber }}</span>
-              <span class="separator">•</span>
-              <span class="time">{{ flightsToDisplay[1].departure.time }}</span>
-              <span class="separator">→</span>
-              <span class="time">{{ flightsToDisplay[1].arrival.time }}</span>
-              <span class="separator">•</span>
-              <span class="duration">{{ flightsToDisplay[1].duration }}</span>
-            </div>
-          </div>
-        </div>
+        <FlightSegment
+          :flight="flightsToDisplay[1]"
+          variant="booking"
+          label="Return"
+        />
       </div>
 
       <!-- Actions -->
@@ -103,14 +76,13 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+@use '@/styles/mixins.scss' as *;
+
 .booking-card {
-  background: white;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
+  @include card-base;
   padding: 1rem;
   margin-bottom: 0.75rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  transition: all 0.2s;
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
@@ -158,68 +130,6 @@ export default {
     flex-direction: column;
     align-items: flex-start;
   }
-}
-
-.flight-info-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex: 1;
-}
-
-.airline-logo {
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
-  flex-shrink: 0;
-  border-radius: 4px;
-
-  @media (max-width: 768px) {
-    width: 80px;
-    height: 80px;
-  }
-}
-
-.flight-info {
-  flex: 1;
-
-  h3 {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin: 0 0 0.4rem 0;
-    color: $color-primary;
-  }
-
-  .flight-meta {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    color: #666;
-
-    .separator {
-      color: #ccc;
-    }
-
-    .time {
-      font-weight: 600;
-      color: $color-primary;
-    }
-
-    .duration {
-      color: #999;
-    }
-  }
-}
-
-.leg-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: $color-accent;
-  margin-bottom: 0.25rem;
-  letter-spacing: 0.5px;
 }
 
 .flight-separator {

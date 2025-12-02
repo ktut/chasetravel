@@ -1,6 +1,7 @@
 <script lang="ts">
 import type { Booking } from '@/stores/searchStore'
 import { formatPrice, formatDate } from '@/utils/formatters'
+import { calculateNights } from '@/utils/dateUtils'
 
 export default {
   name: 'HotelBooking',
@@ -13,16 +14,10 @@ export default {
   methods: {
     formatPrice,
     formatDate,
-    calculateNights(checkIn: Date | string, checkOut: Date | string): number {
-      const checkInDate = typeof checkIn === 'string' ? new Date(checkIn) : checkIn
-      const checkOutDate = typeof checkOut === 'string' ? new Date(checkOut) : checkOut
-      const diffTime = Math.abs(checkOutDate.getTime() - checkInDate.getTime())
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-      return diffDays || 1
-    },
+    calculateNights,
     getBookingPrice(): number {
       if (this.booking.hotel && this.booking.searchData) {
-        const nights = this.calculateNights(this.booking.searchData.checkIn, this.booking.searchData.checkOut)
+        const nights = calculateNights(this.booking.searchData.checkIn, this.booking.searchData.checkOut)
         if (this.booking.room) {
           return this.booking.room.pricePerNight * nights
         }
@@ -76,14 +71,13 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+@use '@/styles/mixins.scss' as *;
+
 .booking-card {
-  background: white;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
+  @include card-base;
   padding: 1rem;
   margin-bottom: 0.75rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  transition: all 0.2s;
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);

@@ -5,8 +5,9 @@ import SortOptions from './SortOptions.vue'
 import HotelCard from './HotelCard.vue'
 import HotelMap from './HotelMap.vue'
 import PriceRangeFilter from './PriceRangeFilter.vue'
-import type { Flight, Hotel } from '@/types/search'
+import type { Flight, FlightPair, Hotel } from '@/types/search'
 import { formatPrice } from '@/utils/formatters'
+import { filterFlights, filterHotels, parseDuration } from '@/composables/useFilters'
 
 export default {
   name: 'Results',
@@ -20,7 +21,7 @@ export default {
   },
   props: {
     results: {
-      type: Array as () => Flight[] | Hotel[],
+      type: Array as () => (Flight | FlightPair | Hotel)[],
       required: true
     },
     searchType: {
@@ -42,7 +43,7 @@ export default {
       sortBy: 'price' as 'price' | 'duration' | 'departure',
 
       // Progressive loading
-      displayedResults: [] as (Flight | Hotel)[],
+      displayedResults: [] as (Flight | FlightPair | Hotel)[],
       loadingBatchSize: 3,
       isLoading: false,
 
@@ -93,105 +94,23 @@ export default {
       }
       return Math.max(...this.results.map((r: any) => r.price || r.pricePerNight))
     },
-    filteredResults(): (Flight | Hotel)[] {
-      let filtered = [...this.results]
+    filteredResults(): (Flight | FlightPair | Hotel)[] {
+      const filters = {
+        maxStops: this.maxStops,
+        priceRange: this.priceRange,
+        selectedAirlines: this.selectedAirlines,
+        selectedAmenities: this.selectedAmenities,
+        sortBy: this.sortBy
+      }
 
       if (this.isFlights) {
         const isRoundTrip = this.searchData?.tripType === 'round-trip'
-
-        if (isRoundTrip) {
-          // Handle FlightPair filtering
-          const pairs = filtered as any[]
-
-          // Filter by stops (check outbound flight)
-          filtered = pairs.filter(p => p.outbound.stops <= this.maxStops)
-
-          // Filter by airlines (check outbound flight)
-          if (this.selectedAirlines.length > 0) {
-            filtered = filtered.filter((p: any) =>
-              this.selectedAirlines.includes(p.outbound.airline)
-            )
-          }
-
-          // Filter by price (use totalPrice)
-          filtered = filtered.filter((p: any) => {
-            const price = Number(p.totalPrice)
-            const min = Number(this.priceRange[0])
-            const max = Number(this.priceRange[1])
-            return price >= min && price <= max
-          })
-
-          // Sort
-          if (this.sortBy === 'price') {
-            filtered.sort((a: any, b: any) => a.totalPrice - b.totalPrice)
-          } else if (this.sortBy === 'duration') {
-            filtered.sort((a: any, b: any) => {
-              const aDur = this.parseDuration(a.outbound.duration)
-              const bDur = this.parseDuration(b.outbound.duration)
-              return aDur - bDur
-            })
-          } else if (this.sortBy === 'departure') {
-            filtered.sort((a: any, b: any) => {
-              return a.outbound.departure.time.localeCompare(b.outbound.departure.time)
-            })
-          }
-        } else {
-          // Handle Flight filtering (one-way)
-          const flights = filtered as Flight[]
-
-          // Filter by stops
-          filtered = flights.filter(f => f.stops <= this.maxStops)
-
-          // Filter by airlines
-          if (this.selectedAirlines.length > 0) {
-            filtered = filtered.filter((f: any) =>
-              this.selectedAirlines.includes(f.airline)
-            )
-          }
-
-          // Filter by price
-          filtered = filtered.filter((f: any) => {
-            const price = Number(f.price)
-            const min = Number(this.priceRange[0])
-            const max = Number(this.priceRange[1])
-            return price >= min && price <= max
-          })
-
-          // Sort
-          if (this.sortBy === 'price') {
-            filtered.sort((a: any, b: any) => a.price - b.price)
-          } else if (this.sortBy === 'duration') {
-            filtered.sort((a: any, b: any) => {
-              const aDur = this.parseDuration(a.duration)
-              const bDur = this.parseDuration(b.duration)
-              return aDur - bDur
-            })
-          } else if (this.sortBy === 'departure') {
-            filtered.sort((a: any, b: any) => {
-              return a.departure.time.localeCompare(b.departure.time)
-            })
-          }
-        }
+        return filterFlights(this.results as (Flight | FlightPair)[], filters, isRoundTrip)
       } else if (this.isHotels) {
-        const hotels = filtered as Hotel[]
-
-        // Filter by price per night
-        filtered = hotels.filter((h: any) => {
-          const price = Number(h.pricePerNight)
-          const min = Number(this.priceRange[0])
-          const max = Number(this.priceRange[1])
-          return price >= min && price <= max
-        })
-
-        // Filter by amenities
-        if (this.selectedAmenities.length > 0) {
-          filtered = filtered.filter((h: any) =>
-            this.selectedAmenities.every(amenity => h.amenities.includes(amenity))
-          )
-        }
+        return filterHotels(this.results as Hotel[], filters)
       }
 
-      return filtered
+      return this.results
     },
     isFiltering(): boolean {
       if (this.isFlights) {
@@ -269,11 +188,7 @@ export default {
   },
   methods: {
     formatPrice,
-    parseDuration(duration: string): number {
-      const match = duration.match(/(\d+)h\s*(\d+)m/)
-      if (!match) return 0
-      return parseInt(match[1]) * 60 + parseInt(match[2])
-    },
+    parseDuration,
     toggleAirline(airline: string) {
       const index = this.selectedAirlines.indexOf(airline)
       if (index > -1) {

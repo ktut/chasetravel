@@ -30,7 +30,6 @@ export default {
 
 <template>
   <div class="parallax-master-container">
-  <!-- <h1 class="image-top-group-title">Your most rewarding trips start here.</h1> -->
     <div class="parallax__group image-top-group" :class="{ 'loaded': isLoaded }">
       <div class="parallax__layer parallax__layer--back">
         <img

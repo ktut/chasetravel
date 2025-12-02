@@ -3,12 +3,16 @@ import { getHotelById, getMockRoomsForHotel } from '@/services/MockHotelResults'
 import { parseSearchDataFromQuery } from '@/types/search'
 import type { Hotel, Room, SearchData } from '@/types/search'
 import { formatPrice } from '@/utils/formatters'
+import { calculateNights } from '@/utils/dateUtils'
+import { saveHotelBooking, loadBookingData } from '@/services/bookingStorage'
 import AmenityPills from '@/components/AmenityPills.vue'
+import StarsDisplay from '@/components/StarsDisplay.vue'
 
 export default {
   name: 'HotelView',
   components: {
-    AmenityPills
+    AmenityPills,
+    StarsDisplay
   },
   data() {
     return {
@@ -77,15 +81,6 @@ export default {
       }
       return `transform: translateX(calc(${currentOffset}vw)); transition: transform 0.3s ease;`
     },
-    starsArray(): number[] {
-      if (!this.hotel) return []
-      return Array.from({ length: this.hotel.stars }, (_, i) => i)
-    },
-    emptyStarsArray(): number[] {
-      if (!this.hotel) return []
-      const empty = 5 - this.hotel.stars
-      return Array.from({ length: empty }, (_, i) => i)
-    },
     googleMapsUrl(): string {
       if (!this.hotel) return ''
       const { lat, lng } = this.hotel.coordinates
@@ -130,17 +125,9 @@ export default {
       if (this.$route.query.type) {
         searchData = parseSearchDataFromQuery(this.$route.query)
       } else {
-        const stored = sessionStorage.getItem('confirmationSearchData')
-        if (stored) {
-          try {
-            const parsed = JSON.parse(stored)
-            // Convert date strings back to Date objects
-            parsed.checkIn = new Date(parsed.checkIn)
-            parsed.checkOut = new Date(parsed.checkOut)
-            searchData = parsed
-          } catch (e) {
-            console.error('Error parsing search data:', e)
-          }
+        const bookingData = loadBookingData()
+        if (bookingData) {
+          searchData = bookingData.searchData
         }
       }
 
@@ -149,14 +136,8 @@ export default {
         return
       }
 
-      // Store search data in sessionStorage
-      sessionStorage.setItem('confirmationSearchData', JSON.stringify(searchData))
-
       // Calculate number of nights
-      const checkIn = new Date(searchData.checkIn)
-      const checkOut = new Date(searchData.checkOut)
-      const diffTime = Math.abs(checkOut.getTime() - checkIn.getTime())
-      this.numberOfNights = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1
+      this.numberOfNights = calculateNights(searchData.checkIn, searchData.checkOut)
 
       // Get hotel by ID
       const hotel = getHotelById(hotelId, searchData)
@@ -178,9 +159,6 @@ export default {
       })
     },
     formatPrice,
-    getStarsArray(count: number): number[] {
-      return Array.from({ length: count }, (_, i) => i)
-    },
     goBack() {
       this.$router.back()
     },
@@ -217,13 +195,8 @@ export default {
     reserveRoom(room: Room) {
       if (!this.hotel || !this.searchData) return
 
-      // Store hotel, room, and search data in sessionStorage
       try {
-        sessionStorage.setItem('selectedHotel', JSON.stringify(this.hotel))
-        sessionStorage.setItem('selectedRoom', JSON.stringify(room))
-        sessionStorage.setItem('confirmationSearchData', JSON.stringify(this.searchData))
-
-        // Navigate to confirmation
+        saveHotelBooking(this.hotel, this.searchData, room)
         this.$router.push('/confirmation')
       } catch (e) {
         console.error('Error storing reservation data:', e)
@@ -406,10 +379,7 @@ export default {
             </div>
             
             <div class="property-meta">
-              <div class="stars">
-                <span v-for="star in starsArray" :key="star" class="star filled">★</span>
-                <span v-for="star in emptyStarsArray" :key="star" class="star empty">☆</span>
-              </div>
+              <StarsDisplay :stars="hotel.stars" :show-empty="true" size="large" />
               <div class="booking-feature">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>

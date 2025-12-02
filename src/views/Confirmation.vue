@@ -2,12 +2,16 @@
 import { useSearchStore } from '@/stores/searchStore'
 import { getAirlineLogo } from '@/utils/airlineLogos'
 import { formatPrice } from '@/utils/formatters'
+import { calculateNights } from '@/utils/dateUtils'
+import { loadBookingData, clearBookingData } from '@/services/bookingStorage'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import StarsDisplay from '@/components/StarsDisplay.vue'
 
 export default {
   name: 'Confirmation',
   components: {
-    LoadingSpinner
+    LoadingSpinner,
+    StarsDisplay
   },
   data() {
     return {
@@ -149,11 +153,7 @@ export default {
     },
     numberOfNights(): number {
       if (!this.searchData?.checkIn || !this.searchData?.checkOut) return 1
-      const checkIn = new Date(this.searchData.checkIn)
-      const checkOut = new Date(this.searchData.checkOut)
-      const diffTime = Math.abs(checkOut.getTime() - checkIn.getTime())
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-      return diffDays || 1
+      return calculateNights(this.searchData.checkIn, this.searchData.checkOut)
     },
     airlineLogo(): string | null {
       if (!this.flight) return null
@@ -187,98 +187,40 @@ export default {
     }
   },
   mounted() {
-    console.log('=== Confirmation.mounted CALLED ===')
-    console.log('Current route:', this.$route.path)
+    const bookingData = loadBookingData()
 
-    // Get booking data from sessionStorage
-    const flightData = sessionStorage.getItem('selectedFlight')
-    const hotelData = sessionStorage.getItem('selectedHotel')
-    const roomData = sessionStorage.getItem('selectedRoom')
-    const searchData = sessionStorage.getItem('confirmationSearchData')
-
-    console.log('FlightData in sessionStorage:', flightData ? 'EXISTS' : 'NULL')
-    console.log('HotelData in sessionStorage:', hotelData ? 'EXISTS' : 'NULL')
-    console.log('SearchData in sessionStorage:', searchData ? 'EXISTS' : 'NULL')
-
-    // Load flight data if available (check for both one-way and round-trip)
-    const outboundFlightData = sessionStorage.getItem('outboundFlight')
-    const returnFlightData = sessionStorage.getItem('returnFlight')
-
-    if (outboundFlightData) {
-      // Round-trip flight
-      try {
-        this.localFlight = JSON.parse(outboundFlightData)
-        this.bookingType = 'flight'
-        console.log('Outbound flight loaded from sessionStorage:', this.localFlight)
-
-        if (returnFlightData) {
-          this.localReturnFlight = JSON.parse(returnFlightData)
-          console.log('Return flight loaded from sessionStorage:', this.localReturnFlight)
-        }
-      } catch (e) {
-        console.error('Error parsing round-trip flight data:', e)
-      }
-    } else if (flightData) {
-      // One-way flight
-      try {
-        this.localFlight = JSON.parse(flightData)
-        this.bookingType = 'flight'
-        console.log('Flight loaded from sessionStorage:', this.localFlight)
-      } catch (e) {
-        console.error('Error parsing flight data:', e)
-      }
-    }
-
-    // Load hotel data if available
-    if (hotelData) {
-      try {
-        this.localHotel = JSON.parse(hotelData)
-        this.bookingType = 'hotel'
-        console.log('Hotel loaded from sessionStorage:', this.localHotel)
-      } catch (e) {
-        console.error('Error parsing hotel data:', e)
-      }
-    }
-
-    // Load room data if available
-    if (roomData) {
-      try {
-        this.localRoom = JSON.parse(roomData)
-        console.log('Room loaded from sessionStorage:', this.localRoom)
-      } catch (e) {
-        console.error('Error parsing room data:', e)
-      }
-    }
-
-    // Load search data
-    if (searchData) {
-      try {
-        this.localSearchData = JSON.parse(searchData)
-        console.log('Search data loaded from sessionStorage:', this.localSearchData)
-      } catch (e) {
-        console.error('Error parsing search data:', e)
-      }
-    } else {
-      console.warn('No search data in sessionStorage')
-    }
-
-    // Redirect if no booking data
-    if (!this.localFlight && !this.localHotel) {
-      console.error('❌ NO BOOKING DATA - REDIRECTING BACK')
+    if (!bookingData) {
       this.$router.back()
-    } else {
-      console.log('✓ Booking data loaded successfully')
-      // Clear sessionStorage after successfully loading the data
-      setTimeout(() => {
-        sessionStorage.removeItem('selectedFlight')
-        sessionStorage.removeItem('outboundFlight')
-        sessionStorage.removeItem('returnFlight')
-        sessionStorage.removeItem('selectedHotel')
-        sessionStorage.removeItem('selectedRoom')
-        sessionStorage.removeItem('confirmationSearchData')
-        console.log('SessionStorage cleared')
-      }, 100)
+      return
     }
+
+    // Set search data
+    this.localSearchData = bookingData.searchData
+
+    // Load flight data (check for round-trip first)
+    if (bookingData.outboundFlight && bookingData.returnFlight) {
+      this.localFlight = bookingData.outboundFlight
+      this.localReturnFlight = bookingData.returnFlight
+      this.bookingType = 'flight'
+    } else if (bookingData.flight) {
+      this.localFlight = bookingData.flight
+      this.bookingType = 'flight'
+    }
+
+    // Load hotel data
+    if (bookingData.hotel) {
+      this.localHotel = bookingData.hotel
+      this.bookingType = 'hotel'
+      
+      if (bookingData.room) {
+        this.localRoom = bookingData.room
+      }
+    }
+
+    // Clear sessionStorage after successfully loading the data
+    setTimeout(() => {
+      clearBookingData()
+    }, 100)
   },
   methods: {
     formatPrice,
@@ -586,9 +528,7 @@ export default {
               <div class="hotel-info">
                 <div class="hotel-header">
                   <h3>{{ hotel.name }}</h3>
-                  <div class="hotel-stars">
-                    <span v-for="star in hotel.stars" :key="star" class="star">★</span>
-                  </div>
+                  <StarsDisplay :stars="hotel.stars" size="large" />
                 </div>
                 <div class="hotel-location">{{ hotel.location }}</div>
                 <div class="hotel-rating">
@@ -1581,6 +1521,7 @@ export default {
     padding: 1rem 2rem;
     font-size: 1.125rem;
     font-weight: 700;
+    // Uses global .btn-primary class
   }
 }
 

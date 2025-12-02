@@ -166,35 +166,6 @@ export default {
             </svg>
           </template>
         </button>
-
-        <!-- User Profile Icon -->
-        <!-- <button class="navbar__icon-btn" aria-label="User profile">
-          <svg class="navbar__icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <circle
-              cx="12"
-              cy="12"
-              r="9"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            />
-            <circle
-              cx="12"
-              cy="10"
-              r="3"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            />
-            <path
-              d="M6.5 18.5C7.5 16.5 9.5 15 12 15C14.5 15 16.5 16.5 17.5 18.5"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-            />
-          </svg>
-        </button> -->
       </div>
     </div>
   </nav>

@@ -4,6 +4,7 @@ import PassengerSelector from './PassengerSelector.vue'
 import SearchTypeToggle from './SearchTypeToggle.vue'
 import TripTypeToggle from './TripTypeToggle.vue'
 import SearchSubmitButton from './SearchSubmitButton.vue'
+import LocationInput from './LocationInput.vue'
 import { useSearchStore } from '@/stores/searchStore'
 import { LOCATIONS, type Location } from '@/constants'
 import { formatShortDate } from '@/utils/formatters'
@@ -20,7 +21,8 @@ export default {
     PassengerSelector,
     SearchTypeToggle,
     TripTypeToggle,
-    SearchSubmitButton
+    SearchSubmitButton,
+    LocationInput
   },
   setup() {
     const searchStore = useSearchStore()
@@ -32,10 +34,6 @@ export default {
       tripType: 'round-trip' as 'one-way' | 'round-trip',
       location: '',
       destination: '',
-      showLocationDropdown: false,
-      showDestinationDropdown: false,
-      selectedLocationIndex: -1,
-      selectedDestinationIndex: -1,
       selectedLocation: null as Location | null,
       selectedDestination: null as Location | null,
       passengerCounts: {
@@ -52,7 +50,6 @@ export default {
     }
   },
   mounted() {
-    document.addEventListener('click', this.handleOutsideClick)
     window.addEventListener('scroll', this.handleScroll)
     // Initialize from query params if on search page
     this.initializeFromQueryParams()
@@ -62,7 +59,6 @@ export default {
     }
   },
   beforeUnmount() {
-    document.removeEventListener('click', this.handleOutsideClick)
     window.removeEventListener('scroll', this.handleScroll)
   },
   watch: {
@@ -88,32 +84,6 @@ export default {
         return 'Update'
       }
       return 'Search'
-    },
-    filteredLocations(): Location[] {
-      const search = this.location ? this.location.toLowerCase() : ''
-      return this.allLocations.filter(loc => {
-        // Exclude if this location is already selected as destination
-        if (this.selectedDestination && loc.code === this.selectedDestination.code) {
-          return false
-        }
-        // If no search text, show all (except excluded)
-        if (!search) return true
-        // Otherwise filter by search text
-        return loc.name.toLowerCase().includes(search) || loc.code.toLowerCase().includes(search)
-      })
-    },
-    filteredDestinations(): Location[] {
-      const search = this.destination ? this.destination.toLowerCase() : ''
-      return this.allLocations.filter(loc => {
-        // Exclude if this location is already selected as origin
-        if (this.selectedLocation && loc.code === this.selectedLocation.code) {
-          return false
-        }
-        // If no search text, show all (except excluded)
-        if (!search) return true
-        // Otherwise filter by search text
-        return loc.name.toLowerCase().includes(search) || loc.code.toLowerCase().includes(search)
-      })
     },
     totalPassengers(): number {
       return this.passengerCounts.adults + this.passengerCounts.children
@@ -221,128 +191,11 @@ export default {
         this.passengerCounts.children = parseInt(query.children as string)
       }
     },
-    handleOutsideClick(event: MouseEvent) {
-      const target = event.target as HTMLElement
-      if (!target.closest('.location-input-wrapper')) {
-        this.showLocationDropdown = false
-        this.showDestinationDropdown = false
-      }
-    },
-    selectLocation(location: Location) {
-      this.location = location.name
+    onLocationSelect(location: Location) {
       this.selectedLocation = location
-      this.showLocationDropdown = false
-      this.selectedLocationIndex = -1
     },
-    selectDestination(location: Location) {
-      this.destination = location.name
+    onDestinationSelect(location: Location) {
       this.selectedDestination = location
-      this.showDestinationDropdown = false
-      this.selectedDestinationIndex = -1
-    },
-    onLocationFocus() {
-      this.showLocationDropdown = true
-      this.showDestinationDropdown = false
-      this.selectedLocationIndex = -1
-    },
-    onLocationInput(event: Event) {
-      const target = event.target as HTMLInputElement
-      this.showLocationDropdown = true
-      this.showDestinationDropdown = false
-      this.selectedLocationIndex = -1
-      // Only clear selected location if the input value doesn't match the selected location
-      if (this.selectedLocation && target.value !== this.selectedLocation.name) {
-        this.selectedLocation = null
-      }
-    },
-    onDestinationFocus() {
-      this.showDestinationDropdown = true
-      this.showLocationDropdown = false
-      this.selectedDestinationIndex = -1
-    },
-    onDestinationInput(event: Event) {
-      const target = event.target as HTMLInputElement
-      this.showDestinationDropdown = true
-      this.showLocationDropdown = false
-      this.selectedDestinationIndex = -1
-      // Only clear selected destination if the input value doesn't match the selected destination
-      if (this.selectedDestination && target.value !== this.selectedDestination.name) {
-        this.selectedDestination = null
-      }
-    },
-    handleLocationKeydown(event: KeyboardEvent) {
-      if (!this.showLocationDropdown || this.filteredLocations.length === 0) return
-
-      switch (event.key) {
-        case 'ArrowDown':
-          event.preventDefault()
-          this.selectedLocationIndex = Math.min(
-            this.selectedLocationIndex + 1,
-            this.filteredLocations.length - 1
-          )
-          this.scrollDropdownIntoView('location')
-          break
-        case 'ArrowUp':
-          event.preventDefault()
-          this.selectedLocationIndex = Math.max(this.selectedLocationIndex - 1, 0)
-          this.scrollDropdownIntoView('location')
-          break
-        case 'Enter':
-          event.preventDefault()
-          if (this.selectedLocationIndex >= 0 && this.selectedLocationIndex < this.filteredLocations.length) {
-            this.selectLocation(this.filteredLocations[this.selectedLocationIndex])
-          }
-          break
-        case 'Escape':
-          event.preventDefault()
-          this.showLocationDropdown = false
-          this.selectedLocationIndex = -1
-          break
-      }
-    },
-    handleDestinationKeydown(event: KeyboardEvent) {
-      if (!this.showDestinationDropdown || this.filteredDestinations.length === 0) return
-
-      switch (event.key) {
-        case 'ArrowDown':
-          event.preventDefault()
-          this.selectedDestinationIndex = Math.min(
-            this.selectedDestinationIndex + 1,
-            this.filteredDestinations.length - 1
-          )
-          this.scrollDropdownIntoView('destination')
-          break
-        case 'ArrowUp':
-          event.preventDefault()
-          this.selectedDestinationIndex = Math.max(this.selectedDestinationIndex - 1, 0)
-          this.scrollDropdownIntoView('destination')
-          break
-        case 'Enter':
-          event.preventDefault()
-          if (this.selectedDestinationIndex >= 0 && this.selectedDestinationIndex < this.filteredDestinations.length) {
-            this.selectDestination(this.filteredDestinations[this.selectedDestinationIndex])
-          }
-          break
-        case 'Escape':
-          event.preventDefault()
-          this.showDestinationDropdown = false
-          this.selectedDestinationIndex = -1
-          break
-      }
-    },
-    scrollDropdownIntoView(type: 'location' | 'destination') {
-      // Wait for next tick to ensure DOM is updated
-      this.$nextTick(() => {
-        const dropdown = this.$el.querySelector(
-          type === 'location' ? '.location-dropdown' : '.destination-dropdown'
-        )
-        if (!dropdown) return
-
-        const selectedOption = dropdown.querySelector('.location-option.keyboard-selected')
-        if (selectedOption) {
-          selectedOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
-        }
-      })
     },
     handleDateRangeSelected(dateRange: {
       checkIn: Date | null,
@@ -495,76 +348,23 @@ export default {
         <!-- Column 2: Location Inputs -->
         <div class="column-locations">
           <!-- From/Location field -->
-          <div class="location-input-wrapper">
-            <div class="input-with-clear">
-              <input
-                v-model="location"
-                type="text"
-                class="location-input"
-                :placeholder="searchType === 'flights' ? 'From' : 'Location'"
-                :aria-label="locationLabel"
-                @input="onLocationInput"
-                @focus="onLocationFocus"
-                @keydown="handleLocationKeydown"
-                autocomplete="off"
-              />
-              <button
-                v-if="location"
-                class="clear-btn"
-                @click="location = ''; selectedLocation = null"
-                type="button"
-              >×</button>
-            </div>
-            <div v-if="showLocationDropdown && filteredLocations.length > 0" class="location-dropdown">
-              <div
-                v-for="(loc, index) in filteredLocations"
-                :key="loc.code"
-                class="location-option"
-                :class="{ 'keyboard-selected': index === selectedLocationIndex }"
-                @click="selectLocation(loc)"
-                @mouseenter="selectedLocationIndex = index"
-              >
-                <span class="location-name">{{ loc.name }}</span>
-                <span class="location-code">{{ loc.code }}</span>
-              </div>
-            </div>
-          </div>
+          <LocationInput
+            v-model="location"
+            :placeholder="locationLabel"
+            :aria-label="locationLabel"
+            :exclude-location="selectedDestination"
+            @select="onLocationSelect"
+          />
 
           <!-- To field (only for flights) -->
-          <div v-if="showDestinationField" class="location-input-wrapper">
-            <div class="input-with-clear">
-              <input
-                v-model="destination"
-                type="text"
-                class="location-input"
-                placeholder="To"
-                aria-label="To"
-                @input="onDestinationInput"
-                @focus="onDestinationFocus"
-                @keydown="handleDestinationKeydown"
-                autocomplete="off"
-              />
-              <button
-                v-if="destination"
-                class="clear-btn"
-                @click="destination = ''; selectedDestination = null"
-                type="button"
-              >×</button>
-            </div>
-            <div v-if="showDestinationDropdown && filteredDestinations.length > 0" class="location-dropdown destination-dropdown">
-              <div
-                v-for="(loc, index) in filteredDestinations"
-                :key="loc.code"
-                class="location-option"
-                :class="{ 'keyboard-selected': index === selectedDestinationIndex }"
-                @click="selectDestination(loc)"
-                @mouseenter="selectedDestinationIndex = index"
-              >
-                <span class="location-name">{{ loc.name }}</span>
-                <span class="location-code">{{ loc.code }}</span>
-              </div>
-            </div>
-          </div>
+          <LocationInput
+            v-if="showDestinationField"
+            v-model="destination"
+            placeholder="To"
+            aria-label="To"
+            :exclude-location="selectedLocation"
+            @select="onDestinationSelect"
+          />
         </div>
 
         <!-- Column 3: Date Inputs -->
@@ -722,110 +522,6 @@ export default {
 
   @media (max-width: 768px) {
     align-items: stretch;
-  }
-}
-
-.location-input-wrapper {
-  position: relative;
-  flex: 1;
-  min-width: 0;
-
-  .input-with-clear {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-
-  .location-input {
-    width: 100%;
-    padding: 8px 12px;
-    padding-right: 36px;
-    border: 1px solid #d0d0d0;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 500;
-    transition: border-color 0.2s;
-    height: 40px;
-    box-sizing: border-box;
-
-    &:focus {
-      outline: none;
-      border-color: $color-accent;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-    }
-  }
-
-  .clear-btn {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    border: none;
-    background: #d0d0d0;
-    color: white;
-    border-radius: 50%;
-    font-size: 16px;
-    line-height: 1;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    transition: all 0.2s;
-
-    &:hover {
-      background: #999;
-    }
-
-    &:active {
-      transform: translateY(-50%) scale(0.95);
-    }
-  }
-
-  .location-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    margin-top: 4px;
-    background: white;
-    border: 1px solid #d0d0d0;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    max-height: 300px;
-    overflow-y: auto;
-    z-index: 100;
-
-    .location-option {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px;
-      cursor: pointer;
-      transition: background 0.2s;
-
-      &:hover,
-      &.keyboard-selected {
-        background: #f5f5f5;
-      }
-
-      &:not(:last-child) {
-        border-bottom: 1px solid #f0f0f0;
-      }
-
-      .location-name {
-        font-size: 14px;
-        color: #000;
-      }
-
-      .location-code {
-        font-size: 12px;
-        color: #666;
-        font-weight: 500;
-      }
-    }
   }
 }
 

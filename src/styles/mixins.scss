@@ -1,0 +1,97 @@
+@use './variables.scss' as *;
+
+/**
+ * Card mixin - Common styles for card components
+ */
+@mixin card-base {
+  background: white;
+  border: 1px solid $color-light-grey;
+  border-radius: 8px;
+  transition: all 0.2s;
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-color: darken($color-light-grey, 10%);
+  }
+}
+
+/**
+ * Button mixin - Base button styles
+ */
+@mixin button-base {
+  font-family: $font-body;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/**
+ * Select button variant - Used for selecting flights/hotels
+ */
+@mixin button-select {
+  @include button-base;
+  background: #ff5722;
+  color: white;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+
+  &:hover:not(:disabled) {
+    background: darken(#ff5722, 8%);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.65rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}
+
+/**
+ * Price display mixin - Common price styling
+ */
+@mixin price-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+
+  .price-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $color-text;
+    line-height: 1;
+  }
+
+  .price-label {
+    color: $color-text-light;
+    font-size: 0.8rem;
+    line-height: 1;
+  }
+}
+
+/**
+ * Price info container - For price displays with total
+ */
+@mixin price-info-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
+}
+
