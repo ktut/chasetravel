@@ -4,6 +4,7 @@ import FlightCard from './FlightCard.vue'
 import SortOptions from './SortOptions.vue'
 import HotelCard from './HotelCard.vue'
 import HotelMap from './HotelMap.vue'
+import PriceRangeFilter from './PriceRangeFilter.vue'
 import type { Flight, Hotel } from '@/types/search'
 import { formatPrice } from '@/utils/formatters'
 
@@ -14,7 +15,8 @@ export default {
     FlightCard,
     SortOptions,
     HotelCard,
-    HotelMap
+    HotelMap,
+    PriceRangeFilter
   },
   props: {
     results: {
@@ -112,9 +114,12 @@ export default {
           }
 
           // Filter by price (use totalPrice)
-          filtered = filtered.filter((p: any) =>
-            p.totalPrice >= this.priceRange[0] && p.totalPrice <= this.priceRange[1]
-          )
+          filtered = filtered.filter((p: any) => {
+            const price = Number(p.totalPrice)
+            const min = Number(this.priceRange[0])
+            const max = Number(this.priceRange[1])
+            return price >= min && price <= max
+          })
 
           // Sort
           if (this.sortBy === 'price') {
@@ -145,9 +150,12 @@ export default {
           }
 
           // Filter by price
-          filtered = filtered.filter((f: any) =>
-            f.price >= this.priceRange[0] && f.price <= this.priceRange[1]
-          )
+          filtered = filtered.filter((f: any) => {
+            const price = Number(f.price)
+            const min = Number(this.priceRange[0])
+            const max = Number(this.priceRange[1])
+            return price >= min && price <= max
+          })
 
           // Sort
           if (this.sortBy === 'price') {
@@ -168,9 +176,12 @@ export default {
         const hotels = filtered as Hotel[]
 
         // Filter by price per night
-        filtered = hotels.filter((h: any) =>
-          h.pricePerNight >= this.priceRange[0] && h.pricePerNight <= this.priceRange[1]
-        )
+        filtered = hotels.filter((h: any) => {
+          const price = Number(h.pricePerNight)
+          const min = Number(this.priceRange[0])
+          const max = Number(this.priceRange[1])
+          return price >= min && price <= max
+        })
 
         // Filter by amenities
         if (this.selectedAmenities.length > 0) {
@@ -226,10 +237,13 @@ export default {
   },
   watch: {
     results: {
-      handler() {
-        // Reset price range when results change
-        if (this.results.length > 0) {
-          this.priceRange = [this.minPrice, this.maxPrice]
+      handler(newResults, oldResults) {
+        // Only reset price range when results actually change (new search)
+        // Don't reset if it's just the initial load with the same results
+        if (this.results.length > 0 && (!oldResults || oldResults.length === 0 || newResults !== oldResults)) {
+          this.$nextTick(() => {
+            this.priceRange = [this.minPrice, this.maxPrice]
+          })
         }
       },
       immediate: true
@@ -239,6 +253,14 @@ export default {
         this.loadResultsProgressively(newResults)
       },
       immediate: true
+    },
+    priceRange: {
+      handler() {
+        // Ensure filtered results are recalculated when price range changes
+        // This forces Vue to update the computed property
+        this.$forceUpdate()
+      },
+      deep: true
     }
   },
   beforeUnmount() {
@@ -376,17 +398,12 @@ export default {
         <!-- Price Filter -->
         <div class="filter-section">
           <h4>Price Range</h4>
-          <div class="price-range-display">
-            <span>{{ formatPrice(priceRange[0]) }}</span>
-            <span>-</span>
-            <span>{{ formatPrice(priceRange[1]) }}</span>
-          </div>
-          <input
-            type="range"
-            v-model="priceRange[1]"
-            :min="minPrice"
-            :max="maxPrice"
-            class="price-slider"
+          <PriceRangeFilter
+            :results="results"
+            :min-price="minPrice"
+            :max-price="maxPrice"
+            :price-key="searchData?.tripType === 'round-trip' ? 'totalPrice' : 'price'"
+            v-model="priceRange"
           />
         </div>
       </div>
@@ -396,17 +413,12 @@ export default {
         <!-- Price Filter -->
         <div class="filter-section">
           <h4>Price per night</h4>
-          <div class="price-range-display">
-            <span>{{ formatPrice(priceRange[0]) }}</span>
-            <span>-</span>
-            <span>{{ formatPrice(priceRange[1]) }}</span>
-          </div>
-          <input
-            type="range"
-            v-model="priceRange[1]"
-            :min="minPrice"
-            :max="maxPrice"
-            class="price-slider"
+          <PriceRangeFilter
+            :results="results"
+            :min-price="minPrice"
+            :max-price="maxPrice"
+            price-key="pricePerNight"
+            v-model="priceRange"
           />
         </div>
 
@@ -798,19 +810,6 @@ export default {
     }
   }
 
-  .price-range-display {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.75rem;
-    font-size: 0.9rem;
-    color: $color-text-light;
-  }
-
-  .price-slider {
-    width: 100%;
-    cursor: pointer;
-  }
 }
 
 /* Main Results Area */
@@ -967,9 +966,7 @@ export default {
   position: relative;
 
   // Compact view for hotel cards when map is shown - keep normal desktop layout
-  :deep(.compact-view) {
-    // No layout changes needed - cards will naturally be narrower due to column width
-  }
+  // No layout changes needed - cards will naturally be narrower due to column width
 }
 
 /* Map Section */
