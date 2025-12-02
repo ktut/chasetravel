@@ -2,13 +2,11 @@
 import type { Hotel } from '@/types/search'
 import { formatPrice } from '@/utils/formatters'
 import AmenityPills from './AmenityPills.vue'
-import LoadingSpinner from './LoadingSpinner.vue'
 
 export default {
   name: 'HotelCard',
   components: {
-    AmenityPills,
-    LoadingSpinner
+    AmenityPills
   },
   props: {
     hotel: {
@@ -20,9 +18,19 @@ export default {
       default: null
     }
   },
-  data() {
-    return {
-      isSelecting: false
+  computed: {
+    numberOfNights(): number {
+      if (!this.searchData?.checkIn || !this.searchData?.checkOut) {
+        return 1
+      }
+      const checkIn = new Date(this.searchData.checkIn)
+      const checkOut = new Date(this.searchData.checkOut)
+      const diffTime = Math.abs(checkOut.getTime() - checkIn.getTime())
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+      return diffDays || 1
+    },
+    totalCost(): number {
+      return this.hotel.pricePerNight * this.numberOfNights
     }
   },
   methods: {
@@ -31,36 +39,14 @@ export default {
       return Array.from({ length: count }, (_, i) => i)
     },
     selectHotel() {
-      if (this.isSelecting) return
-
-      this.isSelecting = true
-
-      setTimeout(() => {
-        console.log('=== HotelCard.selectHotel CALLED ===')
-        console.log('Hotel selected:', this.hotel)
-        console.log('Search data:', this.searchData)
-
-        // Store search data in sessionStorage for navigation
-        try {
-          const searchDataJson = JSON.stringify(this.searchData)
-
-          console.log('Storing search data in sessionStorage...')
-          sessionStorage.setItem('confirmationSearchData', searchDataJson)
-
-          // Verify it was stored
-          const storedSearch = sessionStorage.getItem('confirmationSearchData')
-          console.log('Verification - Search in storage:', storedSearch ? 'YES' : 'NO')
-
-          console.log('Navigating to /hotel/' + this.hotel.id + '...')
-          // Use nextTick to ensure sessionStorage is written before navigation
-          this.$nextTick(() => {
-            this.$router.push(`/hotel/${this.hotel.id}`)
-          })
-        } catch (e) {
-          console.error('Error in selectHotel:', e)
-          this.isSelecting = false
-        }
-      }, 2000)
+      // Store search data in sessionStorage for navigation
+      try {
+        const searchDataJson = JSON.stringify(this.searchData)
+        sessionStorage.setItem('confirmationSearchData', searchDataJson)
+        this.$router.push(`/hotel/${this.hotel.id}`)
+      } catch (e) {
+        console.error('Error in selectHotel:', e)
+      }
     }
   }
 }
@@ -90,21 +76,25 @@ export default {
     </div>
 
     <div class="hotel-price desktop-only">
-      <div class="price-label">Per night</div>
-      <div class="price">{{ formatPrice(hotel.pricePerNight) }}</div>
-      <button @click="selectHotel" :disabled="isSelecting" class="btn-primary select-btn">
-        <LoadingSpinner v-if="isSelecting" />
-        <span v-else>Select</span>
+      <div class="price-info">
+        <div class="price-per-night">
+          <span class="price-amount">{{ formatPrice(hotel.pricePerNight) }}</span>
+          <span class="price-label">/night</span>
+        </div>
+        <div class="price-total">
+          <span class="total-label">Total: </span>
+          <span class="total-amount">{{ formatPrice(totalCost) }}</span>
+        </div>
+      </div>
+      <button @click="selectHotel" class="btn-primary select-btn">
+        Select
       </button>
     </div>
 
     <div class="hotel-price-mobile">
-      <button @click="selectHotel" :disabled="isSelecting" class="btn-primary select-btn">
-        <LoadingSpinner v-if="isSelecting" />
-        <template v-else>
-          <span class="price-text">{{ formatPrice(hotel.pricePerNight) }}</span>
-          <span class="per-night">/night</span>
-        </template>
+      <button @click="selectHotel" class="btn-primary select-btn">
+        <span class="price-text">{{ formatPrice(hotel.pricePerNight) }}</span>
+        <span class="per-night">/night</span>
       </button>
     </div>
   </div>
@@ -117,7 +107,7 @@ export default {
   border-radius: 8px;
   overflow: hidden;
   display: grid;
-  grid-template-columns: minmax(150px, 1fr) 1fr 145px;
+  grid-template-columns: 240px 1fr 180px;
   transition: all 0.2s;
   cursor: pointer;
 
@@ -141,12 +131,14 @@ export default {
 .hotel-image {
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    min-height: 200px;
+    display: block;
     transition: transform 0.3s;
 
     @media (max-width: 968px) {
@@ -161,10 +153,10 @@ export default {
 }
 
 .hotel-details {
-  padding: 1.5rem;
+  padding: 0.85rem 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
 
   @media (max-width: 968px) {
     padding: 0.75rem;
@@ -190,7 +182,7 @@ export default {
   }
 
   .hotel-name {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 600;
     color: $color-text;
     line-height: 1.3;
@@ -204,7 +196,7 @@ export default {
   .hotel-rating-compact {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.35rem;
     flex-wrap: wrap;
 
     @media (max-width: 968px) {
@@ -214,10 +206,10 @@ export default {
     .rating-score {
       background: $color-accent;
       color: white;
-      padding: 0.25rem 0.5rem;
+      padding: 0.2rem 0.45rem;
       border-radius: 4px;
       font-weight: 600;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
 
       @media (max-width: 968px) {
         padding: 0.2rem 0.4rem;
@@ -227,7 +219,7 @@ export default {
 
     .rating-reviews {
       color: $color-text-light;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
 
       @media (max-width: 968px) {
         font-size: 0.75rem;
@@ -240,7 +232,7 @@ export default {
       gap: 1px;
 
       .star {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
 
         @media (max-width: 968px) {
           font-size: 0.75rem;
@@ -251,31 +243,68 @@ export default {
 }
 
 .hotel-price {
-  padding: 1.5rem;
+  padding: 0.85rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.65rem;
   background: $color-bg-light;
   border-left: 1px solid $color-light-grey;
 
-  .price-label {
-    color: $color-text-light;
-    font-size: 0.85rem;
+  .price-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    width: 100%;
   }
 
-  .price {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: $color-text;
+  .price-per-night {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+
+    .price-amount {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $color-text;
+      line-height: 1;
+    }
+
+    .price-label {
+      color: $color-text-light;
+      font-size: 0.8rem;
+      line-height: 1;
+    }
+  }
+
+  .price-total {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    padding: 0.3rem 0.6rem;
+    background: rgba($color-accent, 0.08);
+    border-radius: 4px;
+
+    .total-label {
+      color: $color-text-light;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .total-amount {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: $color-text;
+    }
   }
 
   .select-btn {
-    padding: 0.75rem 1.5rem;
-    margin-top: 0.5rem;
+    padding: 0.65rem 1.25rem;
     white-space: nowrap;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    width: 100%;
   }
 }
 
