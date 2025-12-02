@@ -41,8 +41,13 @@ export default defineComponent({
         center: [centerLat, centerLng],
         zoom: 12,
         scrollWheelZoom: true,
-        zoomControl: true
+        zoomControl: false // Disable default zoom control
       })
+
+      // Add zoom control in top-left corner to avoid overlap with Hide Map button
+      L.control.zoom({
+        position: 'topleft'
+      }).addTo(this.map as L.Map)
 
       // Add OpenStreetMap tiles (no API key needed)
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -182,8 +187,8 @@ export default defineComponent({
 .hotel-map-container {
   grid-area: map;
   position: sticky;
-  top: 9rem;
-  height: calc(100vh - 11rem);
+  top: 14rem;
+  height: calc(100vh - 14rem);
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid $color-light-grey;
@@ -196,6 +201,35 @@ export default defineComponent({
   .map {
     width: 100%;
     height: 100%;
+  }
+}
+
+// Ensure Leaflet zoom controls stay within the map bounds (positioned on left)
+:deep(.leaflet-control-zoom) {
+  margin-top: 10px;
+  margin-left: 10px;
+
+  // Prevent page jumping when zoom buttons are clicked
+  a {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+// Prevent map from causing layout shifts
+:deep(.leaflet-container) {
+  overflow: hidden;
+  position: relative;
+
+  // Ensure map stays in its container without causing reflows
+  &:focus {
+    outline: none;
   }
 }
 

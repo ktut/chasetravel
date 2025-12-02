@@ -1464,10 +1464,22 @@ export function getMockHotelResults(searchData: SearchData): Hotel[] {
   // Get hotels for this location
   const cityHotels = hotelDatabase[locationName] || []
 
+  // Helper function to generate a unique ID from hotel name and location
+  const generateUniqueId = (hotelName: string, location: string): number => {
+    const str = `${hotelName}-${location}`
+    let hash = 0
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i)
+      hash = ((hash << 5) - hash) + char
+      hash = hash & hash // Convert to 32bit integer
+    }
+    return Math.abs(hash)
+  }
+
   // Map to full Hotel objects with mock pricing and review counts
-  const results: Hotel[] = cityHotels.map((hotel, index) => ({
+  const results: Hotel[] = cityHotels.map((hotel) => ({
     ...hotel,
-    id: index + 1,
+    id: generateUniqueId(hotel.name, hotel.location),
     // Generate mock price based on star rating
     pricePerNight: Math.floor(Math.random() * 200) + (hotel.stars === 5 ? 300 : hotel.stars === 4 ? 150 : 100),
     // Generate mock review count

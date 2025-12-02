@@ -45,12 +45,14 @@ export default {
       checkInFlexibility: 'exact' as string,
       checkOutFlexibility: 'exact' as string,
       isMinimized: false,
+      justExpanded: false,
       // Sample locations for typeahead
       allLocations: LOCATIONS
     }
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll)
+    document.addEventListener('click', this.handleClickOutside)
     // Initialize from query params if on search page
     this.initializeFromQueryParams()
     // Minimize on search page by default
@@ -60,6 +62,7 @@ export default {
   },
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll)
+    document.removeEventListener('click', this.handleClickOutside)
   },
   watch: {
     '$route.query': {
@@ -227,12 +230,46 @@ export default {
         this.isMinimized = true
       }
     },
+    handleClickOutside(event: MouseEvent) {
+      // Only handle clicks when on search page and widget is expanded
+      if (!this.isOnSearchPage || this.isMinimized) {
+        return
+      }
+
+      // Prevent immediate re-minimization after expanding
+      if (this.justExpanded) {
+        return
+      }
+
+      // Check if the click is outside the search widget
+      const target = event.target as HTMLElement
+      const searchWidget = this.$el as HTMLElement
+
+      // Check if click is inside modal container (for teleported elements like calendar, dropdowns)
+      const modalContainer = document.getElementById('modal-container')
+      if (modalContainer && modalContainer.contains(target)) {
+        return
+      }
+
+      if (searchWidget && !searchWidget.contains(target)) {
+        // Minimize the widget
+        this.isMinimized = true
+      }
+    },
     handleEdit() {
       // Scroll to top with smooth behavior
       window.scrollTo({ top: 0, behavior: 'smooth' })
 
       // Unminimize the component
       this.isMinimized = false
+
+      // Set flag to prevent immediate re-minimization
+      this.justExpanded = true
+
+      // Clear the flag after a short delay
+      setTimeout(() => {
+        this.justExpanded = false
+      }, 100)
     },
     handleSubmit() {
       // Guard clause - should not be able to submit if button is disabled

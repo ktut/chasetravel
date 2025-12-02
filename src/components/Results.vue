@@ -771,6 +771,7 @@ export default {
 
 .map-open {
   .map-toggle-btn {
+    position: absolute;
     top: 7rem;
     right: 3rem;
   }
@@ -779,7 +780,6 @@ export default {
   position: absolute;
   top: 3rem;
   right: 4rem;
-  z-index: 26;
   display: flex;
   align-items: center;
   gap: 0.5rem;
