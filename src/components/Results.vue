@@ -3,6 +3,7 @@ import NoResults from './NoResults.vue'
 import FlightCard from './FlightCard.vue'
 import SortOptions from './SortOptions.vue'
 import HotelCard from './HotelCard.vue'
+import HotelMap from './HotelMap.vue'
 import type { Flight, Hotel } from '@/types/search'
 import { formatPrice } from '@/utils/formatters'
 
@@ -12,7 +13,8 @@ export default {
     NoResults,
     FlightCard,
     SortOptions,
-    HotelCard
+    HotelCard,
+    HotelMap
   },
   props: {
     results: {
@@ -43,7 +45,10 @@ export default {
       isLoading: false,
 
       // Filters visibility
-      showFilters: false
+      showFilters: false,
+
+      // Map visibility
+      showMap: false
     }
   },
   computed: {
@@ -280,6 +285,9 @@ export default {
         document.body.style.overflow = ''
       }
     },
+    toggleMap() {
+      this.showMap = !this.showMap
+    },
     loadResultsProgressively(results: (Flight | Hotel)[]) {
       this.displayedResults = []
       this.isLoading = true
@@ -309,9 +317,9 @@ export default {
 </script>
 
 <template>
-  <div class="results-wrapper">
-    <!-- Filter Toggle Button (Mobile Only) -->
-     <div class="mobile-filter-toggle-container">
+  <div class="results-wrapper" :class="{ 'map-open': showMap && isHotels }">
+    <!-- Filter Toggle Button (Sticky on both mobile and desktop when map is open) -->
+    <div class="mobile-filter-toggle-container">
       <button class="mobile-filter-toggle" @click="toggleFilters" ref="filterToggle">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="4" y1="6" x2="20" y2="6"></line>
@@ -321,7 +329,8 @@ export default {
         <span>{{ showFilters ? 'Hide Filters' : 'Show Filters' }}</span>
         <span v-if="activeFiltersCount > 0" class="filter-badge">{{ activeFiltersCount }}</span>
       </button>
-    </div> 
+    </div>
+
     <!-- Filters Sidebar -->
     <aside class="filters-sidebar" :class="{ 'filters-visible': showFilters }">
       <div class="filters-header">
@@ -458,7 +467,13 @@ export default {
         <NoResults v-if="filteredResults.length === 0 && !isLoading" :searchType="searchType" />
 
         <TransitionGroup name="flight-list">
-          <HotelCard v-for="hotel in displayedResults as Hotel[]" :key="hotel.id" :hotel="hotel" :search-data="searchData" />
+          <HotelCard
+            v-for="hotel in displayedResults as Hotel[]"
+            :key="hotel.id"
+            :hotel="hotel"
+            :search-data="searchData"
+            :class="{ 'compact-view': showMap }"
+          />
         </TransitionGroup>
 
         <!-- Loading indicator -->
@@ -468,6 +483,25 @@ export default {
         </div>
       </div>
     </main>
+
+    <!-- Map Section (Hotels only, Desktop only) -->
+    <aside v-if="isHotels && showMap" class="map-section">
+      <HotelMap :hotels="filteredResults as Hotel[]" :search-data="searchData" />
+    </aside>
+
+    <!-- Map Toggle Button (Fixed position, for hotels) -->
+    <button v-if="isHotels" @click="toggleMap" class="map-toggle-btn">
+      <svg v-if="!showMap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+        <line x1="8" y1="2" x2="8" y2="18"></line>
+        <line x1="16" y1="6" x2="16" y2="22"></line>
+      </svg>
+      <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+      <span>{{ showMap ? 'Hide Map' : 'Show Map' }}</span>
+    </button>
   </div>
 </template>
 
@@ -484,6 +518,17 @@ export default {
   padding: 3rem 2rem 2rem;
   margin: 0 auto;
   position: relative;
+  transition: grid-template-columns 0.3s ease, max-width 0.3s ease;
+
+  // 3-column layout when map is open
+  &.map-open {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "results map";
+    max-width: 1800px;
+    gap: 0 2rem;
+    padding-top: 6rem;
+  }
 
   @media (max-width: 968px) {
     display: flex;
@@ -494,12 +539,50 @@ export default {
 }
 
 .mobile-filter-toggle-container {
+  display: none;
+
+  // Show on mobile always
   @media (max-width: 968px) {
+    display: block;
     padding: 0.5rem 1rem 0;
     background: white;
     position: sticky;
-    top: 139px;
+    top: 153px;
     z-index: 10;
+
+    // White pseudo-element to cover gap above while scrolling
+    &::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: white;
+      z-index: -1;
+    }
+  }
+
+  // Show on desktop when map is open - positioned fixed at top
+  .map-open & {
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem 2rem 0.75rem;
+    background: white;
+    position: fixed;
+    top: 9rem;
+    left: 0;
+    right: 0;
+    z-index: 25;
+    border-bottom: 1px solid $color-light-grey;
+
+    @media (max-width: 968px) {
+      position: sticky;
+      padding: 0.5rem 1rem 0;
+      top: 210px;
+      z-index: 10;
+      border-bottom: none;
+    }
   }
 }
 
@@ -507,6 +590,7 @@ export default {
 .mobile-filter-toggle {
   display: none;
 
+  // Show on mobile always
   @media (max-width: 968px) {
     display: flex;
     align-items: center;
@@ -543,11 +627,55 @@ export default {
       font-weight: 600;
     }
   }
+
+  // Show on desktop when map is open
+  .map-open & {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: white;
+    border: 1px solid $color-light-grey;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $color-text;
+    width: 100%;
+    max-width: 1334px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+    svg {
+      width: 20px;
+      height: 20px;
+      color: $color-text-light;
+    }
+
+    &:hover {
+      background: $color-bg-light;
+      border-color: $color-accent;
+    }
+
+    .filter-badge {
+      margin-left: auto;
+      background: $color-accent;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    @media (max-width: 968px) {
+      padding: 0.75rem 1rem;
+      border: 1px solid $color-light-grey;
+      border-radius: 8px;
+    }
+  }
 }
 
 /* Filters Sidebar */
 .filters-sidebar {
-  grid-area: filters;
   background: white;
   border: 1px solid $color-light-grey;
   border-radius: 8px;
@@ -555,6 +683,34 @@ export default {
   height: fit-content;
   position: sticky;
   top: 9rem;
+  grid-area: filters;
+
+  // When map is open, filters are collapsible below fixed toggle button
+  .map-open & {
+    position: fixed;
+    top: calc(9rem + 3.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 4rem);
+    max-width: 1334px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding: 0;
+    border: none;
+    transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+    margin: 0;
+    z-index: 35;
+
+    &.filters-visible {
+      max-height: calc(100vh - 13rem);
+      overflow-y: auto;
+      opacity: 1;
+      padding: 1.5rem;
+      border: 1px solid $color-light-grey;
+      border-radius: 8px;
+    }
+  }
 
   @media (max-width: 968px) {
     max-height: 0;
@@ -662,6 +818,11 @@ export default {
   grid-area: results;
   min-height: 500px;
   padding: 0 2rem 2rem;
+
+  .map-open & {
+    padding: 0 1rem 2rem 0;
+  }
+
   @media (max-width: 968px) {
     padding: 1rem;
   }
@@ -691,6 +852,49 @@ export default {
       font-size: 0.9rem;
       margin: 0;
     }
+  }
+}
+
+.map-open {
+  .map-toggle-btn {
+    top: 7rem;
+    right: 3rem;
+  }
+}
+.map-toggle-btn {
+  position: absolute;
+  top: 3rem;
+  right: 4rem;
+  z-index: 26;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: white;
+  border: 1px solid $color-light-grey;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $color-text;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: $color-accent;
+  }
+
+  &:hover {
+    background: $color-bg-light;
+    border-color: $color-accent;
+    color: $color-accent;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  @media (max-width: 968px) {
+    display: none;
   }
 }
 
@@ -761,5 +965,31 @@ export default {
   flex-direction: column;
   gap: 1rem;
   position: relative;
+
+  // Compact view for hotel cards when map is shown - keep normal desktop layout
+  :deep(.compact-view) {
+    // No layout changes needed - cards will naturally be narrower due to column width
+  }
+}
+
+/* Map Section */
+.map-section {
+  grid-area: map;
+  animation: slideInFromRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media (max-width: 968px) {
+    display: none;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 </style>
