@@ -47,7 +47,7 @@ export default {
   .switch-label {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     cursor: pointer;
     user-select: none;
   }

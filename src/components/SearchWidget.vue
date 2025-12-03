@@ -488,7 +488,7 @@ export default {
 .search-grid {
   display: grid;
   grid-template-columns: auto minmax(100px, 1fr) minmax(280px, 1fr) auto;
-  gap: 16px;
+  gap: 24px;
   align-items: start;
 
   @media (min-width: 769px) {
@@ -532,7 +532,7 @@ export default {
 .trip-type-wrapper {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 1.1rem;
   justify-content: flex-start;
 
   @media (max-width: $breakpoint-mobile) {
