@@ -4,6 +4,7 @@ import ResultsView from '../views/ResultsView.vue'
 import Confirmation from '../views/Confirmation.vue'
 import HotelView from '../views/HotelView.vue'
 import MyBookings from '../views/MyBookings.vue'
+import BookingDetail from '../views/BookingDetail.vue'
 import ComponentsView from '../views/ComponentsView.vue'
 
 const router = createRouter({
@@ -38,6 +39,12 @@ const router = createRouter({
       name: 'mybookings',
       component: MyBookings,
       meta: { depth: 4 }
+    },
+    {
+      path: '/booking/:id',
+      name: 'booking-detail',
+      component: BookingDetail,
+      meta: { depth: 5 }
     },
     {
       path: '/components',

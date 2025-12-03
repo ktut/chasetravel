@@ -31,15 +31,24 @@ export default {
   methods: {
     formatPrice,
     formatDate,
-    cancelBooking() {
-      this.$emit('cancel', this.booking.id)
+    navigateToDetail() {
+      this.$router.push(`/booking/${this.booking.id}`)
     }
   }
 }
 </script>
 
 <template>
-  <div v-if="flightsToDisplay.length > 0" class="booking-card" :class="{ 'round-trip': isRoundTrip }">
+  <div
+    v-if="flightsToDisplay.length > 0"
+    class="booking-card"
+    :class="{ 'round-trip': isRoundTrip }"
+    @click="navigateToDetail"
+    @keydown.enter="navigateToDetail"
+    tabindex="0"
+    role="button"
+    :aria-label="`View details for ${booking.type} booking`"
+  >
     <div class="booking-content">
       <div class="booking-type-badge flight">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -66,11 +75,6 @@ export default {
           label="Return"
         />
       </div>
-
-      <!-- Actions -->
-      <div class="booking-footer">
-        <button @click="cancelBooking" class="btn-cancel">Cancel Booking</button>
-      </div>
     </div>
   </div>
 </template>
@@ -83,9 +87,21 @@ export default {
   padding: 1rem;
   margin-bottom: 0.75rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.2s;
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+
+  &:focus {
+    outline: 2px solid $color-accent;
+    outline-offset: 2px;
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 
   &.past {
@@ -148,55 +164,6 @@ export default {
     padding: 0 0.5rem;
     color: #999;
     font-size: 1rem;
-  }
-}
-
-.booking-footer {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid #f0f0f0;
-
-  @media (max-width: 768px) {
-    justify-content: stretch;
-  }
-}
-
-.booking-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.75rem;
-
-  @media (max-width: 768px) {
-    align-items: flex-start;
-    width: 100%;
-  }
-}
-
-.btn-cancel {
-  padding: 0.4rem 0.875rem;
-  border: 1px solid #e5e5e5;
-  border-radius: 4px;
-  background: white;
-  color: #666;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-
-  &:hover {
-    background: #fee;
-    border-color: #dc3545;
-    color: #dc3545;
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
   }
 }
 </style>

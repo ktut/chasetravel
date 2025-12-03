@@ -64,6 +64,25 @@ export const useSearchStore = defineStore('search', {
       if (index !== -1) {
         this.bookings.splice(index, 1)
       }
+    },
+
+    updateBookingDates(bookingId: string, updates: {
+      checkIn: Date,
+      checkOut: Date,
+      checkInFlexibility?: string,
+      checkOutFlexibility?: string
+    }) {
+      const booking = this.bookings.find(b => b.id === bookingId)
+      if (booking && booking.searchData) {
+        booking.searchData.checkIn = updates.checkIn
+        booking.searchData.checkOut = updates.checkOut
+        if (updates.checkInFlexibility) {
+          booking.searchData.checkInFlexibility = updates.checkInFlexibility
+        }
+        if (updates.checkOutFlexibility) {
+          booking.searchData.checkOutFlexibility = updates.checkOutFlexibility
+        }
+      }
     }
   },
 

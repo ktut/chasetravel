@@ -25,15 +25,23 @@ export default {
       }
       return 0
     },
-    cancelBooking() {
-      this.$emit('cancel', this.booking.id)
+    navigateToDetail() {
+      this.$router.push(`/booking/${this.booking.id}`)
     }
   }
 }
 </script>
 
 <template>
-  <div v-if="booking.hotel" class="booking-card">
+  <div
+    v-if="booking.hotel"
+    class="booking-card"
+    @click="navigateToDetail"
+    @keydown.enter="navigateToDetail"
+    tabindex="0"
+    role="button"
+    :aria-label="`View details for ${booking.hotel.name}`"
+  >
     <div class="booking-content">
       <div class="booking-type-badge hotel">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -62,9 +70,6 @@ export default {
           </div>
           <div v-if="booking.room" class="room-name">{{ booking.room.name }}</div>
         </div>
-        <div class="booking-actions">
-          <button @click="cancelBooking" class="btn-cancel">Cancel Booking</button>
-        </div>
       </div>
     </div>
   </div>
@@ -78,9 +83,21 @@ export default {
   padding: 1rem;
   margin-bottom: 0.75rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.2s;
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+
+  &:focus {
+    outline: 2px solid $color-accent;
+    outline-offset: 2px;
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 
   &.past {
@@ -117,14 +134,9 @@ export default {
 
 .booking-details {
   display: grid;
-  grid-template-columns: 80px 1fr auto;
+  grid-template-columns: 80px 1fr;
   gap: 1rem;
   align-items: center;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 80px 1fr;
-    grid-template-rows: auto auto;
-  }
 }
 
 .hotel-image-container {
@@ -174,42 +186,6 @@ export default {
     font-size: 0.8125rem;
     margin-top: 0.25rem;
     font-style: italic;
-  }
-}
-
-.booking-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.75rem;
-
-  @media (max-width: 768px) {
-    grid-column: 1 / -1;
-    align-items: flex-start;
-    width: 100%;
-  }
-}
-
-.btn-cancel {
-  padding: 0.4rem 0.875rem;
-  border: 1px solid #e5e5e5;
-  border-radius: 4px;
-  background: white;
-  color: #666;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-
-  &:hover {
-    background: #fee;
-    border-color: #dc3545;
-    color: #dc3545;
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
   }
 }
 </style>
