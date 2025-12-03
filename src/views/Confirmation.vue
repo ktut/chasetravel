@@ -364,8 +364,8 @@ export default {
           <section class="step-section" v-if="isFlightBooking">
             <h2>Choose a fare</h2>
             <p class="step-disclaimer">
-              <a href="#" class="disclaimer-link">See baggage size and weight limit.</a>
-              Total prices may include estimated baggage fees and flexibility. Some options may require added baggage or flexibility when checking out. Check terms and conditions on the booking site.
+              <a href="#" class="disclaimer-link">See baggage size and weight limits on the airline's website.</a>
+              Check terms and conditions on the booking site.
             </p>
 
             <div class="fare-options">

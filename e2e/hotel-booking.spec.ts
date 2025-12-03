@@ -203,5 +203,101 @@ test.describe('Hotel Booking E2E Flow', () => {
     }
 
     console.log('✓ All hotel booking verifications passed!')
+
+    // Step 20: Book the hotel
+    await page.locator('.book-button').click()
+
+    // Step 21: Wait for booking to be created and navigation to My Bookings
+    await page.waitForURL(/\/mybookings/, { timeout: 10000 })
+    expect(page.url()).toContain('/mybookings')
+
+    // Step 22: Verify booking card is visible
+    await page.waitForSelector('.booking-card', { timeout: 10000 })
+    const bookingCard = page.locator('.booking-card').first()
+    await expect(bookingCard).toBeVisible()
+
+    // Step 23: Click booking card to navigate to detail page
+    await bookingCard.click()
+
+    // Step 24: Wait for navigation to booking detail page
+    await page.waitForURL(/\/booking\/[a-f0-9-]+/, { timeout: 10000 })
+    expect(page.url()).toMatch(/\/booking\/[a-f0-9-]+/)
+
+    // Step 25: Verify booking detail page loaded
+    await page.waitForSelector('.booking-detail-content', { timeout: 10000 })
+    await expect(page.locator('.booking-detail-content .page-title')).toContainText('My Booking')
+
+    // Step 26: Capture original dates displayed on page
+    const originalDatesHeader = await page.locator('.booking-dates-header').textContent()
+    console.log('Original booking dates:', originalDatesHeader)
+
+    // Step 27: Verify Calendar component is visible on booking detail page
+    await expect(page.locator('.reschedule-section .calendar')).toBeVisible()
+
+    // Step 28: Open calendar and select new dates
+    // Click on start date input to open calendar
+    await page.locator('.date-input').first().click()
+
+    // Wait for the desktop calendar to be visible
+    await page.locator('.desktop-calendar').waitFor({ state: 'visible', timeout: 5000 })
+
+    // Select new check-in date (different from original - use 10th available day)
+    const newAvailableDays = page.locator('.desktop-calendar .day:not(.past-date):not(.other-month)')
+    const newCheckInDay = newAvailableDays.nth(9) // 10th day
+
+    await newCheckInDay.waitFor({ state: 'visible', timeout: 5000 })
+    await newCheckInDay.click()
+
+    // Wait for check-in selection to complete
+    await page.waitForSelector('.desktop-calendar .day.selected', { timeout: 5000 })
+    await page.waitForTimeout(500)
+
+    // Ensure calendar is still open
+    await page.locator('.desktop-calendar').waitFor({ state: 'visible', timeout: 5000 })
+
+    // Re-query available days to get fresh DOM references
+    const allNewAvailableDays = page.locator('.desktop-calendar .day:not(.past-date):not(.other-month)')
+    const newCheckOutDay = allNewAvailableDays.nth(12) // 13th day (3 days after 10th)
+
+    await newCheckOutDay.waitFor({ state: 'visible', timeout: 5000 })
+    await page.locator('.desktop-calendar').scrollIntoViewIfNeeded()
+    await page.waitForTimeout(400)
+
+    try {
+      await newCheckOutDay.click({ timeout: 5000 })
+    } catch (error) {
+      console.log('Normal click failed, trying force click')
+      await newCheckOutDay.click({ force: true, timeout: 5000 })
+    }
+
+    // Wait for calendar to close
+    await page.waitForTimeout(500)
+
+    // Step 29: Verify "Confirm New Dates" button appears (reschedule-actions div)
+    await expect(page.locator('.reschedule-actions')).toBeVisible()
+    const confirmButton = page.locator('.reschedule-actions .btn-primary')
+    await expect(confirmButton).toBeVisible()
+    await expect(confirmButton).toContainText('Confirm New Dates')
+
+    // Step 30: Click "Confirm New Dates" button
+    await confirmButton.click()
+
+    // Step 31: Wait for submission (2 second delay as per submitReschedule method)
+    await page.waitForTimeout(2500)
+
+    // Step 32: Verify success notice appears
+    await expect(page.locator('.success-notice')).toBeVisible()
+    const successMessage = await page.locator('.success-notice .notice-content').textContent()
+    expect(successMessage).toContain('date change request')
+    expect(successMessage).toContain('third-party provider')
+
+    // Step 33: Verify dates have updated on the page
+    const updatedDatesHeader = await page.locator('.booking-dates-header').textContent()
+    console.log('Updated booking dates:', updatedDatesHeader)
+
+    // Verify dates are different from original
+    expect(updatedDatesHeader).not.toBe(originalDatesHeader)
+
+    console.log('✓ Hotel date change after booking verified successfully!')
   })
 })

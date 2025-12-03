@@ -214,6 +214,7 @@ export default {
                 :initialCheckInFlexibility="newCheckInFlexibility"
                 :initialCheckOutFlexibility="newCheckOutFlexibility"
                 :isOneWay="false"
+                :showFlexibilitySelectors="false"
                 @date-range-selected="handleDateRangeSelected"
               />
 
@@ -300,7 +301,7 @@ export default {
   padding: 10rem 1.5rem 3rem;
 
   @media (max-width: 768px) {
-    padding: 6rem 1rem 2rem;
+    padding: 13rem 1rem 2rem;
   }
 }
 

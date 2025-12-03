@@ -37,6 +37,10 @@ export default {
     isOneWay: {
       type: Boolean,
       default: false
+    },
+    showFlexibilitySelectors: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -749,7 +753,7 @@ export default {
           @blur="parseAndSetCheckInDate"
           @keydown.enter="parseAndSetCheckInDate"
         />
-        <div class="flexibility-selector">
+        <div v-if="showFlexibilitySelectors" class="flexibility-selector">
           <button
             class="flex-button"
             @click.stop="toggleCheckInFlexMenu"
@@ -781,7 +785,7 @@ export default {
           @blur="parseAndSetCheckOutDate"
           @keydown.enter="parseAndSetCheckOutDate"
         />
-        <div class="flexibility-selector">
+        <div v-if="showFlexibilitySelectors" class="flexibility-selector">
           <button
             class="flex-button"
             @click.stop="toggleCheckOutFlexMenu"
@@ -909,7 +913,7 @@ export default {
               @blur="parseAndSetCheckInDate"
               @keydown.enter="parseAndSetCheckInDate"
             />
-            <div v-if="checkIn" class="modal-flexibility">
+            <div v-if="checkIn && showFlexibilitySelectors" class="modal-flexibility">
               <button
                 class="flex-button"
                 @click.stop="toggleCheckInFlexMenu"
@@ -940,7 +944,7 @@ export default {
               @blur="parseAndSetCheckOutDate"
               @keydown.enter="parseAndSetCheckOutDate"
             />
-            <div v-if="checkOut" class="modal-flexibility">
+            <div v-if="checkOut && showFlexibilitySelectors" class="modal-flexibility">
               <button
                 class="flex-button"
                 @click.stop="toggleCheckOutFlexMenu"
