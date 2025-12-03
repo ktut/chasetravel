@@ -86,13 +86,6 @@ onUnmounted(() => {
       </div>
     </Transition>
   </router-view>
-  
-  <!-- Disclaimer Footer -->
-  <footer class="disclaimer-footer">
-    <div class="disclaimer-content">
-      <strong>Disclaimer:</strong> Per JPMC confidentiality policies, no internal information was used in any way on this project. Everything was based solely on observations of the public-facing product.
-    </div>
-  </footer>
 </template>
 
 <style>
@@ -132,51 +125,5 @@ onUnmounted(() => {
 /* Ensure router-view container allows absolute positioning during transitions */
 .router-view-container {
   position: relative;
-}
-
-/* Disclaimer Footer */
-.disclaimer-footer {
-  margin: 2rem auto;
-  padding: 0 2rem 2rem;
-  max-width: 1400px;
-}
-
-.disclaimer-content {
-  position: relative;
-  background: #faf8f3;
-  border-radius: 8px;
-  padding: 1rem 1.5rem;
-  padding-left: 2rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.6;
-  color: #333;
-}
-
-.disclaimer-content::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: #ff6b35;
-  border-radius: 8px 0 0 8px;
-}
-
-.disclaimer-content strong {
-  font-weight: 700;
-}
-
-@media (max-width: 768px) {
-  .disclaimer-footer {
-    padding: 0 1rem 1rem;
-  }
-  
-  .disclaimer-content {
-    font-size: 13px;
-    padding: 0.875rem 1.25rem;
-    padding-left: 1.75rem;
-  }
 }
 </style>
