@@ -83,7 +83,7 @@ export default {
           v-if="!isSignedIn"
           @click="handleSignIn"
           :disabled="isLoading"
-          class="btn-primary navbar__btn"
+          class="btn-primary navbar__btn navbar__btn--signin"
         >
           <LoadingSpinner v-if="isLoading" />
           <span v-else>Sign in</span>
@@ -223,10 +223,10 @@ export default {
   &__btn {
     padding: 0.5rem 1.5rem !important;
     border-radius: 4px !important;
-    border-width: 1px !important;
+    border: 1px solid #d0d0d0 !important;
     font-size: 0.875rem !important;
     font-weight: 500 !important;
-    min-width: 100px;
+    width: 130px;
     height: 36px;
     display: flex;
     align-items: center;
@@ -371,7 +371,11 @@ export default {
     &__btn {
       padding: 0.5rem !important;
       font-size: 0.8125rem !important;
-      min-width: auto;
+      width: auto;
+
+      &--signin {
+        width: 130px;
+      }
     }
 
     &__signout-text {
