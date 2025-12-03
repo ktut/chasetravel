@@ -66,6 +66,7 @@ export default {
   color: white;
   border-radius: 8px;
   padding: 0.75rem 0.9rem;
+  width: 100%;
   
   &.variant-compact {
     padding: 0.65rem 0.85rem;
@@ -84,16 +85,15 @@ export default {
 
 .badge-header {
   .badge-title {
-    font-size: 0.8rem;
-    font-weight: 600;
-    line-height: 1.3;
     color: white;
-    letter-spacing: 0.01em;
-
-    .variant-full & {
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
+    font-family: "ivyora-display", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1.3rem;
+    text-wrap: balance;
+    line-height: 1.12;
+    display: block;
+    text-wrap: balance;
   }
 }
 
@@ -156,7 +156,12 @@ export default {
 
   .badge-header {
     .badge-title {
-      font-size: 0.75rem;
+      font-family: "ivyora-display", serif;
+      font-weight: 400;
+      font-style: normal;
+      font-size: 1.3rem;
+      text-wrap: balance;
+      line-height: 1.12;
     }
   }
 

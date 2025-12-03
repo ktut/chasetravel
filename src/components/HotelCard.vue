@@ -61,10 +61,6 @@ export default {
   <div class="hotel-card" :class="{ 'has-boost': isFirstResult }">
     <div class="hotel-image">
       <img :src="hotel.image" :alt="hotel.name" />
-      <!-- Points Boost Badge -->
-      <div v-if="isFirstResult" class="boost-badge-overlay">
-        <PointsBoostBadge :price="totalCost" item-type="hotel" variant="compact" />
-      </div>
     </div>
 
     <div class="hotel-details">
@@ -80,6 +76,10 @@ export default {
       </div>
 
       <AmenityPills :amenities="hotel.amenities" />
+      <!-- Points Boost Badge -->
+      <div v-if="isFirstResult" class="boost-badge-overlay">
+        <PointsBoostBadge :price="totalCost" item-type="hotel" variant="compact" />
+      </div>
     </div>
 
     <div class="hotel-price desktop-only">
@@ -155,17 +155,8 @@ export default {
 }
 
 .boost-badge-overlay {
-  position: absolute;
-  bottom: 0.75rem;
-  left: 0.75rem;
-  right: 0.75rem;
+  margin-top: 1rem;
   z-index: 2;
-
-  @media (max-width: 968px) {
-    bottom: 0.5rem;
-    left: 0.5rem;
-    right: 0.5rem;
-  }
 }
 
 .hotel-details {

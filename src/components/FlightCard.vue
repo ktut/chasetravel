@@ -160,10 +160,7 @@ export default {
 
 .boost-badge-container {
   z-index: 1;
-  margin-bottom: 1rem;
-
-  @media (max-width: 768px) {
-  }
+  grid-column-end: span 2;
 }
 
 .flights-container {
