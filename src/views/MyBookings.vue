@@ -207,27 +207,31 @@ export default {
 
           <!-- Past Bookings -->
           <section v-if="pastBookings.length > 0" class="past-bookings-section">
-            <button @click="togglePastBookings" class="past-bookings-toggle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="toggle-icon" :class="{ rotated: showPastBookings }">
-                <path d="M9 5l7 7-7 7"/>
-              </svg>
-              Past Bookings ({{ pastBookings.length }})
-            </button>
+            <div class="past-bookings-container">
+              <button @click="togglePastBookings" class="past-bookings-toggle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="toggle-icon" :class="{ rotated: showPastBookings }">
+                  <path d="M9 5l7 7-7 7"/>
+                </svg>
+                Past Bookings ({{ pastBookings.length }})
+              </button>
 
-            <div v-if="showPastBookings" class="past-bookings-list">
-              <div v-for="group in groupedPastBookings" :key="group.date" class="date-group">
-                <h3 class="date-header">{{ formatDateHeader(group.date) }}</h3>
-                <div v-for="booking in group.bookings" :key="booking.id">
-                  <FlightBooking
-                    v-if="booking.type === 'flight' && booking.flights"
-                    :booking="booking"
-                  />
-                  <HotelBooking
-                    v-else-if="booking.type === 'hotel' && booking.hotel"
-                    :booking="booking"
-                  />
+              <transition name="slide-down">
+                <div v-if="showPastBookings" class="past-bookings-list">
+                  <div v-for="group in groupedPastBookings" :key="group.date" class="date-group">
+                    <h3 class="date-header">{{ formatDateHeader(group.date) }}</h3>
+                    <div v-for="booking in group.bookings" :key="booking.id">
+                      <FlightBooking
+                        v-if="booking.type === 'flight' && booking.flights"
+                        :booking="booking"
+                      />
+                      <HotelBooking
+                        v-else-if="booking.type === 'hotel' && booking.hotel"
+                        :booking="booking"
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </transition>
             </div>
           </section>
         </div>
@@ -389,8 +393,6 @@ export default {
   font-weight: 600;
   color: $color-primary;
   margin: 0 0 1rem 0;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #f0f0f0;
 }
 
 .booking-card {
@@ -695,13 +697,19 @@ export default {
   border-top: 2px solid #e5e5e5;
 }
 
+.past-bookings-container {
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
 .past-bookings-toggle {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   background: white;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
+  border: none;
   padding: 1rem 1.5rem;
   width: 100%;
   cursor: pointer;
@@ -712,7 +720,6 @@ export default {
 
   &:hover {
     background: #f8f8f8;
-    border-color: $color-accent;
   }
 
   .toggle-icon {
@@ -727,6 +734,26 @@ export default {
 }
 
 .past-bookings-list {
-  margin-top: 1rem;
+  padding: 0 1.5rem 1.5rem 1.5rem;
+  border-top: 1px solid #e5e5e5;
+}
+
+// Slide-down transition
+.slide-down-enter-active,
+.slide-down-leave-active {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.slide-down-enter-from,
+.slide-down-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+
+.slide-down-enter-to,
+.slide-down-leave-from {
+  max-height: 3000px;
+  opacity: 1;
 }
 </style>

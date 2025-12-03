@@ -169,12 +169,6 @@ export default {
             <!-- Success Notice -->
             <transition name="notice-fade">
               <div v-if="showSuccessNotice" class="success-notice" role="alert">
-                <div class="notice-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M9 12l2 2 4-4"/>
-                  </svg>
-                </div>
                 <div class="notice-content">
                   <h3>Booking Updated Successfully!</h3>
                   <p>We have sent a date change request to the third-party provider. Please allow up to one business day to process. If there are any issues, contact support. Support is already aware of your booking change request, you will not need to provide additional information.</p>
@@ -395,23 +389,6 @@ export default {
   gap: 1rem;
   align-items: start;
 
-  .notice-icon {
-    width: 40px;
-    height: 40px;
-    background: #28a745;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-
-    svg {
-      width: 24px;
-      height: 24px;
-      color: white;
-    }
-  }
-
   .notice-content {
     h3 {
       font-size: 1.125rem;
@@ -451,12 +428,6 @@ export default {
     padding: 1rem;
     gap: 0.75rem;
     grid-template-columns: auto 1fr;
-
-    .notice-close {
-      grid-column: 1 / -1;
-      justify-self: center;
-      margin-top: 0.5rem;
-    }
   }
 }
 
