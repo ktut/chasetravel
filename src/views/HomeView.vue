@@ -67,7 +67,8 @@ export default {
       <div class="search">
         <!-- The Edit Section with Tab Navigation -->
         <div class="the-edit-section">
-          <h2 class="section-title">The Edit by Chase Travel</h2>
+          <h2 class="section-title">Explore <span class="section-title-highlight">The Edit</span> by Chase Travel</h2>
+          <p class="section-description">A curated collection of luxury properties from around the world. We hand-select each property to ensure the highest level of quality and service.</p>
           <TabNavigation @tab-change="handleTabChange" />
 
           <!-- Overview Tab Content -->
@@ -113,12 +114,12 @@ export default {
 
           <!-- Curated Collections Tab Content -->
           <div v-if="activeTab === 'curated-collections'" class="tab-content">
-            <p>Explore our carefully selected collections of exceptional properties.</p>
+            <p>Coming soon: Explore our carefully selected collections of exceptional properties.</p>
           </div>
 
           <!-- Featured Properties Tab Content -->
           <div v-if="activeTab === 'featured-properties'" class="tab-content">
-            <p>Browse our featured luxury properties worldwide.</p>
+            <p>Coming soon: Browse our featured luxury properties worldwide.</p>
           </div>
         </div>
         
@@ -339,8 +340,15 @@ export default {
   .section-title {
     font-size: 2rem;
     font-weight: 400;
-    margin-bottom: $spacing-xl;
+    margin-bottom: $spacing-md;
     color: #000;
+    .section-title-highlight {
+      color: $color-accent;
+    }
+  }
+
+  .section-description {
+    margin-bottom: $spacing-xl;
   }
 
   .tab-content {
@@ -402,7 +410,7 @@ export default {
       .property-name {
         font-size: 1.125rem;
         font-weight: 500;
-        margin-bottom: $spacing-md;
+        margin-bottom: $spacing-sm;
         color: #333;
       }
 
@@ -421,7 +429,6 @@ export default {
         li {
           font-size: 1rem;
           color: #666;
-          padding: $spacing-xs 0;
           position: relative;
           padding-left: $spacing-md;
 
