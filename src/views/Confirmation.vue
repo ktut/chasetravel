@@ -19,7 +19,7 @@ export default {
     return {
       usePoints: false,
       pointsToRedeem: 0,
-      pointsValue: 0.0125, // Each point is worth $0.0125
+      pointsValue: 0.02, // Points Boost: Each point is worth $0.02 (2 cents)
       localSearchData: null as any,
       localFlight: null as any,
       localReturnFlight: null as any,
