@@ -281,7 +281,6 @@ export default {
   background-image: url('@/assets/maldives.jpg');
   background-size: cover;
   background-position: center;
-  filter: brightness(0.85);
 }
 
 .hero-mask {
@@ -580,9 +579,6 @@ export default {
 
 // Cancel Booking Section
 .cancel-booking-section {
-  padding-top: 2rem;
-  border-top: 2px solid #f0f0f0;
-
   @media (max-width: 768px) {
     padding-top: 1rem;
     margin-bottom: 2rem;
