@@ -6,13 +6,15 @@ import { saveHotelBooking } from '@/services/bookingStorage'
 import AmenityPills from './AmenityPills.vue'
 import StarsDisplay from './StarsDisplay.vue'
 import PriceDisplay from './PriceDisplay.vue'
+import PointsBoostBadge from './PointsBoostBadge.vue'
 
 export default {
   name: 'HotelCard',
   components: {
     AmenityPills,
     StarsDisplay,
-    PriceDisplay
+    PriceDisplay,
+    PointsBoostBadge
   },
   props: {
     hotel: {
@@ -22,6 +24,10 @@ export default {
     searchData: {
       type: Object as () => SearchData | null,
       default: null
+    },
+    isFirstResult: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -52,9 +58,13 @@ export default {
 </script>
 
 <template>
-  <div class="hotel-card">
+  <div class="hotel-card" :class="{ 'has-boost': isFirstResult }">
     <div class="hotel-image">
       <img :src="hotel.image" :alt="hotel.name" />
+      <!-- Points Boost Badge -->
+      <div v-if="isFirstResult" class="boost-badge-overlay">
+        <PointsBoostBadge :price="totalCost" item-type="hotel" variant="compact" />
+      </div>
     </div>
 
     <div class="hotel-details">
@@ -141,6 +151,20 @@ export default {
 
   &:hover img {
     transform: scale(1.05);
+  }
+}
+
+.boost-badge-overlay {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+
+  @media (max-width: 968px) {
+    bottom: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
   }
 }
 

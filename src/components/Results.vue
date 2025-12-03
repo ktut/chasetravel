@@ -373,11 +373,12 @@ export default {
 
         <TransitionGroup name="flight-list">
           <FlightCard
-            v-for="result in displayedResults"
+            v-for="(result, index) in displayedResults"
             :key="result.id"
             :flight="searchData?.tripType !== 'round-trip' ? result as any : null"
             :flightPair="searchData?.tripType === 'round-trip' ? result as any : null"
             :searchData="searchData"
+            :isFirstResult="index === 0"
           />
         </TransitionGroup>
 
@@ -395,11 +396,12 @@ export default {
 
         <TransitionGroup name="flight-list">
           <HotelCard
-            v-for="hotel in displayedResults as Hotel[]"
+            v-for="(hotel, index) in displayedResults as Hotel[]"
             :key="hotel.id"
             :hotel="hotel"
             :search-data="searchData"
             :class="{ 'compact-view': showMap }"
+            :isFirstResult="index === 0"
           />
         </TransitionGroup>
 

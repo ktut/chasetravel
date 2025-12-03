@@ -6,12 +6,14 @@ import { calculateNights } from '@/utils/dateUtils'
 import { loadBookingData, clearBookingData } from '@/services/bookingStorage'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import StarsDisplay from '@/components/StarsDisplay.vue'
+import PointsBoostBadge from '@/components/PointsBoostBadge.vue'
 
 export default {
   name: 'Confirmation',
   components: {
     LoadingSpinner,
-    StarsDisplay
+    StarsDisplay,
+    PointsBoostBadge
   },
   data() {
     return {
@@ -745,6 +747,15 @@ export default {
               Apply your Chase Ultimate Rewards points to reduce the cost of your {{ isFlightBooking ? 'flight' : 'hotel' }}.
             </p>
 
+            <!-- Points Boost Promotion -->
+            <div class="points-boost-promotion">
+              <PointsBoostBadge 
+                :price="currentPrice" 
+                :item-type="isFlightBooking ? 'flight' : 'hotel'" 
+                variant="full" 
+              />
+            </div>
+
             <div class="rewards-options">
               <!-- Option 1: Don't use points -->
               <label class="rewards-option" :class="{ selected: !usePoints }">
@@ -1013,8 +1024,12 @@ export default {
   .step-description {
     color: #666;
     font-size: 0.875rem;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
   }
+}
+
+.points-boost-promotion {
+  margin-bottom: 1.25rem;
 }
 
 .fare-options {

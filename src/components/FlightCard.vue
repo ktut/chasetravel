@@ -5,13 +5,15 @@ import { saveFlightBooking } from '@/services/bookingStorage'
 import LoadingSpinner from './LoadingSpinner.vue'
 import PriceDisplay from './PriceDisplay.vue'
 import FlightSegment from './FlightSegment.vue'
+import PointsBoostBadge from './PointsBoostBadge.vue'
 
 export default {
   name: 'FlightCard',
   components: {
     LoadingSpinner,
     PriceDisplay,
-    FlightSegment
+    FlightSegment,
+    PointsBoostBadge
   },
   props: {
     flight: {
@@ -25,6 +27,10 @@ export default {
     searchData: {
       type: Object as () => SearchData | null,
       default: null
+    },
+    isFirstResult: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -89,7 +95,12 @@ export default {
 </script>
 
 <template>
-  <div v-if="displayFlight" class="flight-card" :class="{ 'round-trip-card': isRoundTrip }">
+  <div v-if="displayFlight" class="flight-card" :class="{ 'round-trip-card': isRoundTrip, 'has-boost': isFirstResult }">
+    <!-- Points Boost Badge -->
+    <div v-if="isFirstResult" class="boost-badge-container">
+      <PointsBoostBadge :price="displayPrice" item-type="flight" variant="compact" />
+    </div>
+
     <div class="flights-container">
       <!-- Outbound Flight (or single flight for one-way) -->
       <FlightSegment
@@ -130,6 +141,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 1.5rem;
+  position: relative;
 
   @media (max-width: 768px) {
     padding: 1rem;
@@ -143,6 +155,14 @@ export default {
 
   &.round-trip-card {
     padding: 1.5rem;
+  }
+}
+
+.boost-badge-container {
+  z-index: 1;
+  margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
   }
 }
 
