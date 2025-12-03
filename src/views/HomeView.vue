@@ -125,7 +125,7 @@ export default {
         <!-- Disclaimer Footer -->
         <footer class="disclaimer-footer">
           <div class="disclaimer-content">
-            <strong>Disclaimer:</strong> Per JPMC confidentiality policies, no internal information was used in any way on this project. Everything was based solely on observations of the public-facing product.
+            <strong>Disclaimer:</strong> Per JPMC confidentiality policies, no internal information or tooling was used in any way on this project. Everything you see here was created solely based on observations of the original public-facing product.
           </div>
         </footer>
       </div>
