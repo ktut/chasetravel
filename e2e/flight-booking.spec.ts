@@ -1,224 +1,74 @@
 import { test, expect } from '@playwright/test'
+import { HomePage } from './pages/HomePage'
+import { ResultsPage } from './pages/ResultsPage'
+import { ConfirmationPage } from './pages/ConfirmationPage'
+import { BookingDetailPage } from './pages/BookingDetailPage'
+import { TEST_LOCATIONS, DATE_INDICES, POINTS } from './constants'
 
 /**
- * End-to-End Test: Booking Flow
+ * End-to-End Test: Flight Booking Flow
  *
  * This test validates the complete user journey from homepage to confirmation:
- * 1. Search for flights (New York → Chicago, March 1-8, 2026)
+ * 1. Search for flights (New York → Chicago)
  * 2. Select the first flight result
  * 3. Verify confirmation page shows correct flight and search information
+ * 4. Complete booking
+ * 5. Reschedule booking dates
  */
 
 test.describe('Booking E2E Flow', () => {
   test('should complete flight booking from homepage to confirmation with correct data', async ({ page }) => {
-    // Step 1: Navigate to homepage
-    await page.goto('/', { timeout: 60000 })
+    // Initialize page objects
+    const homePage = new HomePage(page)
+    const resultsPage = new ResultsPage(page)
+    const confirmationPage = new ConfirmationPage(page)
+    const bookingDetailPage = new BookingDetailPage(page)
 
-    // Step 2: Fill in search form - Flights are selected by default
+    // Step 1: Navigate to homepage and search for flights
+    await homePage.goto()
+    await homePage.searchFlights(
+      TEST_LOCATIONS.NEW_YORK,
+      TEST_LOCATIONS.CHICAGO,
+      DATE_INDICES.FLIGHT_START,
+      DATE_INDICES.FLIGHT_END
+    )
 
-    // Enter departure location - New York
-    const fromInput = page.locator('input').filter({ hasText: '' }).first()
-    await fromInput.click()
-    await fromInput.fill('New York')
-
-    // Click on the dropdown option
-    await page.locator('.location-option').filter({ hasText: 'New York' }).first().click()
-
-    // Enter destination - Chicago
-    const toInput = page.locator('input[placeholder="To"]').first()
-    await toInput.click()
-    await toInput.fill('Chicago')
-
-    // Click on the dropdown option
-    await page.locator('.location-option').filter({ hasText: 'Chicago' }).first().click()
-
-    // Step 3: Select dates using the calendar
-    // Click on start date input to open calendar
-    await page.locator('.date-input').first().click()
-
-    // Wait for the desktop calendar to be visible
-    await page.locator('.desktop-calendar').waitFor({ state: 'visible', timeout: 5000 })
-
-    // Select a start date - find available future dates across both month views
-    // Use all available days from both calendar views to ensure enough dates
-    const availableDays = page.locator('.desktop-calendar .day:not(.past-date):not(.other-month)')
-    const startDay = availableDays.nth(9) // 10th day (0-indexed)
-    await startDay.click()
-
-    // Select an end date - 3 days after start date
-    const endDay = availableDays.nth(12) // 13th day (3 days after 10th)
-    await endDay.click()
-
-    // Calendar should auto-close after selecting end date, but let's verify
-    await page.waitForTimeout(500)
-
-    // Step 4: Submit search
-    // Select the visible/enabled search button
-    const searchButton = page.locator('button.submit-btn').first()
-
-    // Wait a moment for form to be ready
-    await page.waitForTimeout(500)
-
-    // Click the search button
-    await searchButton.click()
-
-    // Step 5: Wait for navigation to results page
-    await page.waitForURL(/\/search\?/, { timeout: 10000 })
-
-    // Verify we're on the search page with query parameters
+    // Step 2: Verify we're on search results page
     expect(page.url()).toContain('/search')
     expect(page.url()).toContain('type=flights')
 
-    // Step 6: Wait for flight results to load
-    await page.waitForSelector('.flight-card', { timeout: 10000 })
+    // Step 3: Select first flight and capture details
+    const { airline, departureAirport, arrivalAirport } = await resultsPage.selectFirstFlight()
 
-    // Get the first flight card
-    const firstFlightCard = page.locator('.flight-card').first()
-    await expect(firstFlightCard).toBeVisible()
+    // Step 4: Verify confirmation page loaded
+    await confirmationPage.waitForLoad()
 
-    // Capture flight details for verification (handle both one-way and round-trip)
-    // For round-trip, get the first airline (outbound flight)
-    const airline = await firstFlightCard.locator('.airline-name').first().textContent()
-    const route = await firstFlightCard.locator('.route').first().textContent()
-    // Parse departure and arrival airports from route (e.g., "NYC-ORD")
-    const [departureAirport, arrivalAirport] = (route || '').split('-')
+    // Step 5: Verify flight details match
+    await confirmationPage.verifyFlightDetails(airline, departureAirport, arrivalAirport)
 
-    console.log('Selected flight:', { airline, departureAirport, arrivalAirport })
+    // Step 6: Verify fare selection
+    await confirmationPage.verifyFareSelection()
 
-    // Step 7: Click the price button to select flight
-    await firstFlightCard.locator('.select-btn').click()
+    // Step 7: Verify booking sections
+    await confirmationPage.verifyBookingSections()
 
-    // Step 8: Wait for navigation to confirmation page
-    await page.waitForURL(/\/confirmation/, { timeout: 10000 })
-    expect(page.url()).toContain('/confirmation')
-
-    // Step 9: Verify confirmation page loaded
-    await page.waitForSelector('.confirmation-page', { timeout: 10000 })
-
-    // Step 10: Verify flight details on confirmation page match selected flight
-    const confirmationPage = page.locator('.confirmation-page')
-    await expect(confirmationPage.locator('.airline-name').first()).toContainText(airline || '')
-
-    // Verify departure and arrival airports (check first flight leg for outbound flight)
-    const firstFlightLeg = page.locator('.flight-leg').first()
-    const confDepartureAirport = await firstFlightLeg.locator('.leg-details .time-point').first().locator('.airport').textContent()
-    const confArrivalAirport = await firstFlightLeg.locator('.leg-details .time-point').last().locator('.airport').textContent()
-
-    expect(confDepartureAirport?.trim()).toBe(departureAirport?.trim())
-    expect(confArrivalAirport?.trim()).toBe(arrivalAirport?.trim())
-
-    // Step 11: Verify booking sections are present
-    // Verify fare option (select first fare card)
-    await expect(page.locator('.fare-card h3').first()).toContainText('Basic Economy')
-
-    // Verify points redemption options
-    await expect(page.locator('.rewards-option').filter({ hasText: 'Pay full amount' })).toBeVisible()
-    await expect(page.locator('.rewards-option').filter({ hasText: 'Redeem points' })).toBeVisible()
-
-    // Step 12: Verify book button is present
-    await expect(page.locator('.book-button')).toBeVisible()
-    await expect(page.locator('.book-button')).toContainText('Book for')
-
-    // Step 13: Test points redemption functionality (if user is signed in)
-    const redeemPointsOption = page.locator('.rewards-option').filter({ hasText: 'Redeem points' })
-    const isDisabled = await redeemPointsOption.evaluate((el) => el.classList.contains('disabled'))
-
-    if (!isDisabled) {
-      // User is signed in, test points redemption
-      await redeemPointsOption.click()
-
-      // Verify points input appears
-      await expect(page.locator('#pointsInput')).toBeVisible()
-
-      // Enter points to redeem
-      await page.locator('#pointsInput').fill('10000')
-
-      // Verify redemption summary
-      await expect(page.locator('.redemption-summary')).toBeVisible()
-      await expect(page.locator('.redemption-summary')).toContainText('10,000')
-      await expect(page.locator('.redemption-summary')).toContainText('Balance due')
-
-      console.log('✓ Points redemption tested successfully')
-    } else {
-      console.log('✓ Points redemption disabled (user not signed in) - this is expected')
-    }
+    // Step 8: Test points redemption functionality
+    await confirmationPage.testPointsRedemption(POINTS.FLIGHT_REDEMPTION)
 
     console.log('✓ All verifications passed!')
 
-    // Step 20: Book the flight
-    await page.locator('.book-button').click()
+    // Step 9: Complete the booking
+    await confirmationPage.completeBooking()
 
-    // Step 21: Wait for booking to be created and navigation to My Bookings
-    await page.waitForURL(/\/mybookings/, { timeout: 10000 })
-    expect(page.url()).toContain('/mybookings')
+    // Step 10: Navigate to booking detail page
+    await bookingDetailPage.navigateFromBookingsList()
 
-    // Step 22: Verify booking card is visible
-    await page.waitForSelector('.booking-card', { timeout: 10000 })
-    const bookingCard = page.locator('.booking-card').first()
-    await expect(bookingCard).toBeVisible()
+    // Step 11: Reschedule booking dates
+    await bookingDetailPage.rescheduleDates(
+      DATE_INDICES.RESCHEDULE_START,
+      DATE_INDICES.RESCHEDULE_END
+    )
 
-    // Step 23: Click booking card to navigate to detail page
-    await bookingCard.click()
-
-    // Step 24: Wait for navigation to booking detail page
-    await page.waitForURL(/\/booking\/[a-f0-9-]+/, { timeout: 10000 })
-    expect(page.url()).toMatch(/\/booking\/[a-f0-9-]+/)
-
-    // Step 25: Verify booking detail page loaded
-    await page.waitForSelector('.booking-detail-content', { timeout: 10000 })
-    await expect(page.locator('.booking-detail-content .page-title')).toContainText('My Booking')
-
-    // Step 26: Capture original dates displayed on page
-    const originalDatesHeader = await page.locator('.booking-dates-header').textContent()
-    console.log('Original booking dates:', originalDatesHeader)
-
-    // Step 27: Verify Calendar component is visible on booking detail page
-    await expect(page.locator('.reschedule-section .calendar')).toBeVisible()
-
-    // Step 28: Open calendar and select new dates
-    // Click on start date input to open calendar
-    await page.locator('.date-input').first().click()
-
-    // Wait for the desktop calendar to be visible
-    await page.locator('.desktop-calendar').waitFor({ state: 'visible', timeout: 5000 })
-
-    // Select new check-in date (different from original - use 15th available day)
-    const newAvailableDays = page.locator('.desktop-calendar .day:not(.past-date):not(.other-month)')
-    const newStartDay = newAvailableDays.nth(14) // 15th day
-    await newStartDay.click()
-
-    // Select new check-out date (use 18th available day, 3 days after new start)
-    const newEndDay = newAvailableDays.nth(17) // 18th day
-    await newEndDay.click()
-
-    // Wait for calendar to close
-    await page.waitForTimeout(500)
-
-    // Step 29: Verify "Confirm New Dates" button appears (reschedule-actions div)
-    await expect(page.locator('.reschedule-actions')).toBeVisible()
-    const confirmButton = page.locator('.reschedule-actions .btn-primary')
-    await expect(confirmButton).toBeVisible()
-    await expect(confirmButton).toContainText('Confirm New Dates')
-
-    // Step 30: Click "Confirm New Dates" button
-    await confirmButton.click()
-
-    // Step 31: Wait for submission (2 second delay as per submitReschedule method)
-    await page.waitForTimeout(2500)
-
-    // Step 32: Verify success notice appears
-    await expect(page.locator('.success-notice')).toBeVisible()
-    const successMessage = await page.locator('.success-notice .notice-content').textContent()
-    expect(successMessage).toContain('date change request')
-    expect(successMessage).toContain('third-party provider')
-
-    // Step 33: Verify dates have updated on the page
-    const updatedDatesHeader = await page.locator('.booking-dates-header').textContent()
-    console.log('Updated booking dates:', updatedDatesHeader)
-
-    // Verify dates are different from original
-    expect(updatedDatesHeader).not.toBe(originalDatesHeader)
-
-    console.log('✓ Date change after booking verified successfully!')
+    console.log('✓ Flight booking E2E test completed successfully!')
   })
 })

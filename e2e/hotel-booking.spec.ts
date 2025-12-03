@@ -1,303 +1,84 @@
 import { test, expect } from '@playwright/test'
+import { HomePage } from './pages/HomePage'
+import { ResultsPage } from './pages/ResultsPage'
+import { HotelViewPage } from './pages/HotelViewPage'
+import { ConfirmationPage } from './pages/ConfirmationPage'
+import { BookingDetailPage } from './pages/BookingDetailPage'
+import { TEST_LOCATIONS, DATE_INDICES, POINTS } from './constants'
 
 /**
  * End-to-End Test: Hotel Booking Flow
  *
  * This test validates the complete user journey from homepage to confirmation:
- * 1. Search for hotels (New York, check-in/check-out dates)
+ * 1. Search for hotels (New York)
  * 2. Select the first hotel result
- * 3. Verify confirmation page shows correct hotel and search information
+ * 3. Select a room
+ * 4. Verify confirmation page shows correct hotel and search information
+ * 5. Complete booking
+ * 6. Reschedule booking dates
  */
 
 test.describe('Hotel Booking E2E Flow', () => {
   test('should complete hotel booking from homepage to confirmation with correct data', async ({ page }) => {
-    // Step 1: Navigate to homepage
-    await page.goto('/', { timeout: 60000 })
+    // Initialize page objects
+    const homePage = new HomePage(page)
+    const resultsPage = new ResultsPage(page)
+    const hotelViewPage = new HotelViewPage(page)
+    const confirmationPage = new ConfirmationPage(page)
+    const bookingDetailPage = new BookingDetailPage(page)
 
-    // Step 2: Switch to Stays (Hotels) search
-    // Use .first() to select the visible Stays button (handles both mobile and desktop)
-    const staysButton = page.locator('.toggle-option').filter({ hasText: 'Stays' }).first()
-    await staysButton.click()
+    // Step 1: Navigate to homepage and search for hotels
+    await homePage.goto()
+    await homePage.searchHotels(
+      TEST_LOCATIONS.NEW_YORK,
+      DATE_INDICES.HOTEL_CHECKIN,
+      DATE_INDICES.HOTEL_CHECKOUT
+    )
 
-    // Verify the Stays tab is active
-    await expect(staysButton).toHaveClass(/active/)
-
-    // Step 3: Fill in search form for hotels
-
-    // Enter location - New York
-    const locationInput = page.locator('input').filter({ hasText: '' }).first()
-    await locationInput.click()
-    await locationInput.fill('New York')
-
-    // Click on the dropdown option
-    await page.locator('.location-option').filter({ hasText: 'New York' }).first().click()
-
-    // Step 4: Select dates using the calendar
-    // Click on start date input to open calendar
-    await page.locator('.date-input').first().click()
-
-    // Wait for the desktop calendar to be visible
-    await page.locator('.desktop-calendar').waitFor({ state: 'visible', timeout: 5000 })
-
-    // Select a check-in date - Select the 5th available future date across both month views
-    const availableDays = page.locator('.desktop-calendar .day:not(.past-date):not(.other-month)')
-    const checkInDay = availableDays.nth(4) // 5th day (0-indexed)
-    
-    // Wait for check-in day to be visible and click it
-    await checkInDay.waitFor({ state: 'visible', timeout: 5000 })
-    await checkInDay.click()
-
-    // Wait for check-in selection to complete - wait for selected state to appear
-    await page.waitForSelector('.desktop-calendar .day.selected', { timeout: 5000 })
-    
-    // Wait for calendar to stabilize after check-in selection
-    await page.waitForTimeout(500)
-    
-    // Ensure calendar is still open and visible
-    await page.locator('.desktop-calendar').waitFor({ state: 'visible', timeout: 5000 })
-    
-    // Re-query available days to get fresh DOM references after potential re-render
-    const allAvailableDays = page.locator('.desktop-calendar .day:not(.past-date):not(.other-month)')
-    const checkOutDay = allAvailableDays.nth(7) // 8th day (3 days after 5th)
-    
-    // Wait for check-out day to be visible and attached to DOM
-    await checkOutDay.waitFor({ state: 'visible', timeout: 5000 })
-    
-    // Ensure the calendar is fully in view
-    await page.locator('.desktop-calendar').scrollIntoViewIfNeeded()
-    
-    // Additional stability wait for any transitions or DOM updates
-    await page.waitForTimeout(400)
-    
-    // Try clicking normally first, but use force if there are pointer event issues
-    try {
-      await checkOutDay.click({ timeout: 5000 })
-    } catch (error) {
-      // If normal click fails due to pointer interception, try force click
-      console.log('Normal click failed, trying force click')
-      await checkOutDay.click({ force: true, timeout: 5000 })
-    }
-
-    // Calendar should auto-close after selecting end date
-    await page.waitForTimeout(500)
-
-    // Step 5: Submit search
-    // Select the visible/enabled search button
-    const searchButton = page.locator('button.submit-btn').first()
-
-    // Wait a moment for form to be ready
-    await page.waitForTimeout(500)
-
-    // Click the search button
-    await searchButton.click()
-
-    // Step 6: Wait for navigation to results page
-    await page.waitForURL(/\/search\?/, { timeout: 10000 })
-
-    // Verify we're on the search page with query parameters
+    // Step 2: Verify we're on search results page
     expect(page.url()).toContain('/search')
     expect(page.url()).toContain('type=hotels')
 
-    // Step 7: Wait for hotel results to load
-    await page.waitForSelector('.hotel-card', { timeout: 10000 })
+    // Step 3: Select first hotel and capture details
+    const { hotelName, hotelRating } = await resultsPage.selectFirstHotel()
 
-    // Get the first hotel card
-    const firstHotelCard = page.locator('.hotel-card').first()
-    await expect(firstHotelCard).toBeVisible()
+    // Step 4: Verify hotel view page loaded and details match
+    await hotelViewPage.waitForLoad()
+    await hotelViewPage.verifyHotelDetails(hotelName, hotelRating)
 
-    // Capture hotel details for verification
-    const hotelName = await firstHotelCard.locator('.hotel-name').textContent()
-    const hotelRating = await firstHotelCard.locator('.rating-score').textContent()
+    // Step 5: Select a room
+    const roomName = await hotelViewPage.selectFirstRoom()
+    console.log('Selected room:', roomName)
 
-    console.log('Selected hotel:', { hotelName, hotelRating })
+    // Step 6: Verify confirmation page loaded
+    await confirmationPage.waitForLoad()
 
-    // Step 8: Click the select button to view hotel details (use the visible one - desktop or mobile)
-    await firstHotelCard.locator('.select-btn').first().click()
+    // Step 7: Verify hotel details on confirmation page
+    await confirmationPage.verifyHotelDetails(hotelName, hotelRating)
 
-    // Step 9: Wait for navigation to hotel view page
-    await page.waitForURL(/\/hotel\/\d+/, { timeout: 10000 })
-    expect(page.url()).toMatch(/\/hotel\/\d+/)
+    // Step 8: Verify hotel stay information
+    await confirmationPage.verifyHotelStayInfo()
 
-    // Step 10: Verify hotel view page loaded with property info
-    await page.waitForSelector('.property-info', { timeout: 10000 })
-    await expect(page.locator('.property-name')).toContainText(hotelName || '')
+    // Step 9: Verify booking sections
+    await confirmationPage.verifyBookingSections()
 
-    // Verify rating matches
-    const hotelViewRating = await page.locator('.rating-score').first().textContent()
-    expect(hotelViewRating?.trim()).toBe(hotelRating?.trim())
-
-    // Step 11: Wait for rooms to load and select a room
-    await page.waitForSelector('.room-card', { timeout: 10000 })
-    const firstRoom = page.locator('.room-card').first()
-    await expect(firstRoom).toBeVisible()
-
-    // Get room name for verification
-    const roomName = await firstRoom.locator('.room-name').textContent()
-
-    // Step 12: Click Reserve button on the first room
-    const reserveButton = firstRoom.locator('.reserve-btn')
-    await expect(reserveButton).toBeVisible()
-    await reserveButton.click()
-
-    // Step 13: Wait for navigation to confirmation page
-    await page.waitForURL(/\/confirmation/, { timeout: 10000 })
-    expect(page.url()).toContain('/confirmation')
-
-    // Step 14: Verify confirmation page loaded with hotel details section
-    await page.waitForSelector('.hotel-details-section', { timeout: 10000 })
-
-    // Step 15: Verify hotel details on confirmation page match selected hotel
-    await expect(page.locator('.hotel-info h3')).toContainText(hotelName || '')
-
-    // Verify rating matches
-    const confHotelRating = await page.locator('.hotel-info .rating-score').textContent()
-    expect(confHotelRating?.trim()).toBe(hotelRating?.trim())
-
-    // Verify room information is displayed if a room was selected
-    const roomDetail = page.locator('.stay-detail').filter({ hasText: 'Room:' })
-    if (await roomDetail.count() > 0) {
-      await expect(roomDetail).toContainText(roomName || '')
-    }
-
-    // Step 16: Verify hotel stay information is present
-    await expect(page.locator('.hotel-stay-info')).toBeVisible()
-
-    // Verify check-in and check-out dates are displayed
-    const stayDetails = page.locator('.stay-detail')
-    await expect(stayDetails.filter({ hasText: 'Check-in:' })).toBeVisible()
-    await expect(stayDetails.filter({ hasText: 'Check-out:' })).toBeVisible()
-    await expect(stayDetails.filter({ hasText: 'night' }).first()).toBeVisible()
-    await expect(stayDetails.filter({ hasText: 'Price per night:' })).toBeVisible()
-
-    // Step 17: Verify booking sections are present
-    // Verify rewards redemption options
-    await expect(page.locator('.rewards-option').filter({ hasText: 'Pay full amount' })).toBeVisible()
-    await expect(page.locator('.rewards-option').filter({ hasText: 'Redeem points' })).toBeVisible()
-
-    // Step 18: Verify book button is present
-    await expect(page.locator('.book-button')).toBeVisible()
-    await expect(page.locator('.book-button')).toContainText('Book for')
-
-    // Step 19: Test points redemption functionality (if user is signed in)
-    const redeemPointsOption = page.locator('.rewards-option').filter({ hasText: 'Redeem points' })
-    const isDisabled = await redeemPointsOption.evaluate((el) => el.classList.contains('disabled'))
-
-    if (!isDisabled) {
-      // User is signed in, test points redemption
-      await redeemPointsOption.click()
-
-      // Verify points input appears
-      await expect(page.locator('#pointsInput')).toBeVisible()
-
-      // Enter points to redeem
-      await page.locator('#pointsInput').fill('15000')
-
-      // Verify redemption summary
-      await expect(page.locator('.redemption-summary')).toBeVisible()
-      await expect(page.locator('.redemption-summary')).toContainText('15,000')
-      await expect(page.locator('.redemption-summary')).toContainText('Balance due')
-
-      console.log('✓ Points redemption tested successfully')
-    } else {
-      console.log('✓ Points redemption disabled (user not signed in) - this is expected')
-    }
+    // Step 10: Test points redemption functionality
+    await confirmationPage.testPointsRedemption(POINTS.HOTEL_REDEMPTION)
 
     console.log('✓ All hotel booking verifications passed!')
 
-    // Step 20: Book the hotel
-    await page.locator('.book-button').click()
+    // Step 11: Complete the booking
+    await confirmationPage.completeBooking()
 
-    // Step 21: Wait for booking to be created and navigation to My Bookings
-    await page.waitForURL(/\/mybookings/, { timeout: 10000 })
-    expect(page.url()).toContain('/mybookings')
+    // Step 12: Navigate to booking detail page
+    await bookingDetailPage.navigateFromBookingsList()
 
-    // Step 22: Verify booking card is visible
-    await page.waitForSelector('.booking-card', { timeout: 10000 })
-    const bookingCard = page.locator('.booking-card').first()
-    await expect(bookingCard).toBeVisible()
+    // Step 13: Reschedule booking dates (use different indices for hotel reschedule)
+    await bookingDetailPage.rescheduleDates(
+      DATE_INDICES.FLIGHT_START, // Use 10th day for hotel reschedule
+      DATE_INDICES.FLIGHT_END    // Use 13th day for hotel reschedule
+    )
 
-    // Step 23: Click booking card to navigate to detail page
-    await bookingCard.click()
-
-    // Step 24: Wait for navigation to booking detail page
-    await page.waitForURL(/\/booking\/[a-f0-9-]+/, { timeout: 10000 })
-    expect(page.url()).toMatch(/\/booking\/[a-f0-9-]+/)
-
-    // Step 25: Verify booking detail page loaded
-    await page.waitForSelector('.booking-detail-content', { timeout: 10000 })
-    await expect(page.locator('.booking-detail-content .page-title')).toContainText('My Booking')
-
-    // Step 26: Capture original dates displayed on page
-    const originalDatesHeader = await page.locator('.booking-dates-header').textContent()
-    console.log('Original booking dates:', originalDatesHeader)
-
-    // Step 27: Verify Calendar component is visible on booking detail page
-    await expect(page.locator('.reschedule-section .calendar')).toBeVisible()
-
-    // Step 28: Open calendar and select new dates
-    // Click on start date input to open calendar
-    await page.locator('.date-input').first().click()
-
-    // Wait for the desktop calendar to be visible
-    await page.locator('.desktop-calendar').waitFor({ state: 'visible', timeout: 5000 })
-
-    // Select new check-in date (different from original - use 10th available day)
-    const newAvailableDays = page.locator('.desktop-calendar .day:not(.past-date):not(.other-month)')
-    const newCheckInDay = newAvailableDays.nth(9) // 10th day
-
-    await newCheckInDay.waitFor({ state: 'visible', timeout: 5000 })
-    await newCheckInDay.click()
-
-    // Wait for check-in selection to complete
-    await page.waitForSelector('.desktop-calendar .day.selected', { timeout: 5000 })
-    await page.waitForTimeout(500)
-
-    // Ensure calendar is still open
-    await page.locator('.desktop-calendar').waitFor({ state: 'visible', timeout: 5000 })
-
-    // Re-query available days to get fresh DOM references
-    const allNewAvailableDays = page.locator('.desktop-calendar .day:not(.past-date):not(.other-month)')
-    const newCheckOutDay = allNewAvailableDays.nth(12) // 13th day (3 days after 10th)
-
-    await newCheckOutDay.waitFor({ state: 'visible', timeout: 5000 })
-    await page.locator('.desktop-calendar').scrollIntoViewIfNeeded()
-    await page.waitForTimeout(400)
-
-    try {
-      await newCheckOutDay.click({ timeout: 5000 })
-    } catch (error) {
-      console.log('Normal click failed, trying force click')
-      await newCheckOutDay.click({ force: true, timeout: 5000 })
-    }
-
-    // Wait for calendar to close
-    await page.waitForTimeout(500)
-
-    // Step 29: Verify "Confirm New Dates" button appears (reschedule-actions div)
-    await expect(page.locator('.reschedule-actions')).toBeVisible()
-    const confirmButton = page.locator('.reschedule-actions .btn-primary')
-    await expect(confirmButton).toBeVisible()
-    await expect(confirmButton).toContainText('Confirm New Dates')
-
-    // Step 30: Click "Confirm New Dates" button
-    await confirmButton.click()
-
-    // Step 31: Wait for submission (2 second delay as per submitReschedule method)
-    await page.waitForTimeout(2500)
-
-    // Step 32: Verify success notice appears
-    await expect(page.locator('.success-notice')).toBeVisible()
-    const successMessage = await page.locator('.success-notice .notice-content').textContent()
-    expect(successMessage).toContain('date change request')
-    expect(successMessage).toContain('third-party provider')
-
-    // Step 33: Verify dates have updated on the page
-    const updatedDatesHeader = await page.locator('.booking-dates-header').textContent()
-    console.log('Updated booking dates:', updatedDatesHeader)
-
-    // Verify dates are different from original
-    expect(updatedDatesHeader).not.toBe(originalDatesHeader)
-
-    console.log('✓ Hotel date change after booking verified successfully!')
+    console.log('✓ Hotel booking E2E test completed successfully!')
   })
 })
