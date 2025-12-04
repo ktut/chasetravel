@@ -168,15 +168,10 @@ export default {
   .toggle-switch {
     position: relative;
     display: inline-flex;
-    background: linear-gradient(145deg, #f5f5f5, #e8e8e8);
+    background: #f8f8f8;
     border-radius: 8px;
     padding: 4px;
-    box-shadow:
-      inset 0 2px 4px rgba(0, 0, 0, 0.06),
-      0 1px 2px rgba(0, 0, 0, 0.05);
-    min-width: 260px;
-    height: 40px;
-    box-sizing: border-box;
+    min-width: 276px;
   }
 
   .toggle-option {
@@ -190,7 +185,7 @@ export default {
     background: transparent;
     border-radius: 6px;
     cursor: pointer;
-    transition: color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1;
     white-space: nowrap;
     color: #888;
@@ -214,7 +209,7 @@ export default {
     }
 
     .toggle-label {
-      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       user-select: none;
     }
   }
@@ -225,17 +220,17 @@ export default {
     flex-shrink: 0;
     transform-origin: center;
     color: #888;
-    transition: color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
     .icon-path {
-      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     &.active {
       color: $color-accent;
 
       .icon-path {
-        animation: luxuryPulse 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        animation: luxuryPulse 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
     }
 
@@ -253,12 +248,12 @@ export default {
 
       .plane-body {
         transform-origin: center;
-        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
 
       &.active {
         .plane-body {
-          animation: planeRotateUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+          animation: planeRotateUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
         .landing-gear {
@@ -270,7 +265,7 @@ export default {
         }
 
         .cloud-1 {
-          animation: cloudDrift1 0.6s ease-out 0.3s backwards;
+          animation: cloudDrift1 0.4s ease-out 0.3s backwards;
         }
 
         .cloud-2 {
@@ -278,7 +273,7 @@ export default {
         }
 
         .cloud-3 {
-          animation: cloudDrift3 0.5s ease-out 0.35s backwards;
+          animation: cloudDrift3 0.4s ease-out 0.2s backwards;
         }
       }
     }
@@ -286,7 +281,7 @@ export default {
     // Hotel icon - simple door open animation
     &.hotel-icon.active {
       .door {
-        animation: doorSwingOpen 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        animation: doorSwingOpen 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
     }
   }

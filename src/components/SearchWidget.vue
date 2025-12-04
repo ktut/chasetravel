@@ -525,8 +525,8 @@ export default {
     align-items: center;
     justify-content: center;
     height: auto;
-    margin-top: -4.5rem;
-    padding-bottom: 0.3rem;
+    margin-top: -5.3rem;
+    padding-bottom: 1rem;
   }
 }
 
