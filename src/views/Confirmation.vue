@@ -522,18 +522,18 @@ export default {
 
           <!-- Hotel Details (Hotel only) -->
           <section class="hotel-details-section" v-if="isHotelBooking && hotel">
+            <div class="hotel-image-top">
+              <img :src="hotel.image" :alt="hotel.name" />
+            </div>
             <h2>Hotel Details</h2>
             <div class="hotel-detail-card">
-              <div class="hotel-image">
-                <img :src="hotel.image" :alt="hotel.name" />
-              </div>
               <div class="hotel-info">
                 <div class="hotel-header">
                   <h3>{{ hotel.name }}</h3>
-                  <StarsDisplay :stars="hotel.stars" size="large" />
                 </div>
                 <div class="hotel-location">{{ hotel.location }}</div>
                 <div class="hotel-rating">
+                  <StarsDisplay :stars="hotel.stars" size="large" />
                   <span class="rating-score">{{ hotel.rating }}</span>
                   <span class="rating-reviews">({{ hotel.reviewCount }} reviews)</span>
                 </div>
@@ -763,7 +763,7 @@ export default {
                 <div class="option-content">
                   <div class="option-header">
                     <span class="option-title">Pay full amount</span>
-                    <span class="option-price">{{ formatPrice(currentFarePrice) }}</span>
+                    <span class="option-price">{{ formatPrice(currentPrice) }}</span>
                   </div>
                   <p class="option-description">
                     {{ isSignedIn ? `Keep your ${formattedPointsBalance} points for later` : 'Pay with credit card' }}
@@ -1594,43 +1594,38 @@ export default {
   h2 {
     font-size: 1.5rem;
     font-weight: 600;
-    margin: 0 0 1rem 0;
+    margin: 1rem 0 1rem 0;
     color: $color-primary;
   }
 }
 
-.hotel-detail-card {
-  background: white;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
+.hotel-image-top {
+  position: relative;
   overflow: hidden;
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 0;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  height: 350px;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
+    height: 250px;
   }
 
-  .hotel-image {
-    position: relative;
-    overflow: hidden;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      min-height: 250px;
+.hotel-detail-card {
 
-      @media (max-width: 768px) {
-        min-height: 150px;
-        max-height: 200px;
-      }
-    }
+  @media (max-width: 768px) {
+    border: none;
+    padding: 0;
   }
 
   .hotel-info {
-    padding: 1.5rem;
+    padding-top: 1rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;

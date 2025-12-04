@@ -283,7 +283,8 @@ export default {
 
 <template>
   <div class="hotel-view" v-if="hotel">
-    <div class="hotel-container">
+    <!-- Image Gallery -->
+    <div class="image-gallery-top">
       <!-- Back Button -->
       <button @click="goBack" class="back-button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -292,7 +293,6 @@ export default {
         See all properties
       </button>
 
-      <!-- Image Gallery -->
       <div class="image-gallery">
         <div class="main-image" @click="openLightbox(0)">
           <img :src="mainImage" :alt="hotel.name" />
@@ -312,7 +312,9 @@ export default {
           </div>
         </div>
       </div>
+    </div>
 
+    <div class="hotel-container">
       <!-- Lightbox -->
       <div 
         v-if="showLightbox" 
@@ -498,19 +500,35 @@ export default {
 
 <style lang="scss" scoped>
 .hotel-view {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 7rem 1.5rem 2rem;
+  padding-top: 5rem;
 
   @media (max-width: 768px) {
-    padding: 7rem 1rem 1rem;
+    padding-top: 4rem;
+  }
+}
+
+.image-gallery-top {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+
+  @media (max-width: 768px) {
+    padding: 0 1rem;
   }
 }
 
 .hotel-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
+
+  @media (max-width: 768px) {
+    padding: 2rem 1rem;
+  }
 }
 
 .back-button {
@@ -523,6 +541,7 @@ export default {
   cursor: pointer;
   font-size: 1rem;
   padding: 0.5rem 0;
+  margin-bottom: 1rem;
   transition: all 0.2s;
 
   svg {
@@ -540,7 +559,7 @@ export default {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 0.5rem;
-  height: 400px;
+  height: 450px;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
