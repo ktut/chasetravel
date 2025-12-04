@@ -3,11 +3,15 @@ import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import NavBar from '@/components/NavBar.vue'
 import SearchWidget from '@/components/SearchWidget.vue'
+import Footer from '@/components/Footer.vue'
 
 const route = useRoute()
 
 // Show search widget in sticky header only on search page
 const isSearchPage = computed(() => route.path === '/search')
+
+// Show footer on all pages except HomeView
+const showFooter = computed(() => route.path !== '/')
 
 // Track route depth for transition direction
 const prevDepth = ref<number>(0)
@@ -86,6 +90,7 @@ onUnmounted(() => {
       </div>
     </Transition>
   </router-view>
+  <Footer v-if="showFooter" />
 </template>
 
 <style>
