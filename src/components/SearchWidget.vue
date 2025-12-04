@@ -523,9 +523,10 @@ export default {
   @media (max-width: $breakpoint-mobile) {
     gap: 8px;
     align-items: center;
-    margin-top: -3.5rem;
     justify-content: center;
     height: auto;
+    margin-top: -4.5rem;
+    padding-bottom: 0.3rem;
   }
 }
 

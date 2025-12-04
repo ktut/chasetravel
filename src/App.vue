@@ -99,6 +99,9 @@ onUnmounted(() => {
 @media (max-width: 768px) {
   #search-header-container {
     top: 60px;
+    .controls-top-row {
+      margin-top: unset !important;
+    }
   }
 }
 
