@@ -448,19 +448,19 @@ export default {
                   <div class="room-pricing">
                     <div class="price-info">
                       <div class="total-price">
+                        <div class="room-availability">We have {{ room.availability }} left.</div>
                         <span v-if="getRoomOriginalTotalPrice(room)" class="strikethrough">{{ formatPrice(getRoomOriginalTotalPrice(room)!) }}</span>
                         <span class="current-total">{{ formatPrice(getRoomTotalPrice(room)) }} total</span>
                       </div>
-                      <div class="price-note">✓ Taxes & fees</div>
+                      <div class="reserve-section">
+                        <button @click="reserveRoom(room)" class="btn-primary reserve-btn">
+                          Select
+                        </button>
+                        <div class="charge-note">You will not be charged yet.</div>
+                      </div>
                     </div>
                   </div>
 
-                  <div class="room-availability">We have {{ room.availability }} left.</div>
-
-                  <button @click="reserveRoom(room)" class="btn-primary reserve-btn">
-                    Reserve
-                  </button>
-                  <div class="charge-note">You will not be charged yet.</div>
                 </div>
               </div>
             </div>
@@ -955,7 +955,7 @@ export default {
     border-radius: 8px;
     overflow: hidden;
     transition: all 0.2s;
-    min-height: 450px;
+    min-height: 400px;
 
     &:hover {
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -1031,14 +1031,15 @@ export default {
       }
 
       .room-pricing {
-        margin-top: 0.5rem;
+        margin-top: auto;
         padding-top: 0.75rem;
         border-top: 1px solid $color-light-grey;
 
         .price-info {
           display: flex;
           justify-content: space-between;
-          align-items: center;
+          align-items: flex-end;
+          gap: 1rem;
 
           .total-price {
             display: flex;
@@ -1056,13 +1057,27 @@ export default {
               font-size: 1.25rem;
               font-weight: 700;
               color: $color-primary;
+              line-height: 1.2;
             }
           }
 
-          .price-note {
-            color: #0a8a4e;
-            font-size: 0.75rem;
-            white-space: nowrap;
+          .reserve-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 1rem;
+
+            .reserve-btn {
+              padding: 0.6rem 1.75rem;
+              white-space: nowrap;
+            }
+
+            .charge-note {
+              color: $color-text-light;
+              font-size: 0.7rem;
+              white-space: nowrap;
+              line-height: 1;
+            }
           }
         }
       }
@@ -1070,21 +1085,7 @@ export default {
       .room-availability {
         color: $color-text-light;
         font-size: 0.85rem;
-        margin-top: 0.25rem;
-      }
-
-      .reserve-btn {
-        margin-top: auto;
-        padding: 0.65rem 1.5rem;
-        align-self: flex-end;
-        font-size: 0.95rem;
-      }
-
-      .charge-note {
-        color: $color-text-light;
-        font-size: 0.75rem;
-        text-align: right;
-        margin-top: 0.25rem;
+        margin-top: 0.65rem;
       }
     }
   }
