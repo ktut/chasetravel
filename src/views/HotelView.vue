@@ -432,25 +432,26 @@ export default {
               <div v-for="room in filteredRooms" :key="room.id" class="room-card">
                 <div class="room-image-container">
                   <img :src="getCurrentRoomImage(room.id)" :alt="room.name" />
+                  <div v-if="room.discount && room.originalPrice" class="discount-badge">
+                    {{ Math.round((room.discount / room.originalPrice) * 100) }}% off
+                  </div>
                 </div>
-                
+
                 <div class="room-details">
                   <h3 class="room-name">{{ room.name }}</h3>
                   <div class="room-capacity">{{ room.capacity }}</div>
                   <div class="room-beds">{{ room.bedConfig }}</div>
                   <div class="room-features">
-                    <span v-for="feature in room.features" :key="feature" class="feature">{{ feature }}</span>
+                    <span v-for="feature in room.features.filter(f => f !== '✓ Reserve now, pay later')" :key="feature" class="feature">{{ feature }}</span>
                   </div>
-                  
+
                   <div class="room-pricing">
-                    <div v-if="room.discount" class="discount-badge">{{ room.discount }} off</div>
                     <div class="price-info">
-                      <div v-if="room.originalPrice" class="original-price">{{ formatPrice(room.originalPrice) }} nightly</div>
                       <div class="total-price">
                         <span v-if="getRoomOriginalTotalPrice(room)" class="strikethrough">{{ formatPrice(getRoomOriginalTotalPrice(room)!) }}</span>
                         <span class="current-total">{{ formatPrice(getRoomTotalPrice(room)) }} total</span>
                       </div>
-                      <div class="price-note">✓ Total includes taxes and fees</div>
+                      <div class="price-note">✓ Taxes & fees</div>
                     </div>
                   </div>
 
@@ -948,17 +949,13 @@ export default {
   }
 
   .room-card {
-    display: block;
-    grid-template-columns: 300px 1fr;
-    gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
     border: 1px solid $color-light-grey;
     border-radius: 8px;
-    padding: 1.5rem;
+    overflow: hidden;
     transition: all 0.2s;
-
-    @media (max-width: 968px) {
-      grid-template-columns: 1fr;
-    }
+    min-height: 450px;
 
     &:hover {
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -966,167 +963,128 @@ export default {
 
     .room-image-container {
       position: relative;
-      border-radius: 8px;
+      width: 100%;
+      height: 140px;
       overflow: hidden;
-      height: 200px;
-      @media (max-width: 968px) {
-        position: absolute;
-        height: 100px;
-        width: 100px;
-      }
+      flex-shrink: 0;
 
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
       }
+
+      .discount-badge {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        background: #d32f2f;
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 3px;
+        font-size: 0.7rem;
+        font-weight: 600;
+      }
     }
 
     .room-details {
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
-      margin-top: 1rem;
-      @media (max-width: 968px) {
-        margin-top: 0;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: baseline;
-      }
+      gap: 0.4rem;
+      padding: 1rem;
+      flex: 1;
 
       .room-name {
-        font-size: 1.25rem;
+        font-size: 1.1rem;
         font-weight: 600;
-        margin: 0;
+        margin: 0 0 0.25rem 0;
         color: $color-primary;
-        text-wrap: balance;
-        @media (max-width: 968px) {
-          display: flex;
-          align-items: center;
-          flex-basis: 100%;
-          padding-left: 2rem;
-          &:before {
-            content: '';
-            width: 100px;
-            height: 100px;
-            float: left;
-          }
-        }
+        line-height: 1.3;
       }
 
       .room-capacity {
         font-weight: 500;
         color: $color-text;
+        font-size: 0.9rem;
       }
 
       .room-beds {
         color: $color-text-light;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
       }
 
       .room-features {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.75rem;
-        margin: 0.5rem 0;
-        @media (max-width: 968px) {
-          display: none;
-        }
+        gap: 0.4rem;
+        margin: 0.25rem 0;
 
         .feature {
           color: $color-text;
-          font-size: 0.85rem;
-        }
-      }
+          font-size: 0.8rem;
 
-      .more-details {
-        color: $color-accent;
-        text-decoration: none;
-        font-size: 0.9rem;
-        width: fit-content;
-
-        &:hover {
-          text-decoration: underline;
+          &::before {
+            content: "✓ ";
+            color: #0a8a4e;
+          }
         }
       }
 
       .room-pricing {
-        margin: 1rem 0;
-        @media (max-width: 968px) {
-          order: 1;
-          flex-basis: 100%;
-          margin: 0;
-        }
-
-        .discount-badge {
-          background: #d32f2f;
-          color: white;
-          padding: 0.25rem 0.75rem;
-          border-radius: 4px;
-          font-size: 0.75rem;
-          font-weight: 600;
-          width: fit-content;
-          margin-bottom: 0.5rem;
-        }
+        margin-top: 0.5rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid $color-light-grey;
 
         .price-info {
-          .original-price {
-            text-decoration: line-through;
-            color: $color-text-light;
-            font-size: 0.9rem;
-            margin-bottom: 0.25rem;
-          }
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
 
           .total-price {
             display: flex;
-            align-items: baseline;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.15rem;
 
             .strikethrough {
               text-decoration: line-through;
               color: $color-text-light;
-              font-size: 1rem;
+              font-size: 0.85rem;
             }
 
             .current-total {
-              font-size: 1.5rem;
+              font-size: 1.25rem;
               font-weight: 700;
               color: $color-primary;
             }
           }
 
           .price-note {
-            color: $color-text-light;
-            font-size: 0.85rem;
-            margin-bottom: 0.25rem;
-            @media (max-width: 968px) {
-              display: none;
-            }
+            color: #0a8a4e;
+            font-size: 0.75rem;
+            white-space: nowrap;
           }
         }
       }
 
       .room-availability {
         color: $color-text-light;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
       }
 
       .reserve-btn {
-        margin-top: 0.5rem;
-        padding: 0.75rem 2rem;
-        width: fit-content;
-        @media (max-width: 968px) {
-          order: 2;
-        }
+        margin-top: auto;
+        padding: 0.65rem 1.5rem;
+        align-self: flex-end;
+        font-size: 0.95rem;
       }
 
       .charge-note {
         color: $color-text-light;
-        font-size: 0.85rem;
-        @media (max-width: 968px) {
-          display: none;
-        }
+        font-size: 0.75rem;
+        text-align: right;
+        margin-top: 0.25rem;
       }
     }
   }
