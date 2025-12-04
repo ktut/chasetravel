@@ -56,6 +56,7 @@ export default {
       isOpen: false,
       focusedDate: null as Date | null,
       justOpened: false,
+      isMobile: false,
       monthNames: [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
@@ -74,6 +75,8 @@ export default {
   mounted() {
     document.addEventListener('keydown', this.handleKeyDown)
     document.addEventListener('click', this.handleOutsideClick)
+    // Detect mobile devices
+    this.isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth <= 768
     // Initialize from props
     if (this.initialCheckIn) {
       this.checkIn = this.initialCheckIn
@@ -749,6 +752,7 @@ export default {
           class="date-input"
           :value="checkIn ? checkInFormatted : ''"
           placeholder="Start date"
+          :readonly="isMobile"
           @focus="openCalendar"
           @blur="parseAndSetCheckInDate"
           @keydown.enter="parseAndSetCheckInDate"
@@ -781,6 +785,7 @@ export default {
           class="date-input"
           :value="checkOut ? checkOutFormatted : ''"
           placeholder="End date"
+          :readonly="isMobile"
           @focus="openCalendar"
           @blur="parseAndSetCheckOutDate"
           @keydown.enter="parseAndSetCheckOutDate"
@@ -910,6 +915,7 @@ export default {
               class="date-display-input"
               :value="checkIn ? checkInFormatted : ''"
               placeholder="Select start date"
+              readonly
               @blur="parseAndSetCheckInDate"
               @keydown.enter="parseAndSetCheckInDate"
             />
@@ -941,6 +947,7 @@ export default {
               class="date-display-input"
               :value="checkOut ? checkOutFormatted : ''"
               placeholder="Select end date"
+              readonly
               @blur="parseAndSetCheckOutDate"
               @keydown.enter="parseAndSetCheckOutDate"
             />
